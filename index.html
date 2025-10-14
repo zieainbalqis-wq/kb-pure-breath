@@ -4,127 +4,178 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>KB Pure Breath</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Segoe+UI&display=swap">
   <style>
+    :root {
+      --bg-light: #f0f9ff;
+      --bg-dark: #121212;
+      --text-light: #333;
+      --text-dark: #eee;
+      --card-light: rgba(255,255,255,0.85);
+      --card-dark: rgba(30,30,30,0.85);
+    }
+
     body {
       margin: 0;
       font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(to bottom right, #e8f5e9, #e3f2fd);
-      color: #333;
+      background: url('https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0') repeat-x center center fixed;
+      background-size: cover;
+      animation: moveClouds 120s linear infinite;
+      color: var(--text-light);
+      transition: background 0.5s, color 0.5s;
     }
-    header {
-      background-color: #2c3e50;
-      color: white;
+
+    @keyframes moveClouds {
+      from { background-position: 0 0; }
+      to { background-position: 10000px 0; }
+    }
+
+    body.dark {
+      background-color: var(--bg-dark);
+      color: var(--text-dark);
+    }
+
+    .hero {
+      background: url('https://i.pinimg.com/originals/8e/9c/2b/8e9c2b3f1a5e9e9c2b3f1a5e9e9c2b3f.gif') center center no-repeat;
+      background-size: cover;
       text-align: center;
-      padding: 30px 20px;
+      padding: 80px 20px;
+      color: white;
     }
-    header img {
-      max-width: 120px;
+
+    .hero img {
+      max-width: 180px;
       margin-bottom: 10px;
     }
+
+    .tagline {
+      font-size: 1.8em;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+
+    .navbar {
+      position: sticky;
+      top: 0;
+      background: rgba(44, 62, 80, 0.95);
+      padding: 10px;
+      text-align: center;
+      z-index: 1000;
+    }
+
+    .navbar a {
+      color: white;
+      margin: 0 15px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
     .container {
-      max-width: 960px;
+      max-width: 1200px;
       margin: auto;
       padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
     }
+
+    .row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
     .card {
-      background-color: white;
+      flex: 1;
+      background-color: var(--card-light);
       border-radius: 10px;
       box-shadow: 0 4px 8px rgba(0,0,0,0.1);
       padding: 20px;
-      margin-bottom: 25px;
+      backdrop-filter: blur(10px);
+      transition: background 0.5s;
     }
-    h2 {
-      color: #2c3e50;
-      margin-top: 0;
+
+    body.dark .card {
+      background-color: var(--card-dark);
     }
-    a {
-      color: #0077cc;
-      text-decoration: none;
-    }
-    a:hover {
-      text-decoration: underline;
-    }
-    iframe {
-      width: 100%;
-      height: 400px;
+
+    button.toggle {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #2c3e50;
+      color: white;
       border: none;
-      border-radius: 8px;
+      padding: 10px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+      z-index: 1000;
     }
-    @media (max-width: 600px) {
-      header img {
-        max-width: 80px;
+
+    @media (max-width: 768px) {
+      .row {
+        flex-direction: column;
       }
-      iframe {
-        height: 300px;
+      .hero img {
+        max-width: 120px;
+      }
+      .tagline {
+        font-size: 1.2em;
       }
     }
   </style>
 </head>
 <body>
-  <header>
+  <header class="hero">
     <img src="logo.png" alt="KB Pure Breath Logo">
     <h1>KB Pure Breath</h1>
-    <p>Dashboard Info Kesihatan: IPU & Particulate Matter</p>
+    <p class="tagline">Breathe Pure, Live Sure</p>
   </header>
 
+  <nav class="navbar">
+    <a href="#live">Live Data</a>
+    <a href="#kajian">Kajian Tempatan</a>
+    <a href="#tips">Tips</a>
+  </nav>
+
   <div class="container">
-    <div class="card">
-      <h2>Apa itu Particulate Matter?</h2>
-      <p>Particulate Matter (PM) ialah zarah halus dalam udara. PM2.5 dan PM10 merujuk kepada saiz zarah – semakin kecil, semakin mudah masuk ke paru-paru dan memberi kesan kesihatan.</p>
-      <p>PM2.5 boleh menembusi jauh ke dalam sistem pernafasan dan saluran darah, meningkatkan risiko penyakit seperti:</p>
-      <ul>
-        <li>Asma dan bronkitis</li>
-        <li>Masalah jantung dan paru-paru</li>
-        <li>Kesan jangka panjang terhadap sistem imun</li>
-      </ul>
+    <div class="row">
+      <div class="card">
+        <h2>🌫️ Apa itu Particulate Matter?</h2>
+        <p>PM2.5 dan PM10 ialah zarah halus dalam udara yang boleh menjejaskan kesihatan paru-paru dan jantung.</p>
+      </div>
+      <div class="card">
+        <h2>📊 Indeks Pencemaran Udara (IPU)</h2>
+        <p>IPU menunjukkan tahap pencemaran udara. Nilai tinggi bermaksud udara tercemar dan boleh menjejaskan kesihatan awam.</p>
+      </div>
     </div>
 
-    <div class="card">
-      <h2>Indeks Pencemaran Udara (IPU)</h2>
-      <p>IPU menunjukkan tahap pencemaran udara. Nilai tinggi bermaksud udara tercemar dan boleh menjejaskan kesihatan awam. Bacaan IPU biasanya dikategorikan kepada:</p>
-      <ul>
-        <li>0–50: Baik</li>
-        <li>51–100: Sederhana</li>
-        <li>101–200: Tidak sihat</li>
-        <li>201–300: Sangat tidak sihat</li>
-        <li>301+: Berbahaya</li>
-      </ul>
+    <div class="card" id="live">
+      <h2>🗺️ Peta & Data Real-Time</h2>
+      <iframe src="https://aqicn.org/map/malaysia/" width="100%" height="400" style="border:none;border-radius:8px;"></iframe>
     </div>
 
-    <div class="card">
-      <h2>Peta & Data Real-Time</h2>
-      <p>Lihat data semasa IPU dan zarah PM2.5/PM10 di kawasan anda:</p>
-      <iframe src="https://aqicn.org/map/malaysia/" title="Peta Kualiti Udara Malaysia"></iframe>
+    <div class="card" id="kajian">
+      <h2>🧪 Kajian Tempatan</h2>
+      <p>Prof. Juliana dari UPM mengkaji impak pencemaran udara terhadap kesihatan pelajar dan komuniti bandar.</p>
     </div>
 
-    <div class="card">
-      <h2>Tips Perlindungan</h2>
+    <div class="card" id="tips">
+      <h2>🛡️ Tips Perlindungan</h2>
       <ul>
         <li>Elakkan aktiviti luar semasa IPU tinggi</li>
         <li>Guna topeng N95 jika perlu keluar</li>
         <li>Pastikan rumah ada penapis udara</li>
-        <li>Ikuti perkembangan dari sumber rasmi seperti JAS dan WHO</li>
-      </ul>
-    </div>
-
-    <div class="card">
-      <h2>Kajian Tempatan: Prof. Dr. Juliana Jalaludin</h2>
-      <p>Prof. Juliana dari UPM merupakan pakar dalam bidang Environmental & Occupational Health. Kajian beliau memberi fokus kepada impak pencemaran udara terhadap kesihatan pelajar dan komuniti bandar.</p>
-      <p>Antara kajian beliau:</p>
-      <ul>
-        <li><a href="https://scholar.google.com/citations?user=tytz5aUAAAAJ&hl=en" target="_blank">Google Scholar Profile</a></li>
-        <li><a href="https://medic.upm.edu.my/upload/dokumen/20240801104113CURRICULUM_VITAE_%28FPSK_ACADEMICIAN%29_Prof_Juliana_v2.pdf" target="_blank">CV Rasmi UPM</a></li>
-        <li><a href="https://orcid.org/0000-0002-7910-6945" target="_blank">ORCID Profile</a></li>
-      </ul>
-    </div>
-
-    <div class="card">
-      <h2>Sumber Tambahan</h2>
-      <ul>
-        <li><a href="https://www.aqi.in/dashboard/malaysia/pm10" target="_blank">Dashboard AQI Malaysia (PM10, PM2.5)</a></li>
-        <li><a href="https://eqms.doe.gov.my/" target="_blank">Portal MyEQMS – Jabatan Alam Sekitar</a></li>
       </ul>
     </div>
   </div>
+
+  <button class="toggle" onclick="toggleDark()">🌓 Tukar Tema</button>
+
+  <script>
+    function toggleDark() {
+      document.body.classList.toggle('dark');
+    }
+  </script>
 </body>
 </html>
