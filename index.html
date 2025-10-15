@@ -202,4 +202,94 @@
       </div>
     </div>
   </div>
+  <!-- Dark Mode Toggle -->
+  <button class="toggle" onclick="toggleDark()">🌓 Tukar Tema</button>
+
+  <!-- Floating Chatbot Button -->
+  <div id="chatbot-button" onclick="toggleChatbot()">💬</div>
+
+  <!-- Chatbot Panel -->
+  <div id="chatbot-panel">
+    <iframe src="https://www.tidio.com/popup-chat/" width="100%" height="100%" frameborder="0"></iframe>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    // Chart.js PM2.5
+    const ctx = document.getElementById('pmChart').getContext('2d');
+    const pmChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: ['8AM','10AM','12PM','2PM','4PM'],
+        datasets: [{
+          label: 'PM2.5 (µg/m³)',
+          data: [35, 42, 38, 50, 47],
+          borderColor: 'rgba(75,192,192,1)',
+          backgroundColor: 'rgba(75,192,192,0.2)',
+          fill: true
+        }]
+      }
+    });
+
+    // Dropdown lokasi
+    function updateIframe(city) {
+      document.getElementById('dataFrame').src = `https://aqicn.org/city/malaysia/${city}/`;
+    }
+
+    // Dark mode toggle
+    function toggleDark() {
+      document.body.classList.toggle('dark');
+    }
+
+    // FAQ accordion
+    const acc = document.getElementsByClassName("accordion");
+    for (let i = 0; i < acc.length; i++) {
+      acc[i].addEventListener("click", function() {
+        this.classList.toggle("active");
+        const panel = this.nextElementSibling;
+        panel.style.display = panel.style.display === "block" ? "none" : "block";
+      });
+    }
+
+    // Chatbot toggle
+    function toggleChatbot() {
+      const panel = document.getElementById('chatbot-panel');
+      panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+    }
+  </script>
+
+  <!-- Chatbot Styles -->
+  <style>
+    #chatbot-button {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: #3498db;
+      color: white;
+      font-size: 24px;
+      padding: 12px 16px;
+      border-radius: 50px;
+      cursor: pointer;
+      z-index: 9999;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+    #chatbot-panel {
+      position: fixed;
+      bottom: 80px;
+      right: 20px;
+      width: 320px;
+      height: 450px;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      display: none;
+      z-index: 9998;
+    }
+    body.dark #chatbot-panel {
+      background: #1e1e1e;
+    }
+  </style>
+</body>
+</html>
 
