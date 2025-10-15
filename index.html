@@ -125,3 +125,81 @@
     <a href="#tips">Tips</a>
     <a href="#faq">FAQ</a>
   </nav>
+    <div class="container">
+    <div class="row">
+      <div class="card">
+        <h2>🌫️ Apa itu Particulate Matter?</h2>
+        <p>PM2.5 dan PM10 ialah zarah halus dalam udara yang boleh menjejaskan kesihatan paru-paru dan jantung.</p>
+      </div>
+      <div class="card">
+        <h2>📊 Indeks Pencemaran Udara (IPU)</h2>
+        <p>IPU menunjukkan tahap pencemaran udara. Nilai tinggi bermaksud udara tercemar dan boleh menjejaskan kesihatan awam.</p>
+      </div>
+    </div>
+
+    <div class="card" id="live">
+      <h2>🗺️ Peta & Data Real-Time</h2>
+      <select onchange="updateIframe(this.value)">
+        <option value="kuala-lumpur">Kuala Lumpur</option>
+        <option value="selangor">Selangor</option>
+        <option value="johor-bahru">Johor Bahru</option>
+      </select>
+      <iframe id="dataFrame" src="https://aqicn.org/city/malaysia/kuala-lumpur/" width="100%" height="400" style="border:none;border-radius:8px;margin-top:10px;"></iframe>
+    </div>
+
+    <div class="card" id="kajian">
+      <h2>🧪 Kajian Tempatan</h2>
+      <p>Prof. Dr. Juliana Jalaludin dari UPM mengkaji impak pencemaran udara terhadap kesihatan pelajar dan komuniti bandar.</p>
+      <a href="https://medic.upm.edu.my/upload/dokumen/20240801104113CURRICULUM_VITAE_%28FPSK_ACADEMICIAN%29_Prof_Juliana_v2.pdf" target="_blank">Lihat Kajian</a>
+    </div>
+
+    <div class="card" id="tips">
+      <h2>🛡️ Tips Perlindungan</h2>
+      <ul>
+        <li>Elakkan aktiviti luar semasa IPU tinggi</li>
+        <li>Guna topeng N95 jika perlu keluar</li>
+        <li>Pastikan rumah ada penapis udara</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2>📈 Trend PM2.5 Hari Ini</h2>
+      <canvas id="pmChart"></canvas>
+    </div>
+
+    <div class="card">
+      <h2>🧾 Infografik Kesan Pencemaran Udara</h2>
+      <iframe src="https://gaspgroup.org/wp-content/uploads/2023/01/Air-Pollution-Infographic.pdf" width="100%" height="600"></iframe>
+    </div>
+
+    <div class="card" id="faq">
+      <h2>❓ Soalan Lazim (FAQ)</h2>
+      <div class="faq">
+        <button class="accordion">1. Apa itu PM2.5 dan kenapa ia bahaya?</button>
+        <div class="panel">
+          <p>PM2.5 ialah zarah halus dalam udara yang berukuran kurang dari 2.5 mikrometer. Ia boleh masuk jauh ke dalam paru-paru dan saluran darah, menyebabkan masalah kesihatan seperti asma, strok, dan penyakit jantung.</p>
+        </div>
+
+        <button class="accordion">2. Bila IPU dianggap tidak sihat?</button>
+        <div class="panel">
+          <p>IPU melebihi 100 dianggap tidak sihat untuk kumpulan sensitif. Melebihi 150 tidak sihat untuk semua, dan melebihi 200 sangat tidak sihat. Elakkan aktiviti luar jika IPU tinggi.</p>
+        </div>
+
+        <button class="accordion">3. Apa beza IPU dan AQI?</button>
+        <div class="panel">
+          <p>IPU (Indeks Pencemaran Udara) digunakan di Malaysia, manakala AQI (Air Quality Index) digunakan secara global. Kedua-duanya mengukur tahap pencemaran, tapi skala dan kategori mungkin berbeza sedikit.</p>
+        </div>
+
+        <button class="accordion">4. Macam mana nak tahu kualiti udara di kawasan saya?</button>
+        <div class="panel">
+          <p>Gunakan peta interaktif atau dropdown lokasi di laman ini untuk semak data IPU dan PM2.5 secara langsung berdasarkan kawasan anda.</p>
+        </div>
+
+        <button class="accordion">5. Apa yang boleh saya buat untuk lindungi diri dari pencemaran udara?</button>
+        <div class="panel">
+          <p>Guna topeng N95, kurangkan aktiviti luar semasa IPU tinggi, guna penapis udara di rumah, dan tutup tingkap semasa jerebu. Sentiasa rujuk data semasa untuk buat keputusan.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
