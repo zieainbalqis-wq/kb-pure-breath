@@ -9,15 +9,26 @@
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background: #f4f4f4;
-      color: #333;
+      background: linear-gradient(-45deg, #3498db, #2ecc71, #9b59b6, #f39c12);
+      background-size: 400% 400%;
+      animation: gradientBG 15s ease infinite;
+      color: #fff;
+    }
+
+    @keyframes gradientBG {
+      0% {background-position: 0% 50%;}
+      50% {background-position: 100% 50%;}
+      100% {background-position: 0% 50%;}
     }
 
     header {
-      background: linear-gradient(to right, #3498db, #2ecc71);
-      color: white;
-      padding: 40px 20px;
       text-align: center;
+      padding: 40px 20px;
+    }
+
+    header img {
+      width: 120px;
+      margin-bottom: 10px;
     }
 
     section {
@@ -28,12 +39,6 @@
     canvas {
       max-width: 800px;
       margin: auto;
-    }
-
-    .infografik {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
     }
 
     .infografik img {
@@ -55,7 +60,7 @@
     }
 
     footer.contact-banner {
-      background: url('https://zieainbalqis-wq.github.io/kb-pure-breath/images/group-photo.jpg') center center no-repeat;
+      background: url('images/group-photo.jpg') center center no-repeat;
       background-size: cover;
       padding: 60px 20px;
       color: white;
@@ -108,18 +113,21 @@
       width: 280px;
       height: 360px;
       background: white;
+      color: #333;
       border-radius: 10px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.3);
       display: none;
       z-index: 9998;
+      padding: 20px;
     }
   </style>
 </head>
 <body>
   <!-- Banner Utama -->
   <header>
+    <img src="images/logo.png" alt="KB Pure Breath Logo" />
     <h1>KB Pure Breath</h1>
-    <p>Memantau Particulate Matter & Indeks Pencemaran Udara (IPU)</p>
+    <p>Sistem Pemantauan Kualiti Udara Komuniti</p>
   </header>
 
   <!-- Trend Chart -->
@@ -195,11 +203,9 @@
   <!-- Chatbot -->
   <div id="chatbot-button" onclick="toggleChatbot()">💬</div>
   <div id="chatbot-panel">
-    <div style="padding:20px;">
-      Chatbot KB Pure Breath aktif. Klik 💬 untuk borak atau rujuk data semasa.
-      <br><br>
-      Untuk borak dengan Copilot, klik <a href="https://wa.me/18772241042" target="_blank">WhatsApp Copilot</a>.
-    </div>
+    Chatbot KB Pure Breath aktif. Klik 💬 untuk borak atau rujuk data semasa.
+    <br><br>
+    Untuk borak dengan Copilot, klik <a href="https://wa.me/18772241042" target="_blank">WhatsApp Copilot</a>.
   </div>
 
   <!-- Scripts -->
