@@ -8,11 +8,12 @@
   <style>
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background: linear-gradient(-45deg, #3498db, #2ecc71, #9b59b6, #f39c12);
       background-size: 400% 400%;
       animation: gradientBG 15s ease infinite;
       color: #fff;
+      text-align: center;
     }
 
     @keyframes gradientBG {
@@ -22,30 +23,37 @@
     }
 
     header {
-      text-align: center;
-      padding: 40px 20px;
+      padding: 60px 20px 40px;
     }
 
     header img {
-      width: 120px;
-      margin-bottom: 10px;
+      width: 140px;
+      margin-bottom: 20px;
+    }
+
+    header h1 {
+      font-size: 2.5em;
+      margin: 0;
+    }
+
+    header p {
+      font-size: 1.2em;
+      margin-top: 10px;
     }
 
     section {
       padding: 60px 20px;
-      text-align: center;
+      max-width: 800px;
+      margin: auto;
     }
 
     canvas {
-      max-width: 800px;
-      margin: auto;
+      max-width: 100%;
     }
 
     .faq-item {
       margin-bottom: 20px;
       text-align: left;
-      max-width: 800px;
-      margin: auto;
     }
 
     .faq-item summary {
@@ -100,13 +108,13 @@
   </style>
 </head>
 <body>
-<!-- Banner Utama -->
+
+<!-- Banner Tengah -->
 <header>
   <img src="images/logo.png" alt="KB Pure Breath Logo" />
   <h1>KB Pure Breath</h1>
   <p>Sistem Pemantauan Kualiti Udara Komuniti</p>
 </header>
-
 <!-- Trend Chart -->
 <section>
   <h2>📊 Trend PM2.5 & PM10</h2>
@@ -126,6 +134,7 @@
   <img src="https://www.cdc.gov/air/images/pm-health-effects.jpg" alt="Infografik Respiratori" style="max-width:600px; border-radius:10px; margin-bottom:20px;">
   <p>PM2.5 dan PM10 boleh menembusi jauh ke dalam paru-paru dan menyebabkan keradangan, asma, bronkitis, dan risiko penyakit jantung.</p>
 </section>
+
 <!-- Kajian Saintifik -->
 <section>
   <h2>📚 Kajian Berkaitan PM & Kesihatan</h2>
