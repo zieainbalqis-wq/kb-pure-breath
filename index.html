@@ -1,301 +1,92 @@
 <!DOCTYPE html>
 <html lang="ms">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>KB Pure Breath</title>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Arial&display=swap">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
-    :root {
-      --bg-light: #f0f9ff;
-      --bg-dark: #121212;
-      --text-light: #333;
-      --text-dark: #eee;
-      --card-light: rgba(255,255,255,0.85);
-      --card-dark: rgba(30,30,30,0.85);
-    }
-
     body {
       margin: 0;
-      font-family: 'Arial', sans-serif;
-      background: url('https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0') repeat-x center center fixed;
-      background-size: cover;
-      animation: moveClouds 120s linear infinite;
-      color: var(--text-light);
-      transition: background 0.5s, color 0.5s;
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      color: #333;
     }
 
-    @keyframes moveClouds {
-      from { background-position: 0 0; }
-      to { background-position: 10000px 0; }
-    }
-
-    body.dark {
-      background-color: var(--bg-dark);
-      color: var(--text-dark);
-    }
-
-    .hero {
-      background: url('https://images.unsplash.com/photo-1695653426483-7f6a3c6f4e3c') center center no-repeat;
-      background-size: cover;
-      text-align: center;
-      padding: 80px 20px;
+    header {
+      background: linear-gradient(to right, #3498db, #2ecc71);
       color: white;
-    }
-
-    .hero img {
-      max-width: 220px;
-      margin-bottom: 10px;
-    }
-
-    .tagline {
-      font-size: 2em;
-      font-weight: bold;
-      margin-top: 10px;
-    }
-
-    .navbar {
-      position: sticky;
-      top: 0;
-      background: rgba(44, 62, 80, 0.95);
-      padding: 10px;
+      padding: 40px 20px;
       text-align: center;
-      z-index: 1000;
     }
 
-    .navbar a {
-      color: white;
-      margin: 0 15px;
-      text-decoration: none;
-      font-weight: bold;
+    section {
+      padding: 60px 20px;
+      text-align: center;
     }
 
-    .container {
-      max-width: 1200px;
+    canvas {
+      max-width: 800px;
       margin: auto;
-      padding: 20px;
+    }
+
+    .infografik {
       display: flex;
       flex-direction: column;
-      gap: 20px;
+      align-items: center;
     }
 
-    .row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 20px;
-    }
-
-    .card {
-      flex: 1;
-      background-color: var(--card-light);
+    .infografik img {
+      max-width: 600px;
       border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-      padding: 20px;
-      backdrop-filter: blur(10px);
-      transition: background 0.5s;
       margin-bottom: 20px;
     }
 
-    body.dark .card {
-      background-color: var(--card-dark);
+    .faq-item {
+      margin-bottom: 20px;
+      text-align: left;
+      max-width: 800px;
+      margin: auto;
     }
 
-    button.toggle {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background: #2c3e50;
-      color: white;
-      border: none;
-      padding: 10px 15px;
-      border-radius: 5px;
+    .faq-item summary {
+      font-weight: bold;
       cursor: pointer;
-      z-index: 1000;
     }
 
-    @media (max-width: 768px) {
-      .row {
-        flex-direction: column;
-      }
-      .hero img {
-        max-width: 140px;
-      }
-      .tagline {
-        font-size: 1.4em;
-      }
-    }
-  </style>
-</head>
-<body>
-  <header class="hero">
-    <img src="logo.png" alt="KB Pure Breath Logo">
-    <h1>KB Pure Breath</h1>
-    <p class="tagline">"Breathe Pure, Live Sure"</p>
-  </header>
-
-  <nav class="navbar">
-    <a href="#live">Live Data</a>
-    <a href="#kajian">Kajian Tempatan</a>
-    <a href="#tips">Tips</a>
-    <a href="#faq">FAQ</a>
-  </nav>
-  <div class="container">
-    <div class="row">
-      <div class="card">
-        <h2>🌫️ Apa itu Particulate Matter?</h2>
-        <p>PM2.5 dan PM10 ialah zarah halus dalam udara yang boleh menjejaskan kesihatan paru-paru dan jantung.</p>
-      </div>
-      <div class="card">
-        <h2>📊 Indeks Pencemaran Udara (IPU)</h2>
-        <p>IPU menunjukkan tahap pencemaran udara. Nilai tinggi bermaksud udara tercemar dan boleh menjejaskan kesihatan awam.</p>
-      </div>
-    </div>
-
-    <div class="card" id="live">
-      <h2>🗺️ Peta & Data Real-Time</h2>
-      <select onchange="updateIframe(this.value)">
-        <option value="kuala-lumpur">Kuala Lumpur</option>
-        <option value="selangor">Selangor</option>
-        <option value="johor-bahru">Johor Bahru</option>
-      </select>
-      <iframe id="dataFrame" src="https://aqicn.org/city/malaysia/kuala-lumpur/" width="100%" height="400" style="border:none;border-radius:8px;margin-top:10px;"></iframe>
-    </div>
-
-    <div class="card" id="kajian">
-      <h2>🧪 Kajian Tempatan</h2>
-      <p>Prof. Dr. Juliana Jalaludin dari UPM mengkaji impak pencemaran udara terhadap kesihatan pelajar dan komuniti bandar.</p>
-      <a href="https://medic.upm.edu.my/upload/dokumen/20240801104113CURRICULUM_VITAE_%28FPSK_ACADEMICIAN%29_Prof_Juliana_v2.pdf" target="_blank">Lihat Kajian</a>
-    </div>
-
-    <div class="card" id="tips">
-      <h2>🛡️ Tips Perlindungan</h2>
-      <ul>
-        <li>Elakkan aktiviti luar semasa IPU tinggi</li>
-        <li>Guna topeng N95 jika perlu keluar</li>
-        <li>Pastikan rumah ada penapis udara</li>
-      </ul>
-    </div>
-
-    <div class="card">
-      <h2>📈 Trend PM2.5 & PM10 Hari Ini</h2>
-      <canvas id="pmChart"></canvas>
-    </div>
-
-    <div class="card">
-      <h2>🧾 Infografik Kesan Pencemaran Udara</h2>
-      <iframe src="https://gaspgroup.org/wp-content/uploads/2023/01/Air-Pollution-Infographic.pdf" width="100%" height="600"></iframe>
-    </div>
-
-    <div class="card" id="faq">
-      <h2>❓ Soalan Lazim (FAQ)</h2>
-      <div class="faq">
-        <button class="accordion">1. Apa itu PM2.5 dan kenapa ia bahaya?</button>
-        <div class="panel">
-          <p>PM2.5 ialah zarah halus dalam udara yang berukuran kurang dari 2.5 mikrometer. Ia boleh masuk jauh ke dalam paru-paru dan saluran darah, menyebabkan masalah kesihatan seperti asma, strok, dan penyakit jantung.</p>
-        </div>
-
-        <button class="accordion">2. Bila IPU dianggap tidak sihat?</button>
-        <div class="panel">
-          <p>IPU melebihi 100 dianggap tidak sihat untuk kumpulan sensitif. Melebihi 150 tidak sihat untuk semua, dan melebihi 200 sangat tidak sihat. Elakkan aktiviti luar jika IPU tinggi.</p>
-        </div>
-
-        <button class="accordion">3. Apa beza IPU dan AQI?</button>
-        <div class="panel">
-          <p>IPU (Indeks Pencemaran Udara) digunakan di Malaysia, manakala AQI (Air Quality Index) digunakan secara global. Kedua-duanya mengukur tahap pencemaran, tapi skala dan kategori mungkin berbeza sedikit.</p>
-        </div>
-
-        <button class="accordion">4. Macam mana nak tahu kualiti udara di kawasan saya?</button>
-        <div class="panel">
-          <p>Gunakan peta interaktif atau dropdown lokasi di laman ini untuk semak data IPU dan PM2.5 secara langsung berdasarkan kawasan anda.</p>
-        </div>
-
-        <button class="accordion">5. Apa yang boleh saya buat untuk lindungi diri dari pencemaran udara?</button>
-        <div class="panel">
-          <p>Guna topeng N95, kurangkan aktiviti luar semasa IPU tinggi, guna penapis udara di rumah, dan tutup tingkap semasa jerebu. Sentiasa rujuk data semasa untuk buat keputusan.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-  <!-- Dark Mode Toggle -->
-  <button class="toggle" onclick="toggleDark()">🌓 Tukar Tema</button>
-
-  <!-- Floating Chatbot Button -->
-  <div id="chatbot-button" onclick="toggleChatbot()">💬</div>
-
-  <!-- Chatbot Panel -->
-  <div id="chatbot-panel">
-    <div style="padding:20px; color:#333;">
-  Chat dengan Copilot di <a href="https://wa.me/18772241042" target="_blank">WhatsApp</a>.
-</div>
-
-  <!-- Scripts -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script>
-    // Chart.js PM2.5 & PM10
-    const ctx = document.getElementById('pmChart').getContext('2d');
-    const pmChart = new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels: ['8AM','10AM','12PM','2PM','4PM'],
-        datasets: [
-          {
-            label: 'PM2.5 (µg/m³)',
-            data: [35, 42, 38, 50, 47],
-            borderColor: 'rgba(75,192,192,1)',
-            backgroundColor: 'rgba(75,192,192,0.2)',
-            fill: true
-          },
-          {
-            label: 'PM10 (µg/m³)',
-            data: [45, 48, 40, 55, 52],
-            borderColor: 'rgba(255,99,132,1)',
-            backgroundColor: 'rgba(255,99,132,0.2)',
-            fill: true
-          }
-        ]
-      },
-      options: {
-        responsive: true,
-        plugins: {
-          legend: {
-            position: 'top'
-          },
-          title: {
-            display: true,
-            text: 'Trend PM2.5 & PM10 Hari Ini'
-          }
-        }
-      }
-    });
-
-    // Dropdown lokasi
-    function updateIframe(city) {
-      document.getElementById('dataFrame').src = `https://aqicn.org/city/malaysia/${city}/`;
+    footer.contact-banner {
+      background: url('https://zieainbalqis-wq.github.io/kb-pure-breath/images/group-photo.jpg') center center no-repeat;
+      background-size: cover;
+      padding: 60px 20px;
+      color: white;
+      text-align: center;
+      position: relative;
+      z-index: 1;
     }
 
-    // Dark mode toggle
-    function toggleDark() {
-      document.body.classList.toggle('dark');
+    footer.contact-banner::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: -1;
     }
 
-    // FAQ accordion
-    document.querySelectorAll(".accordion").forEach(button => {
-      button.addEventListener("click", () => {
-        button.classList.toggle("active");
-        const panel = button.nextElementSibling;
-        panel.style.display = panel.style.display === "block" ? "none" : "block";
-      });
-    });
-
-    // Chatbot toggle
-    function toggleChatbot() {
-      const panel = document.getElementById('chatbot-panel');
-      panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+    .contact-content {
+      max-width: 800px;
+      margin: auto;
+      backdrop-filter: blur(4px);
+      background: rgba(0,0,0,0.4);
+      padding: 30px;
+      border-radius: 10px;
     }
-  </script>
 
-  <!-- Chatbot Styles -->
-  <style>
+    .contact-content a {
+      color: #ffd700;
+      text-decoration: none;
+    }
+
     #chatbot-button {
       position: fixed;
       bottom: 80px;
@@ -309,77 +100,154 @@
       z-index: 9999;
       box-shadow: 0 4px 8px rgba(0,0,0,0.2);
     }
+
     #chatbot-panel {
       position: fixed;
-      bottom: 1200px;
+      bottom: 160px;
       right: 20px;
-      width: 320px;
-      height: 450px;
+      width: 280px;
+      height: 360px;
       background: white;
       border-radius: 10px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.3);
       display: none;
       z-index: 9998;
     }
-    body.dark #chatbot-panel {
-      background: #1e1e1e;
-    }
   </style>
-<!-- Contact Us Banner -->
-<footer class="contact-banner">
-  <div class="contact-content">
-    <h2>📞 Hubungi Kami</h2>
-    <p>Untuk pertanyaan, cadangan atau kolaborasi, sila hubungi pasukan KB Pure Breath:</p>
-    <ul>
-      <li>Email: <a href="mailto:kbpurebreath@gmail.com">kbpurebreath@gmail.com</a></li>
-      <li>Instagram: <a href="https://instagram.com/kbpurebreath" target="_blank">@kbpurebreath</a></li>
-      <li>WhatsApp Umum: <a href="https://wa.me/60123456789" target="_blank">+60 12-345 6789</a></li>
-    </ul>
-    <h3>📱 Team KB Pure Breath</h3>
-    <ul>
-      <li>Iqbal – <a href="https://wa.me/60179912306" target="_blank">+60 17-991 2306</a></li>
-      <li>Syakirullah – <a href="https://wa.me/60172131363" target="_blank">+60 17-213 1363</a></li>
-      <li>Wan Zulkhairi – <a href="https://wa.me/60145147998" target="_blank">+60 14-514 7998</a></li>
-      <li>Zhafri – <a href="https://wa.me/60138487104" target="_blank">+60 13-848 7104</a></li>
-      <li>Zie Ain Balqis – <a href="https://wa.me/60172370158" target="_blank">+60 17-237 0158</a></li>
-    </ul>
+</head>
+<body>
+  <!-- Banner Utama -->
+  <header>
+    <h1>KB Pure Breath</h1>
+    <p>Memantau Particulate Matter & Indeks Pencemaran Udara (IPU)</p>
+  </header>
+
+  <!-- Trend Chart -->
+  <section>
+    <h2>📊 Trend PM2.5 & PM10</h2>
+    <canvas id="pmTrendChart" height="400"></canvas>
+  </section>
+
+  <!-- Real-Time IPU -->
+  <section>
+    <h2>🌫️ Real-Time IPU</h2>
+    <p>IPU semasa: <strong>85 (Sederhana)</strong></p>
+    <p>Kemaskini: 16 Okt 2025, 11:30 PM</p>
+  </section>
+
+  <!-- Infografik Kesan Respiratori -->
+  <section class="infografik">
+    <h2>🫁 Kesan Particulate Matter ke Sistem Respiratori</h2>
+    <img src="https://www.cdc.gov/air/images/pm-health-effects.jpg" alt="Infografik Respiratori">
+    <p>PM2.5 dan PM10 boleh menembusi jauh ke dalam paru-paru dan menyebabkan keradangan, asma, bronkitis, dan risiko penyakit jantung.</p>
+  </section>
+
+  <!-- Kajian -->
+  <section>
+    <h2>📚 Kajian Berkaitan</h2>
+    <p><a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7605313/" target="_blank">Kesan PM2.5 terhadap kesihatan respiratori – NCBI</a></p>
+  </section>
+
+  <!-- FAQ -->
+  <section>
+    <h2>❓ Soalan Lazim</h2>
+    <div class="faq-item">
+      <details>
+        <summary>Apa itu PM2.5 dan PM10?</summary>
+        <p>PM2.5 dan PM10 ialah zarah halus dalam udara yang boleh memberi kesan kepada kesihatan apabila disedut.</p>
+      </details>
+    </div>
+    <div class="faq-item">
+      <details>
+        <summary>Bagaimana nak kurangkan pendedahan?</summary>
+        <p>Elakkan aktiviti luar semasa IPU tinggi, guna penapis udara, dan pakai pelitup muka N95.</p>
+      </details>
+    </div>
+  </section>
+
+  <!-- About Us -->
+  <section>
+    <h2>👥 Tentang KB Pure Breath</h2>
+    <p>Inisiatif komuniti untuk memantau dan menyebarkan maklumat kualiti udara secara mudah dan mesra pengguna.</p>
+  </section>
+
+  <!-- Contact Us Banner -->
+  <footer class="contact-banner">
+    <div class="contact-content">
+      <h2>📞 Hubungi Kami</h2>
+      <p>Untuk pertanyaan, cadangan atau kolaborasi, sila hubungi pasukan KB Pure Breath:</p>
+      <ul>
+        <li>Email: <a href="mailto:kbpurebreath@gmail.com">kbpurebreath@gmail.com</a></li>
+        <li>Instagram: <a href="https://instagram.com/kbpurebreath" target="_blank">@kbpurebreath</a></li>
+        <li>WhatsApp Umum: <a href="https://wa.me/60123456789" target="_blank">+60 12-345 6789</a></li>
+      </ul>
+      <h3>📱 Team KB Pure Breath</h3>
+      <ul>
+        <li>Iqbal – <a href="https://wa.me/60179912306" target="_blank">+60 17-991 2306</a></li>
+        <li>Syakirullah – <a href="https://wa.me/60172131363" target="_blank">+60 17-213 1363</a></li>
+        <li>Wan Zulkhairi – <a href="https://wa.me/60145147998" target="_blank">+60 14-514 7998</a></li>
+        <li>Zhafri – <a href="https://wa.me/60138487104" target="_blank">+60 13-848 7104</a></li>
+        <li>Zie Ain Balqis – <a href="https://wa.me/60172370158" target="_blank">+60 17-237 0158</a></li>
+      </ul>
+    </div>
+  </footer>
+
+  <!-- Chatbot -->
+  <div id="chatbot-button" onclick="toggleChatbot()">💬</div>
+  <div id="chatbot-panel">
+    <div style="padding:20px;">
+      Chatbot KB Pure Breath aktif. Klik 💬 untuk borak atau rujuk data semasa.
+      <br><br>
+      Untuk borak dengan Copilot, klik <a href="https://wa.me/18772241042" target="_blank">WhatsApp Copilot</a>.
+    </div>
   </div>
-</footer>
 
-<style>
-.contact-banner {
-  background: url('https://zieainbalqis-wq.github.io/kb-pure-breath/images/group-photo.jpg') center center no-repeat;
-  background-size: cover;
-  padding: 60px 20px;
-  color: white;
-  text-align: center;
-  position: relative;
-  z-index: 1;
-}
+  <!-- Scripts -->
+  <script>
+    function toggleChatbot() {
+      const panel = document.getElementById('chatbot-panel');
+      panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+    }
 
-.contact-banner::before {
-  content: "";
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: rgba(0,0,0,0.5);
-  z-index: -1;
-}
-
-.contact-content {
-  max-width: 800px;
-  margin: auto;
-  backdrop-filter: blur(4px);
-  background: rgba(0,0,0,0.4);
-  padding: 30px;
-  border-radius: 10px;
-}
-
-.contact-content a {
-  color: #ffd700;
-  text-decoration: none;
-}
-</style>
+    const ctx = document.getElementById('pmTrendChart').getContext('2d');
+    const pmTrendChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: ['Isnin', 'Selasa', 'Rabu', 'Khamis', 'Jumaat', 'Sabtu', 'Ahad'],
+        datasets: [
+          {
+            label: 'PM2.5 (µg/m³)',
+            data: [35, 42, 38, 50, 45, 60, 55],
+            borderColor: '#e74c3c',
+            backgroundColor: 'rgba(231, 76, 60, 0.2)',
+            tension: 0.4,
+            fill: true
+          },
+          {
+            label: 'PM10 (µg/m³)',
+            data: [60, 70, 65, 80, 75, 90, 85],
+            borderColor: '#3498db',
+            backgroundColor: 'rgba(52, 152, 219, 0.2)',
+            tension: 0.4,
+            fill: true
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { position: 'top' },
+          title: { display: false }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            title: { display: true, text: 'Kepekatan (µg/m³)' }
+          }
+        }
+      }
+    });
+  </script>
 
 </body>
 </html>
