@@ -5,38 +5,32 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>KB Pure Breath</title>
   <meta name="description" content="KB Pure Breath - Live Air Quality & Resources" />
-  <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-  <!-- Chart.js CDN -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 
   <style>
     :root{
       --bg:#f6fbff;
-      --accent1:#2bb6b6; /* turquoise */
-      --accent2:#4aa0e6; /* blue */
+      --accent1:#2bb6b6;
+      --accent2:#4aa0e6;
       --muted:#6b7280;
       --card:#ffffff;
-      --glass: rgba(255,255,255,0.75);
       --maxwidth:1100px;
     }
     *{box-sizing:border-box}
     html,body{height:100%}
     body{
       margin:0;
-      font-family:Inter, Poppins, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      font-family:Inter, Poppins, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
       background:var(--bg);
       color:#0f172a;
       -webkit-font-smoothing:antialiased;
-      -moz-osx-font-smoothing:grayscale;
       line-height:1.45;
-      padding-bottom:120px; /* room for floating chatbot */
+      padding-bottom:140px;
     }
-
-    /* HERO */
     .hero{
       width:100%;
-      min-height:320px;
+      min-height:360px;
       display:flex;
       align-items:center;
       justify-content:center;
@@ -61,57 +55,407 @@
       z-index:2;
       padding:28px 0;
     }
-    .hero-inner{
-      display:flex;
-      gap:20px;
-      align-items:center;
-      justify-content:space-between;
-      width:100%;
-    }
-    .brand{
-      display:flex;
-      gap:16px;
-      align-items:center;
-    }
-    .logo{
-      width:64px;height:64px;border-radius:8px;background:rgba(255,255,255,0.12);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:18px;
-    }
+    .hero-inner{display:flex;gap:20px;align-items:center;justify-content:space-between;width:100%}
+    .brand{display:flex;gap:16px;align-items:center}
+    .logo{width:64px;height:64px;border-radius:8px;background:rgba(255,255,255,0.12);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:18px;box-shadow:0 4px 18px rgba(2,6,23,0.25)}
     .brand h1{margin:0;font-size:22px;font-weight:600}
     .brand p{margin:0;font-size:13px;color:rgba(255,255,255,0.9)}
 
-    /* NAV */
-    nav{
-      display:flex;
-      gap:12px;
-      align-items:center;
-      margin-left:auto;
-    }
+    nav{display:flex;gap:12px;align-items:center;margin-left:auto}
     nav a{color:rgba(255,255,255,0.95);text-decoration:none;padding:8px 12px;border-radius:8px;font-weight:500}
     nav a:hover{background:rgba(255,255,255,0.06)}
 
-    /* MAIN LAYOUT */
     main{margin-top:-36px}
-    .card-row{
-      display:grid;
-      grid-template-columns: 1fr 320px;
-      gap:18px;
-      max-width:var(--maxwidth);
-      margin:18px auto;
-      padding:18px;
+    .card-row{display:grid;grid-template-columns:1fr 320px;gap:18px;max-width:var(--maxwidth);margin:18px auto;padding:18px}
+    .card{background:var(--card);border-radius:12px;box-shadow:0 6px 20px rgba(2,6,23,0.06);padding:18px}
+    .pm-grid{display:flex;gap:12px;flex-wrap:wrap}
+    .pm-box{flex:1 1 220px;padding:14px;border-radius:10px;background:linear-gradient(180deg, rgba(255,255,255,0.95), rgba(245,247,250,0.95));border:1px solid rgba(10,20,40,0.03)}
+    .pm-title{font-size:13px;color:var(--muted);margin-bottom:6px}
+    .pm-value{font-size:28px;font-weight:700;color:var(--accent2)}
+    .chart-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+    .chart-card{padding:12px;border-radius:10px;background:linear-gradient(180deg,#fff,#fbfdff);min-height:220px}
+    canvas{max-width:100%;height:260px !important}
+    .ipu-card{margin-top:12px;padding:12px;border-radius:10px;background:linear-gradient(90deg,var(--accent1),var(--accent2));color:#fff;display:flex;align-items:center;justify-content:space-between;gap:12px}
+    .ipu-large{font-size:28px;font-weight:700}
+    .ipu-desc{font-size:13px;opacity:0.95}
+    .section{max-width:var(--maxwidth);margin:20px auto;padding:18px}
+    .section h2{margin:0 0 12px 0;font-size:20px}
+    .infographic{display:flex;gap:16px;flex-wrap:wrap}
+    .info-card{flex:1 1 280px;padding:14px;background:var(--card);border-radius:10px;box-shadow:0 6px 18px rgba(2,6,23,0.04)}
+    .research-card a{color:var(--accent2);text-decoration:none;font-weight:600}
+    .faq .q{background:var(--card);padding:12px;border-radius:8px;margin-bottom:8px;cursor:pointer;box-shadow:0 6px 14px rgba(2,6,23,0.03)}
+    .faq .a{display:none;padding:10px;color:var(--muted)}
+    .team-grid{display:flex;gap:12px;flex-wrap:wrap}
+    .member{background:var(--card);padding:12px;border-radius:10px;min-width:180px;flex:1 1 200px}
+    footer{max-width:var(--maxwidth);margin:24px auto;padding:18px;text-align:center;color:var(--muted);font-size:14px}
+    .chatbot-btn{position:fixed;bottom:20px;right:20px;background:linear-gradient(90deg,var(--accent1),var(--accent2));color:white;padding:12px 16px;border-radius:999px;text-decoration:none;font-weight:700;box-shadow:0 10px 30px rgba(10,30,60,0.18);z-index:99999;display:flex;align-items:center;gap:10px}
+    .chatbot-btn .dot{width:10px;height:10px;background:#fff;border-radius:50%;opacity:0.9}
+    .note{font-size:13px;color:var(--muted);margin-top:8px}
+    @media (max-width:900px){
+      .card-row{grid-template-columns: 1fr; padding:12px}
+      .chart-row{grid-template-columns:1fr}
+      .hero-inner{flex-direction:column;align-items:flex-start}
+      nav{display:none}
+      .hero{min-height:300px}
+      canvas{height:200px !important}
+      .chatbot-btn{right:12px;bottom:14px}
     }
-    .card{
-      background:var(--card);
-      border-radius:12px;
-      box-shadow:0 6px 20px rgba(2,6,23,0.06);
-      padding:18px;
+  </style>
+</head>
+<body>
+  <header class="hero" role="banner">
+    <div class="container">
+      <div class="hero-inner">
+        <div class="brand">
+          <div class="logo">KB</div>
+          <div>
+            <h1>KB Pure Breath</h1>
+            <p>Live air quality — PM2.5 & PM10 monitoring (Kuala Lumpur)</p>
+          </div>
+        </div>
+
+        <nav aria-label="Main navigation">
+          <a href="#live">Live Data</a>
+          <a href="#research">Kajian Tempatan</a>
+          <a href="#infografik">Infografik</a>
+          <a href="#faq">FAQ</a>
+          <a href="#about">About Us</a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Row 1 -->
+    <section id="live" class="card-row" aria-labelledby="live-heading">
+      <div class="card">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+          <div>
+            <div class="pm-title">Particulate Matter (Latest)</div>
+            <div class="pm-grid">
+              <div class="pm-box">
+                <div class="pm-title">PM2.5 (µg/m³)</div>
+                <div id="pm25" class="pm-value">--</div>
+                <div style="font-size:12px;color:var(--muted);margin-top:6px" id="pm25-time">--</div>
+              </div>
+              <div class="pm-box">
+                <div class="pm-title">PM10 (µg/m³)</div>
+                <div id="pm10" class="pm-value">--</div>
+                <div style="font-size:12px;color:var(--muted);margin-top:6px" id="pm10-time">--</div>
+              </div>
+            </div>
+          </div>
+
+          <aside class="card" style="min-width:230px;position:relative">
+            <div style="font-size:13px;color:var(--muted);margin-bottom:8px">Indeks Pencemaran UDARA (IPU) - Live (AQICN)</div>
+            <div class="ipu-card" id="ipuCard" aria-live="polite">
+              <div>
+                <div class="ipu-large" id="ipuValue">--</div>
+                <div class="ipu-desc" id="ipuDesc">No data</div>
+              </div>
+              <div style="text-align:right;font-size:12px">Updated:<br><span id="ipuTime">--</span></div>
+            </div>
+          </aside>
+        </div>
+
+        <!-- Row 2 -->
+        <div class="chart-row" style="margin-top:14px">
+          <div class="chart-card">
+            <div style="display:flex;align-items:center;justify-content:space-between">
+              <div style="font-weight:700">Trend PM2.5</div>
+              <div style="font-size:12px;color:var(--muted)">Last readings (auto)</div>
+            </div>
+            <canvas id="chartPm25" aria-label="PM2.5 trend chart"></canvas>
+          </div>
+
+          <div class="chart-card">
+            <div style="display:flex;align-items:center;justify-content:space-between">
+              <div style="font-weight:700">Trend PM10</div>
+              <div style="font-size:12px;color:var(--muted)">Last readings (auto)</div>
+            </div>
+            <canvas id="chartPm10" aria-label="PM10 trend chart"></canvas>
+          </div>
+        </div>
+
+        <!-- Row 3: Real-time details -->
+        <div style="margin-top:12px">
+          <div style="padding:10px;background:linear-gradient(180deg,#fff,#fbfdff);border-radius:8px">
+            <div style="font-weight:700">Real-time IPU (from AQICN)</div>
+            <div id="realTimeDetails" style="font-size:14px;color:var(--muted);margin-top:6px">--</div>
+            <div class="note" id="apiNote">Data source: AQICN (waqi.info). Attribution required.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right column -->
+      <aside>
+        <div class="card">
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <div>
+              <div style="font-size:13px;color:var(--muted)">Live station</div>
+              <div style="font-weight:700">Kuala Lumpur (AQICN)</div>
+            </div>
+          </div>
+
+          <div style="margin-top:12px;font-size:13px;color:var(--muted)">
+            <strong>Notes:</strong> Data fetched from AQICN API. If no data, external API may not have fresh measurements or CORS may block direct browser requests.
+          </div>
+          <hr style="margin:12px 0;border:none;border-top:1px solid rgba(10,20,40,0.04)">
+          <div style="font-size:13px">
+            <strong>Quick tips</strong>
+            <ul style="padding-left:18px;margin:8px 0 0 0;color:var(--muted)">
+              <li>Use N95 masks when AQI is poor.</li>
+              <li>Limit outdoor activities during haze.</li>
+              <li>Keep windows closed if PM high indoors.</li>
+            </ul>
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <!-- Infographic -->
+    <section id="infografik" class="section" aria-labelledby="infografik-heading">
+      <h2 id="infografik-heading">Infografik: Kesan Particulate Matter ke Sistem Respiratori</h2>
+      <div class="infographic">
+        <div class="info-card">
+          <h3 style="margin-top:0">PM2.5</h3>
+          <p style="margin:6px 0;color:var(--muted)">Partikel halus yang boleh menembusi alveoli dan memasuki aliran darah. Berkait dengan peningkatan risiko asma, bronkitis, penyakit kardiovaskular, dan keradangan kronik.</p>
+        </div>
+        <div class="info-card">
+          <h3 style="margin-top:0">PM10</h3>
+          <p style="margin:6px 0;color:var(--muted)">Partikel lebih besar yang menyumbang kepada iritasi saluran pernafasan atas dan bronkus; boleh mencetuskan simptom pada individu sensitif.</p>
+        </div>
+        <div class="info-card">
+          <h3 style="margin-top:0">Prevention</h3>
+          <p style="margin:6px 0;color:var(--muted)">Penggunaan topeng sesuai, kawalan sumber pencemaran, dan pemantauan berkala adalah langkah penting untuk perlindungan komuniti.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Research -->
+    <section id="research" class="section">
+      <h2>Kajian Tempatan</h2>
+      <div class="research-card card" style="padding:12px">
+        <p style="margin:0 0 8px 0;color:var(--muted)">Rujukan kajian berkaitan (Prof. Dr. Juliana binti Jalaludin):</p>
+        <a id="profLink" href="https://www.tandfonline.com/doi/abs/10.1080/02786826.2025.2502492" target="_blank" rel="noopener noreferrer">Baca artikel Prof. Juliana (2025) ↗</a>
+        <div style="margin-top:10px;color:var(--muted)">
+          <strong>Ringkasan ringkas (bio):</strong>
+          <div>Prof. Dr. Juliana binti Jalaludin — Fakulti Perubatan & Sains Kesihatan, Universiti Putra Malaysia (UPM). Penyelidik berpengalaman dalam bidang kesan pencemaran udara terhadap kesihatan pernafasan, dengan beberapa penerbitan berkaitan pendedahan PM dan implikasi klinikal.</div>
+          <div style="margin-top:8px"><a href="https://profile.upm.edu.my/juliana/profesional.html" target="_blank" rel="noopener noreferrer">Profil rasmi Prof. Juliana (UPM) ↗</a></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq" class="section">
+      <h2>FAQ</h2>
+      <div class="faq">
+        <div class="q">Apa itu PM2.5 dan PM10?</div>
+        <div class="a">PM2.5: partikel < 2.5 µm; PM10: partikel < 10 µm. PM2.5 boleh menembusi alveoli dan bertindak lebih sistemik.</div>
+
+        <div class="q">Apakah IPU/AQI?</div>
+        <div class="a">AQI (IPU) adalah indeks yang memudahkan pemahaman kualiti udara. AQICN menyediakan nilai AQI berasaskan stesen pemantauan.</div>
+      </div>
+    </section>
+
+    <!-- About / Team -->
+    <section id="about" class="section">
+      <h2>About Us</h2>
+      <div style="margin-bottom:12px;color:var(--muted)">Team KB Pure Breath — untuk sebarang pertanyaan, hubungi nombor berikut:</div>
+      <div class="team-grid">
+        <div class="member"><strong>Iqbal</strong><div>+60179912306</div></div>
+        <div class="member"><strong>Syakirullah</strong><div>+60172131363</div></div>
+        <div class="member"><strong>Wan Zulkhairi</strong><div>+60145147998</div></div>
+        <div class="member"><strong>Zhafri</strong><div>+60138487104</div></div>
+        <div class="member"><strong>Zie Ain Balqis</strong><div>+60172370158</div></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    © KB Pure Breath — Data source: AQICN (waqi.info). Built for public monitoring & educational/demo use.
+  </footer>
+
+  <!-- Chatbot (WhatsApp) -->
+  <a id="chatbot" class="chatbot-btn" href="https://wa.me/18772241042" target="_blank" rel="noopener noreferrer" aria-label="Chat with Copilot on WhatsApp">
+    <span style="font-size:16px">💬</span>
+    <span style="font-size:14px">Chat Copilot</span>
+    <span class="dot" aria-hidden="true"></span>
+  </a>
+
+  <script>
+    /****************************************
+     * AQICN real-time integration (Kuala Lumpur)
+     * Token: provided by user (AQICN)
+     * Endpoint used: https://api.waqi.info/feed/kuala+lumpur/?token=TOKEN
+     ****************************************/
+    const AQICN_TOKEN = "ae042b2540f9d68b5f09af2ab8fa7b28b58ad821"; // inserted per request
+    const AQICN_URL = `https://api.waqi.info/feed/kuala+lumpur/?token=${AQICN_TOKEN}`;
+    const UPDATE_INTERVAL_MS = 60 * 1000; // 60s
+    const HISTORY_POINTS = 24; // keep last N points
+
+    let pm25History = [];
+    let pm10History = [];
+    let timeHistory = [];
+    let chartPm25, chartPm10;
+
+    function safeSetText(id, txt){
+      const el = document.getElementById(id);
+      if (el) el.textContent = txt;
     }
 
-    /* PM boxes */
-    .pm-grid{
-      display:flex;
-      gap:12px;
-      flex-wrap:wrap;
+    async function fetchAQICN(){
+      try {
+        const res = await fetch(AQICN_URL);
+        if (!res.ok) throw new Error('Network response not ok');
+        const json = await res.json();
+        return json;
+      } catch (err) {
+        console.warn('AQICN fetch error', err);
+        return {status:'error', data:null, error:err.message};
+      }
     }
-    .pm-box{
-      flex:1 1 220px;
-      padding:14px;border-radius:10px;background:linear-gradient(180deg, rgba(255,255,255,0.95), rgba(
+
+    function parseAQIData(json){
+      // return {aqi, pm25, pm10, time}
+      if (!json || json.status !== "ok" || !json.data) return null;
+      const d = json.data;
+      const aqi = (typeof d.aqi === 'number') ? d.aqi : (isFinite(Number(d.aqi)) ? Number(d.aqi) : null);
+      let pm25 = null, pm10 = null;
+      if (d.iaqi){
+        if (d.iaqi.pm25 && typeof d.iaqi.pm25.v !== 'undefined') pm25 = Number(d.iaqi.pm25.v);
+        if (d.iaqi.pm10 && typeof d.iaqi.pm10.v !== 'undefined') pm10 = Number(d.iaqi.pm10.v);
+      }
+      // fallback: sometimes d.data.forecast or d.idx etc.
+      const t = (d.time && d.time.s) ? d.time.s : new Date().toISOString();
+      return {aqi, pm25, pm10, time: t};
+    }
+
+    function initCharts(){
+      const ctx25 = document.getElementById('chartPm25').getContext('2d');
+      const ctx10 = document.getElementById('chartPm10').getContext('2d');
+
+      chartPm25 = new Chart(ctx25, {
+        type: 'line',
+        data: { labels: [], datasets: [{ label: 'PM2.5 (µg/m³)', data: [], tension: 0.3, borderWidth: 2, borderColor: getComputedStyle(document.documentElement).getPropertyValue('--accent2') || '#4aa0e6', fill: true, backgroundColor: 'rgba(74,160,230,0.08)'}] },
+        options: { responsive: true, maintainAspectRatio: false, scales: { x: { display: true }, y: { beginAtZero: true } } }
+      });
+
+      chartPm10 = new Chart(ctx10, {
+        type: 'line',
+        data: { labels: [], datasets: [{ label: 'PM10 (µg/m³)', data: [], tension: 0.3, borderWidth: 2, borderColor: getComputedStyle(document.documentElement).getPropertyValue('--accent1') || '#2bb6b6', fill: true, backgroundColor: 'rgba(43,182,182,0.06)'}] },
+        options: { responsive: true, maintainAspectRatio: false, scales: { x: { display: true }, y: { beginAtZero: true } } }
+      });
+    }
+
+    function pushHistory(ts, pm25, pm10){
+      timeHistory.push(ts);
+      pm25History.push(pm25);
+      pm10History.push(pm10);
+      if (timeHistory.length > HISTORY_POINTS) timeHistory.shift();
+      if (pm25History.length > HISTORY_POINTS) pm25History.shift();
+      if (pm10History.length > HISTORY_POINTS) pm10History.shift();
+    }
+
+    function updateCharts(){
+      const labels = timeHistory.map(t => new Date(t).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}));
+      chartPm25.data.labels = labels;
+      chartPm25.data.datasets[0].data = pm25History.map(v => v === null ? null : v);
+      chartPm25.update();
+
+      chartPm10.data.labels = labels;
+      chartPm10.data.datasets[0].data = pm10History.map(v => v === null ? null : v);
+      chartPm10.update();
+    }
+
+    function describeAQI(aqi){
+      if (aqi === null || isNaN(aqi)) return {cat:'No data', color:'#9AA4B2'};
+      if (aqi <= 50) return {cat:'Good', color:'#26a69a'};
+      if (aqi <= 100) return {cat:'Moderate', color:'#ffca28'};
+      if (aqi <= 150) return {cat:'Unhealthy for Sensitive', color:'#ff7043'};
+      if (aqi <= 200) return {cat:'Unhealthy', color:'#e53935'};
+      if (aqi <= 300) return {cat:'Very Unhealthy', color:'#8e24aa'};
+      return {cat:'Hazardous', color:'#6b0018'};
+    }
+
+    function styleIPUCard(color){
+      const card = document.getElementById('ipuCard');
+      if (card) {
+        card.style.background = `linear-gradient(90deg, ${color}, ${color})`;
+        card.style.boxShadow = '0 8px 24px rgba(10,30,60,0.12)';
+      }
+    }
+
+    async function refreshAll(){
+      safeSetText('pm25','Loading…');
+      safeSetText('pm10','Loading…');
+      const json = await fetchAQICN();
+      if (!json || json.status === 'error' || json.status !== 'ok'){
+        // show friendly message
+        safeSetText('realTimeDetails','Gagal ambil data dari AQICN. Cuba semula dalam beberapa saat. (Jika CORS error, gunakan proxy server).');
+        console.warn('AQICN returned error or no data', json);
+        return;
+      }
+
+      const parsed = parseAQIData(json);
+      if (!parsed){
+        safeSetText('realTimeDetails','Tiada data sah dari API.');
+        return;
+      }
+
+      const now = parsed.time ? new Date(parsed.time) : new Date();
+      const aqi = parsed.aqi;
+      const pm25 = (typeof parsed.pm25 === 'number' ? parsed.pm25 : null);
+      const pm10 = (typeof parsed.pm10 === 'number' ? parsed.pm10 : null);
+
+      pushHistory(now.toISOString(), pm25, pm10);
+      updateCharts();
+
+      safeSetText('pm25', pm25 !== null ? pm25.toFixed(1) : '--');
+      safeSetText('pm10', pm10 !== null ? pm10.toFixed(1) : '--');
+      safeSetText('pm25-time', now.toLocaleString());
+      safeSetText('pm10-time', now.toLocaleString());
+
+      // set IPU/AQI
+      const desc = describeAQI(aqi);
+      safeSetText('ipuValue', aqi !== null ? aqi : '--');
+      safeSetText('ipuDesc', desc.cat);
+      safeSetText('ipuTime', now.toLocaleString());
+      safeSetText('realTimeDetails', `AQI: ${aqi !== null ? aqi : '--'} • PM2.5: ${pm25 !== null ? pm25.toFixed(1) : '--'} µg/m³ • PM10: ${pm10 !== null ? pm10.toFixed(1) : '--'}.`);
+      styleIPUCard(desc.color);
+    }
+
+    // FAQ toggle
+    function initFAQ(){
+      document.querySelectorAll('.faq .q').forEach(q=>{
+        q.addEventListener('click', ()=> {
+          const a = q.nextElementSibling;
+          if (!a) return;
+          if (a.style.display === 'block') { a.style.display = 'none'; }
+          else { a.style.display = 'block'; }
+        });
+      });
+    }
+
+    // Init on load
+    window.addEventListener('DOMContentLoaded', async ()=>{
+      initCharts();
+      initFAQ();
+
+      // seed history with empty points
+      const now = new Date();
+      for (let i=HISTORY_POINTS-1;i>=0;i--){
+        const ts = new Date(now.getTime() - i * 60 * 1000); // minute-based padding
+        pushHistory(ts.toISOString(), null, null);
+      }
+      updateCharts();
+
+      // first fetch
+      await refreshAll();
+
+      // periodic
+      setInterval(refreshAll, UPDATE_INTERVAL_MS);
+    });
+  </script>
+</body>
+</html>
