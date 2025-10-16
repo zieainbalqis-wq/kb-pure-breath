@@ -41,12 +41,6 @@
       margin: auto;
     }
 
-    .infografik img {
-      max-width: 600px;
-      border-radius: 10px;
-      margin-bottom: 20px;
-    }
-
     .faq-item {
       margin-bottom: 20px;
       text-align: left;
@@ -57,39 +51,6 @@
     .faq-item summary {
       font-weight: bold;
       cursor: pointer;
-    }
-
-    footer.contact-banner {
-      background: url('images/group-photo.jpg') center center no-repeat;
-      background-size: cover;
-      padding: 60px 20px;
-      color: white;
-      text-align: center;
-      position: relative;
-      z-index: 1;
-    }
-
-    footer.contact-banner::before {
-      content: "";
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.5);
-      z-index: -1;
-    }
-
-    .contact-content {
-      max-width: 800px;
-      margin: auto;
-      backdrop-filter: blur(4px);
-      background: rgba(0,0,0,0.4);
-      padding: 30px;
-      border-radius: 10px;
-    }
-
-    .contact-content a {
-      color: #ffd700;
-      text-decoration: none;
     }
 
     #chatbot-button {
@@ -120,140 +81,143 @@
       z-index: 9998;
       padding: 20px;
     }
+
+    body.dark {
+      background: #121212;
+      color: #eee;
+    }
+
+    body.dark header,
+    body.dark section,
+    body.dark footer {
+      background: transparent;
+      color: #eee;
+    }
+
+    body.dark a {
+      color: #ffd700;
+    }
   </style>
 </head>
 <body>
-  <!-- Banner Utama -->
-  <header>
-    <img src="images/logo.png" alt="KB Pure Breath Logo" />
-    <h1>KB Pure Breath</h1>
-    <p>Sistem Pemantauan Kualiti Udara Komuniti</p>
-  </header>
+<!-- Banner Utama -->
+<header>
+  <img src="images/logo.png" alt="KB Pure Breath Logo" />
+  <h1>KB Pure Breath</h1>
+  <p>Sistem Pemantauan Kualiti Udara Komuniti</p>
+</header>
 
-  <!-- Trend Chart -->
-  <section>
-    <h2>📊 Trend PM2.5 & PM10</h2>
-    <canvas id="pmTrendChart" height="400"></canvas>
-  </section>
+<!-- Trend Chart -->
+<section>
+  <h2>📊 Trend PM2.5 & PM10</h2>
+  <canvas id="pmTrendChart" height="400"></canvas>
+</section>
 
-  <!-- Real-Time IPU -->
-  <section>
-    <h2>🌫️ Real-Time IPU</h2>
-    <p>IPU semasa: <strong>85 (Sederhana)</strong></p>
-    <p>Kemaskini: 16 Okt 2025, 11:30 PM</p>
-  </section>
+<!-- Real-Time IPU -->
+<section>
+  <h2>🌫️ Real-Time IPU</h2>
+  <p>IPU semasa: <strong>85 (Sederhana)</strong></p>
+  <p>Kemaskini: 16 Okt 2025, 11:30 PM</p>
+</section>
 
-  <!-- Infografik Kesan Respiratori -->
-  <section class="infografik">
-    <h2>🫁 Kesan Particulate Matter ke Sistem Respiratori</h2>
-    <img src="https://www.cdc.gov/air/images/pm-health-effects.jpg" alt="Infografik Respiratori">
-    <p>PM2.5 dan PM10 boleh menembusi jauh ke dalam paru-paru dan menyebabkan keradangan, asma, bronkitis, dan risiko penyakit jantung.</p>
-  </section>
+<!-- Infografik Kesan Respiratori -->
+<section>
+  <h2>🫁 Kesan Particulate Matter ke Sistem Respiratori</h2>
+  <img src="https://www.cdc.gov/air/images/pm-health-effects.jpg" alt="Infografik Respiratori" style="max-width:600px; border-radius:10px; margin-bottom:20px;">
+  <p>PM2.5 dan PM10 boleh menembusi jauh ke dalam paru-paru dan menyebabkan keradangan, asma, bronkitis, dan risiko penyakit jantung.</p>
+</section>
+<!-- Kajian Saintifik -->
+<section>
+  <h2>📚 Kajian Berkaitan PM & Kesihatan</h2>
+  <p>“Long-term exposure to PM2.5 increases risk of cardiovascular and respiratory diseases.”</p>
+  <p>Rujukan: <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7413047/" target="_blank">NCBI - PM2.5 Health Effects</a></p>
+</section>
 
-  <!-- Kajian -->
-  <section>
-    <h2>📚 Kajian Berkaitan</h2>
-    <p><a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7605313/" target="_blank">Kesan PM2.5 terhadap kesihatan respiratori – NCBI</a></p>
-  </section>
-
-  <!-- FAQ -->
-  <section>
-    <h2>❓ Soalan Lazim</h2>
-    <div class="faq-item">
-      <details>
-        <summary>Apa itu PM2.5 dan PM10?</summary>
-        <p>PM2.5 dan PM10 ialah zarah halus dalam udara yang boleh memberi kesan kepada kesihatan apabila disedut.</p>
-      </details>
-    </div>
-    <div class="faq-item">
-      <details>
-        <summary>Bagaimana nak kurangkan pendedahan?</summary>
-        <p>Elakkan aktiviti luar semasa IPU tinggi, guna penapis udara, dan pakai pelitup muka N95.</p>
-      </details>
-    </div>
-  </section>
-
-  <!-- About Us -->
-  <section>
-    <h2>👥 Tentang KB Pure Breath</h2>
-    <p>Inisiatif komuniti untuk memantau dan menyebarkan maklumat kualiti udara secara mudah dan mesra pengguna.</p>
-  </section>
-
-  <!-- Contact Us Banner -->
-  <footer class="contact-banner">
-    <div class="contact-content">
-      <h2>📞 Hubungi Kami</h2>
-      <p>Untuk pertanyaan, cadangan atau kolaborasi, sila hubungi pasukan KB Pure Breath:</p>
-      <ul>
-        <li>Email: <a href="mailto:kbpurebreath@gmail.com">kbpurebreath@gmail.com</a></li>
-        <li>Instagram: <a href="https://instagram.com/kbpurebreath" target="_blank">@kbpurebreath</a></li>
-        <li>WhatsApp Umum: <a href="https://wa.me/60123456789" target="_blank">+60 12-345 6789</a></li>
-      </ul>
-      <h3>📱 Team KB Pure Breath</h3>
-      <ul>
-        <li>Iqbal – <a href="https://wa.me/60179912306" target="_blank">+60 17-991 2306</a></li>
-        <li>Syakirullah – <a href="https://wa.me/60172131363" target="_blank">+60 17-213 1363</a></li>
-        <li>Wan Zulkhairi – <a href="https://wa.me/60145147998" target="_blank">+60 14-514 7998</a></li>
-        <li>Zhafri – <a href="https://wa.me/60138487104" target="_blank">+60 13-848 7104</a></li>
-        <li>Zie Ain Balqis – <a href="https://wa.me/60172370158" target="_blank">+60 17-237 0158</a></li>
-      </ul>
-    </div>
-  </footer>
-
-  <!-- Chatbot -->
-  <div id="chatbot-button" onclick="toggleChatbot()">💬</div>
-  <div id="chatbot-panel">
-    Chatbot KB Pure Breath aktif. Klik 💬 untuk borak atau rujuk data semasa.
-    <br><br>
-    Untuk borak dengan Copilot, klik <a href="https://wa.me/18772241042" target="_blank">WhatsApp Copilot</a>.
+<!-- FAQ -->
+<section>
+  <h2>❓ Soalan Lazim (FAQ)</h2>
+  <div class="faq-item">
+    <details>
+      <summary>Apakah itu PM2.5 dan PM10?</summary>
+      <p>PM2.5 dan PM10 ialah zarah halus yang terapung di udara dan boleh memberi kesan kepada sistem pernafasan.</p>
+    </details>
   </div>
+  <div class="faq-item">
+    <details>
+      <summary>Bagaimana saya boleh lindungi diri?</summary>
+      <p>Gunakan topeng N95, elakkan aktiviti luar semasa IPU tinggi, dan pantau kualiti udara secara berkala.</p>
+    </details>
+  </div>
+</section>
 
-  <!-- Scripts -->
-  <script>
-    function toggleChatbot() {
-      const panel = document.getElementById('chatbot-panel');
-      panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
-    }
+<!-- About Us -->
+<section>
+  <h2>👥 Tentang KB Pure Breath</h2>
+  <p>Inisiatif komuniti untuk memantau dan meningkatkan kesedaran tentang kualiti udara di kawasan Kota Bharu dan sekitarnya.</p>
+</section>
 
-    const ctx = document.getElementById('pmTrendChart').getContext('2d');
-    const pmTrendChart = new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels: ['Isnin', 'Selasa', 'Rabu', 'Khamis', 'Jumaat', 'Sabtu', 'Ahad'],
-        datasets: [
-          {
-            label: 'PM2.5 (µg/m³)',
-            data: [35, 42, 38, 50, 45, 60, 55],
-            borderColor: '#e74c3c',
-            backgroundColor: 'rgba(231, 76, 60, 0.2)',
-            tension: 0.4,
-            fill: true
-          },
-          {
-            label: 'PM10 (µg/m³)',
-            data: [60, 70, 65, 80, 75, 90, 85],
-            borderColor: '#3498db',
-            backgroundColor: 'rgba(52, 152, 219, 0.2)',
-            tension: 0.4,
-            fill: true
-          }
-        ]
-      },
-      options: {
-        responsive: true,
-        plugins: {
-          legend: { position: 'top' },
-          title: { display: false }
+<!-- Contact Us -->
+<section>
+  <h2>📞 Hubungi Kami</h2>
+  <p>Team KB Pure Breath</p>
+  <p>Email: <a href="mailto:kbpurebreath@gmail.com">kbpurebreath@gmail.com</a></p>
+</section>
+
+<!-- Chatbot -->
+<div id="chatbot-button" onclick="toggleChatbot()">💬</div>
+<div id="chatbot-panel">
+  <h3>Chatbot KB</h3>
+  <p>Hai! Ada soalan tentang kualiti udara?</p>
+  <p>Saya sedia bantu 😊</p>
+</div>
+
+<!-- Dark Mode Toggle -->
+<button onclick="toggleDarkMode()" style="position:fixed; top:20px; right:20px; z-index:9999;">🌓 Dark Mode</button>
+
+<!-- Script -->
+<script>
+  // Chart.js setup
+  const ctx = document.getElementById('pmTrendChart').getContext('2d');
+  const pmTrendChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: ['Isnin', 'Selasa', 'Rabu', 'Khamis', 'Jumaat'],
+      datasets: [
+        {
+          label: 'PM2.5',
+          data: [35, 42, 30, 50, 45],
+          borderColor: '#e74c3c',
+          fill: false
         },
-        scales: {
-          y: {
-            beginAtZero: true,
-            title: { display: true, text: 'Kepekatan (µg/m³)' }
-          }
+        {
+          label: 'PM10',
+          data: [60, 65, 55, 70, 68],
+          borderColor: '#f1c40f',
+          fill: false
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        y: {
+          beginAtZero: true
         }
       }
-    });
-  </script>
+    }
+  });
+
+  // Chatbot toggle
+  function toggleChatbot() {
+    const panel = document.getElementById('chatbot-panel');
+    panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+  }
+
+  // Dark mode toggle
+  function toggleDarkMode() {
+    document.body.classList.toggle('dark');
+  }
+</script>
 
 </body>
 </html>
