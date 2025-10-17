@@ -166,28 +166,95 @@
 
   <button class="whatsapp-btn" onclick="window.open('https://wa.me/18772241042','_blank')">WhatsApp Copilot</button>
 
-  <script>
-    const pm25El = document.getElementById('pm25');
-    const pm10El = document.getElementById('pm10');
-    const aqiEl = document.getElementById('aqi');
-    const realTimeEl = document.getElementById('realTimeAQI');
-    const lastUpdateEl = document.getElementById('lastUpdate');
+   <script>
+/* ---------- CONFIG ---------- */
+const API_KEY = 'ae042b2540f9d68b5f09af2ab8fa7b28b58ad821';
+const RAW_API = `https://api.waqi.info/feed/kuala+lumpur/?token=${API_KEY}`;
 
-    const pmChartCtx = document.getElementById('pmChart').getContext('2d');
-    let pmChart = new Chart(pmChartCtx, {
-      type: 'line',
-      data: {
-        labels: [],
-        datasets: [
-          {label:'PM2.5',data:[],borderColor:'var(--accent1)',backgroundColor:'rgba(43,182,182,0.2)',tension:0.3},
-          {label:'PM10',data:[],borderColor:'var(--accent2)',backgroundColor:'rgba(74,160,230,0.2)',tension:0.3}
-        ]
-      },
-      options:{responsive:true,animation:false,scales:{y:{beginAtZero:true},x:{ticks:{color:'#0f172a'}}},plugins:{legend:{position:'top'}}}
-    });
+/* proxy helper (AllOrigins - returns contents as JSON string) */
+function proxyUrl(url){
+  return 'https://api.allorigins.win/get?url=' + encodeURIComponent(url);
+}
 
-    const API_KEY = 'ae042b2540f9d68b5f09af2ab8fa7b28b58ad821';
+/* DOM refs */
+const pm25El = document.getElementById('pm25');
+const pm10El = document.getElementById('pm10');
+const aqiEl  = document.getElementById('aqi');
+const realTimeEl = document.getElementById('realTimeAQI');
+const lastUpdateEl = document.getElementById('lastUpdate');
 
-    async function fetchAQI(){
-      try{
-        const url = encodeURIComponent(`https://api.waqi.info/feed/kuala+lumpur/?
+/* Chart setup */
+const ctx = document.getElementById('pmChart').getContext('2d');
+const labels = [], data25 = [], data10 = [];
+const pmChart = new Chart(ctx, {
+  type: 'line',
+  data: { labels, datasets: [
+    { label: 'PM2.5 (µg/m³)', data: data25, borderColor: getComputedStyle(document.documentElement).getPropertyValue('--accent1') || '#2bb6b6', tension: 0.3, fill: true, backgroundColor: 'rgba(43,182,182,0.12)' },
+    { label: 'PM10 (µg/m³)', data: data10, borderColor: getComputedStyle(document.documentElement).getPropertyValue('--accent2') || '#4aa0e6', tension: 0.3, fill: true, backgroundColor: 'rgba(74,160,230,0.12)' }
+  ]},
+  options: { responsive:true, maintainAspectRatio:false, scales:{ y:{ beginAtZero:true } }, plugins:{ legend:{ position:'top' } } }
+});
+
+/* fetch via proxy and update UI/chart */
+async function fetchAQIProxy(){
+  try{
+    const resp = await fetch(proxyUrl(RAW_API), {cache: "no-store"});
+    if(!resp.ok) throw new Error('Proxy fetch failed: ' + resp.status);
+    const wrapper = await resp.json();               // { contents: "...", status: "ok" }
+    const json = JSON.parse(wrapper.contents);       // original API response
+
+    if(!json || json.status !== 'ok' || !json.data){
+      console.warn('AQICN returned no data', json);
+      realTimeEl.textContent = 'No data available from AQICN';
+      return;
+    }
+
+    const now = new Date();
+    const tsLabel = now.toTimeString().split(' ')[0]; // HH:MM:SS
+
+    const aqi = (typeof json.data.aqi === 'number' || !isNaN(Number(json.data.aqi))) ? Number(json.data.aqi) : null;
+    const iaqi = json.data.iaqi || {};
+    const pm25 = iaqi.pm25 ? Number(iaqi.pm25.v) : null;
+    const pm10 = iaqi.pm10 ? Number(iaqi.pm10.v) : null;
+
+    // UI
+    pm25El.textContent = pm25 !== null ? pm25.toFixed(1) : '--';
+    pm10El.textContent = pm10 !== null ? pm10.toFixed(1) : '--';
+    aqiEl.textContent  = aqi !== null ? aqi : '--';
+    realTimeEl.textContent = `AQI: ${aqi !== null ? aqi : '--'} ${json.data.dominentpol ? '— ' + json.data.dominentpol : ''}`;
+    lastUpdateEl.textContent = now.toLocaleString();
+
+    // chart history (keep last 30)
+    labels.push(tsLabel);
+    data25.push(pm25 === null ? null : pm25);
+    data10.push(pm10 === null ? null : pm10);
+    if(labels.length > 30){ labels.shift(); data25.shift(); data10.shift(); }
+
+    pmChart.update();
+  } catch (err) {
+    console.error('fetchAQIProxy error', err);
+    realTimeEl.textContent = 'Error fetching data (proxy). Check console.';
+  }
+}
+
+/* init seed labels so chart doesn't look weird */
+(function seed(){
+  const now = Date.now();
+  for(let i=10;i>0;i--){
+    const t = new Date(now - i*60000);
+    labels.push(t.toTimeString().split(' ')[0]);
+    data25.push(null);
+    data10.push(null);
+  }
+  pmChart.update();
+})();
+
+/* First load + interval */
+fetchAQIProxy();
+setInterval(fetchAQIProxy, 60_000);
+
+/* Optional: developer hint if CORS or proxy fails */
+window.addEventListener('error', e => {
+  console.warn('Window error', e);
+});
+</script>
