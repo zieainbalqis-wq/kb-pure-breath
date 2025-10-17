@@ -150,7 +150,7 @@
     <section class="section" id="faq">
       <h2>FAQ</h2>
       <p><strong>Q:</strong> What is PM2.5?<br><strong>A:</strong> Fine particulate matter that can penetrate lungs and affect health.</p>
-      <p><strong>Q:</strong> How often is AQI updated?<br><strong>A:</strong> Every few minutes in real-time using IQAir API.</p>
+      <p><strong>Q:</strong> How often is AQI updated?<br><strong>A:</strong> Every 1 minute in real-time using IQAir API.</p>
     </section>
   </main>
 
@@ -170,14 +170,18 @@
     const pmChartCtx = document.getElementById('pmChart').getContext('2d');
     let pmChart = new Chart(pmChartCtx, {
       type: 'line',
-      data: {labels: [], datasets:[
-        {label:'PM2.5',data:[],borderColor:'var(--accent1)',backgroundColor:'rgba(43,182,182,0.2)'},
-        {label:'PM10',data:[],borderColor:'var(--accent2)',backgroundColor:'rgba(74,160,230,0.2)'}
-      ]},
-      options:{responsive:true,animation:false,plugins:{legend:{position:'top'}}}
+      data: {
+        labels: [],
+        datasets: [
+          {label:'PM2.5',data:[],borderColor:'var(--accent1)',backgroundColor:'rgba(43,182,182,0.2)',tension:0.3},
+          {label:'PM10',data:[],borderColor:'var(--accent2)',backgroundColor:'rgba(74,160,230,0.2)',tension:0.3}
+        ]
+      },
+      options:{responsive:true,animation:false,scales:{y:{beginAtZero:true},x:{ticks:{color:'#0f172a'}}},plugins:{legend:{position:'top'}}}
     });
 
     const API_KEY = 'ae042b2540f9d68b5f09af2ab8fa7b28b58ad821';
+
     async function fetchAQI(){
       try{
         const res = await fetch(`https://api.waqi.info/feed/kuala+lumpur/?token=${API_KEY}`);
@@ -185,25 +189,33 @@
         if(data.status==='ok'){
           const iaqi = data.data.iaqi;
           const now = new Date();
-          pm25El.textContent = iaqi.pm25?iaqi.pm25.v:'--';
-          pm10El.textContent = iaqi.pm10?iaqi.pm10.v:'--';
+          const timeLabel = now.getHours().toString().padStart(2,'0')+':'+now.getMinutes().toString().padStart(2,'0')+':'+now.getSeconds().toString().padStart(2,'0');
+
+          pm25El.textContent = iaqi.pm25 ? iaqi.pm25.v : '--';
+          pm10El.textContent = iaqi.pm10 ? iaqi.pm10.v : '--';
           aqiEl.textContent = data.data.aqi || '--';
           realTimeEl.textContent = `AQI: ${data.data.aqi} — ${data.data.dominentpol}`;
           lastUpdateEl.textContent = now.toLocaleString();
 
-          pmChart.data.labels.push(now.getHours()+':'+now.getMinutes());
-          pmChart.data.datasets[0].data.push(iaqi.pm25?iaqi.pm25.v:null);
-          pmChart.data.datasets[1].data.push(iaqi.pm10?iaqi.pm10.v:null);
+          pmChart.data.labels.push(timeLabel);
+          pmChart.data.datasets[0].data.push(iaqi.pm25 ? iaqi.pm25.v : null);
+          pmChart.data.datasets[1].data.push(iaqi.pm10 ? iaqi.pm10.v : null);
+
           if(pmChart.data.labels.length>20){
             pmChart.data.labels.shift();
             pmChart.data.datasets.forEach(ds=>ds.data.shift());
           }
           pmChart.update();
+        } else {
+          console.warn('No AQI data available.');
         }
-      }catch(e){console.error(e);}
+      } catch(e){
+        console.error('Error fetching AQI:', e);
+      }
     }
+
     fetchAQI();
-    setInterval(fetchAQI, 300000); // every 5 min
+    setInterval(fetchAQI,60000);
   </script>
 </body>
 </html>
