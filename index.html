@@ -29,7 +29,10 @@
     .container{width:95%;max-width:var(--maxwidth);margin:0 auto;position:relative;z-index:2;padding:28px 0;}
     .hero-inner{display:flex;gap:20px;align-items:center;justify-content:space-between;width:100%;}
     .brand{display:flex;gap:16px;align-items:center;}
-    .logo{width:96px;height:96px;border-radius:12px;background:rgba(255,255,255,0.12);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:22px;}
+    .logo{
+      width:96px;height:96px;border-radius:12px;object-fit:contain;
+      box-shadow:0 4px 12px rgba(0,0,0,0.2);
+    }
     .brand h1{margin:0;font-size:28px;font-weight:600}
     .brand p{margin:0;font-size:14px;color:rgba(255,255,255,0.9)}
     nav{display:flex;gap:12px;align-items:center;margin-left:auto}
@@ -59,7 +62,7 @@
   <header class="hero">
     <div class="container hero-inner">
       <div class="brand">
-        <div class="logo">KB</div>
+        <img src="logo.png" alt="KB Logo" class="logo" />
         <div>
           <h1>KB Pure Breath</h1>
           <p>Live Air Quality & Resources</p>
@@ -149,8 +152,11 @@
 
     <section class="section" id="faq">
       <h2>FAQ</h2>
-      <p><strong>Q:</strong> What is PM2.5?<br><strong>A:</strong> Fine particulate matter that can penetrate lungs and affect health.</p>
-      <p><strong>Q:</strong> How often is AQI updated?<br><strong>A:</strong> Every 1 minute in real-time using IQAir API.</p>
+      <p><strong>Q1:</strong> What is PM2.5?<br><strong>A:</strong> Fine particulate matter that can penetrate lungs and affect health.</p>
+      <p><strong>Q2:</strong> What is PM10?<br><strong>A:</strong> Larger particulate matter, still harmful to respiratory system but less than PM2.5.</p>
+      <p><strong>Q3:</strong> What is AQI?<br><strong>A:</strong> Air Quality Index (AQI) is a standard measurement of air pollution levels.</p>
+      <p><strong>Q4:</strong> How often is the data updated?<br><strong>A:</strong> Every 1 minute in real-time using IQAir API.</p>
+      <p><strong>Q5:</strong> How can I protect myself from high pollution?<br><strong>A:</strong> Limit outdoor activities during high AQI, wear mask, and use air purifiers indoors.</p>
     </section>
   </main>
 
@@ -184,38 +190,4 @@
 
     async function fetchAQI(){
       try{
-        const res = await fetch(`https://api.waqi.info/feed/kuala+lumpur/?token=${API_KEY}`);
-        const data = await res.json();
-        if(data.status==='ok'){
-          const iaqi = data.data.iaqi;
-          const now = new Date();
-          const timeLabel = now.getHours().toString().padStart(2,'0')+':'+now.getMinutes().toString().padStart(2,'0')+':'+now.getSeconds().toString().padStart(2,'0');
-
-          pm25El.textContent = iaqi.pm25 ? iaqi.pm25.v : '--';
-          pm10El.textContent = iaqi.pm10 ? iaqi.pm10.v : '--';
-          aqiEl.textContent = data.data.aqi || '--';
-          realTimeEl.textContent = `AQI: ${data.data.aqi} — ${data.data.dominentpol}`;
-          lastUpdateEl.textContent = now.toLocaleString();
-
-          pmChart.data.labels.push(timeLabel);
-          pmChart.data.datasets[0].data.push(iaqi.pm25 ? iaqi.pm25.v : null);
-          pmChart.data.datasets[1].data.push(iaqi.pm10 ? iaqi.pm10.v : null);
-
-          if(pmChart.data.labels.length>20){
-            pmChart.data.labels.shift();
-            pmChart.data.datasets.forEach(ds=>ds.data.shift());
-          }
-          pmChart.update();
-        } else {
-          console.warn('No AQI data available.');
-        }
-      } catch(e){
-        console.error('Error fetching AQI:', e);
-      }
-    }
-
-    fetchAQI();
-    setInterval(fetchAQI,60000);
-  </script>
-</body>
-</html>
+        const url = encodeURIComponent(`https://api.waqi.info/feed/kuala+lumpur/?
