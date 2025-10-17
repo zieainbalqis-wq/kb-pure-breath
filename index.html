@@ -1,294 +1,209 @@
 <!doctype html>
-<html lang="ms">
+<html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>KB Pure Breath — KL AQI Live</title>
-<meta name="description" content="KB Pure Breath - Live AQI Kuala Lumpur (AQICN) - monitoring PM2.5 & PM10" />
-<!-- Chart.js -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-<style>
-  :root{
-    --accent1:#2bb6b6; --accent2:#4aa0e6; --muted:#6b7280; --maxw:1100px;
-  }
-  *{box-sizing:border-box}
-  html,body{height:100%}
-  body{margin:0;font-family:Inter, Poppins, system-ui, -apple-system, "Segoe UI", Roboto, Arial;background:#f6fbff;color:#071129;line-height:1.45;padding-bottom:120px}
-  /* HERO */
-  .hero{min-height:320px;display:flex;align-items:center;background-image:url('https://us.images.westend61.de/0001599644pw/malaysia-kuala-lumpur-clouds-over-klcc-park-and-petronas-towers-EAF00105.jpg');background-size:cover;background-position:center;position:relative;color:#fff}
-  .hero::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(6,21,34,0.6),rgba(6,21,34,0.35));pointer-events:none}
-  .hero-inner{width:95%;max-width:var(--maxw);margin:0 auto;position:relative;z-index:2;padding:28px 0;display:flex;align-items:center;justify-content:space-between;gap:16px}
-  .brand{display:flex;gap:12px;align-items:center}
-  .logo{width:64px;height:64px;border-radius:8px;background:rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;overflow:hidden}
-  .logo img{width:100%;height:100%;object-fit:contain;display:block}
-  .brand h1{margin:0;font-size:20px}
-  .brand p{margin:0;font-size:13px;color:rgba(255,255,255,0.9)}
-  nav{display:flex;gap:12px;margin-left:auto}
-  nav a{color:rgba(255,255,255,0.95);text-decoration:none;padding:8px 12px;border-radius:8px;font-weight:600}
-  nav a:hover{background:rgba(255,255,255,0.06)}
-  /* MAIN */
-  main{max-width:var(--maxw);margin:-40px auto 24px;padding:0 16px}
-  .grid{display:grid;grid-template-columns:1fr 320px;gap:14px}
-  .card{background:#fff;border-radius:12px;padding:14px;box-shadow:0 8px 30px rgba(10,20,40,0.06)}
-  .pm-row{display:flex;gap:12px;flex-wrap:wrap}
-  .pm{flex:1 1 180px;padding:12px;border-radius:10px;background:linear-gradient(180deg,#fff,#fbfdff);border:1px solid rgba(10,20,40,0.03)}
-  .pm .label{font-size:13px;color:var(--muted);margin-bottom:8px}
-  .pm .val{font-size:26px;font-weight:800;color:var(--accent2)}
-  .charts{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
-  canvas{width:100%;height:220px!important}
-  .ipu{margin-top:12px;padding:12px;border-radius:10px;background:linear-gradient(90deg,var(--accent1),var(--accent2));color:#fff;display:flex;justify-content:space-between;align-items:center}
-  .section{margin-top:18px}
-  .inf{display:flex;gap:12px;flex-wrap:wrap}
-  .info{flex:1 1 240px;background:#fff;padding:12px;border-radius:10px}
-  .research a{color:var(--accent2);font-weight:600}
-  .team{display:flex;gap:10px;flex-wrap:wrap}
-  .member{background:#fff;padding:10px;border-radius:10px;min-width:160px}
-  footer{text-align:center;color:var(--muted);margin:18px 0}
-  .chat{position:fixed;right:18px;bottom:18px;background:linear-gradient(90deg,var(--accent1),var(--accent2));color:#fff;padding:10px 14px;border-radius:999px;text-decoration:none;font-weight:700;z-index:99999;display:flex;align-items:center;gap:10px}
-  .note{font-size:13px;color:var(--muted);margin-top:8px}
-  @media(max-width:900px){
-    .grid{grid-template-columns:1fr}
-    .charts{grid-template-columns:1fr}
-    nav{display:none}
-    .hero-inner{flex-direction:column;align-items:flex-start}
-    canvas{height:180px!important}
-    .chat{right:12px;bottom:12px}
-  }
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>KB Pure Breath</title>
+  <meta name="description" content="KB Pure Breath - Live Air Quality & Resources" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <style>
+    :root{
+      --bg:#f6fbff;
+      --accent1:#2bb6b6;
+      --accent2:#4aa0e6;
+      --muted:#6b7280;
+      --card:#ffffff;
+      --glass: rgba(255,255,255,0.75);
+      --maxwidth:1100px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;font-family:Inter,Poppins,sans-serif;line-height:1.45;background:var(--bg);color:#0f172a;padding-bottom:120px;}
+    a{text-decoration:none;color:var(--accent2);}
+    .hero{
+      width:100%;min-height:320px;display:flex;align-items:center;justify-content:center;
+      background-image:url('https://us.images.westend61.de/0001599644pw/malaysia-kuala-lumpur-clouds-over-klcc-park-and-petronas-towers-EAF00105.jpg');
+      background-size:cover;background-position:center;position:relative;color:#fff;
+    }
+    .hero::before{content:"";position:absolute;inset:0;background: linear-gradient(180deg, rgba(6,21,34,0.6), rgba(6,21,34,0.35));pointer-events:none;}
+    .container{width:95%;max-width:var(--maxwidth);margin:0 auto;position:relative;z-index:2;padding:28px 0;}
+    .hero-inner{display:flex;gap:20px;align-items:center;justify-content:space-between;width:100%;}
+    .brand{display:flex;gap:16px;align-items:center;}
+    .logo{width:96px;height:96px;border-radius:12px;background:rgba(255,255,255,0.12);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:22px;}
+    .brand h1{margin:0;font-size:28px;font-weight:600}
+    .brand p{margin:0;font-size:14px;color:rgba(255,255,255,0.9)}
+    nav{display:flex;gap:12px;align-items:center;margin-left:auto}
+    nav a{color:rgba(255,255,255,0.95);padding:8px 12px;border-radius:8px;font-weight:500}
+    nav a:hover{background:rgba(255,255,255,0.06)}
+
+    main{margin-top:-36px}
+    .card-row{display:grid;grid-template-columns:1fr 320px;gap:18px;max-width:var(--maxwidth);margin:18px auto;padding:18px;}
+    .card{background:var(--card);border-radius:12px;box-shadow:0 6px 20px rgba(2,6,23,0.06);padding:18px;}
+    .pm-grid{display:flex;gap:12px;flex-wrap:wrap}
+    .pm-box{flex:1 1 220px;padding:14px;border-radius:10px;background:linear-gradient(180deg, rgba(255,255,255,0.95), rgba(255,255,255,0.85));text-align:center;}
+    .pm-box h2{margin:0;font-size:20px;color:var(--accent1)}
+    .pm-box p{margin:4px 0 0;font-size:14px;color:var(--muted)}
+    .chart-container{margin-top:20px;padding:14px;background:var(--card);border-radius:12px;box-shadow:0 6px 20px rgba(2,6,23,0.06);}
+    .infographic{margin:20px auto;text-align:center;}
+    .infographic img{max-width:90%;border-radius:12px;box-shadow:0 6px 20px rgba(2,6,23,0.06);}
+    .section{padding:40px 18px;}
+    .section h2{font-size:24px;margin-bottom:20px;color:var(--accent2);}
+    .about-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:18px;}
+    .member-card{text-align:center;background:var(--card);padding:14px;border-radius:12px;box-shadow:0 6px 20px rgba(2,6,23,0.06);}
+    .member-card img{width:100px;height:100px;border-radius:50%;object-fit:cover;margin-bottom:10px;}
+    footer{background:var(--accent1);color:#fff;padding:28px;text-align:center;border-top-left-radius:12px;border-top-right-radius:12px;}
+    .whatsapp-btn{position:fixed;bottom:28px;right:28px;background:#25D366;color:#fff;border:none;padding:14px 18px;font-size:16px;border-radius:50px;cursor:pointer;box-shadow:0 6px 20px rgba(2,6,23,0.2);}
+  </style>
 </head>
 <body>
-  <header class="hero" role="banner" aria-label="KB Pure Breath hero">
-    <div class="hero-inner">
-      <div class="brand" style="gap:14px">
-        <div class="logo" aria-hidden="true">
-          <!-- logo.png should be in repo root (main branch) -->
-          <img src="logo.png" alt="KB Pure Breath logo" onerror="this.style.display='none'"/>
-        </div>
+  <header class="hero">
+    <div class="container hero-inner">
+      <div class="brand">
+        <div class="logo">KB</div>
         <div>
           <h1>KB Pure Breath</h1>
-          <p>Live AQI — Kuala Lumpur (PM2.5 & PM10)</p>
+          <p>Live Air Quality & Resources</p>
         </div>
       </div>
-
-      <nav aria-label="Main navigation">
-        <a href="#live">Live</a>
-        <a href="#research">Kajian</a>
-        <a href="#infografik">Infografik</a>
+      <nav>
+        <a href="#pm">PM Data</a>
+        <a href="#infographic">Infographic</a>
+        <a href="#prof">Prof Juliana</a>
+        <a href="#about">About Us</a>
         <a href="#faq">FAQ</a>
-        <a href="#about">About</a>
       </nav>
     </div>
   </header>
-
   <main>
-    <!-- Live section -->
-    <section id="live" class="grid" aria-labelledby="live">
-      <div class="card" style="min-height:360px">
-        <div style="display:flex;gap:12px;align-items:flex-start;justify-content:space-between">
-          <div style="flex:1">
-            <div style="font-size:13px;color:var(--muted)">Particulate Matter (Latest)</div>
-            <div class="pm-row" style="margin-top:10px">
-              <div class="pm">
-                <div class="label">PM2.5 (µg/m³)</div>
-                <div id="pm25" class="val">--</div>
-                <div id="t25" style="font-size:12px;color:var(--muted);margin-top:6px"></div>
-              </div>
-              <div class="pm">
-                <div class="label">PM10 (µg/m³)</div>
-                <div id="pm10" class="val">--</div>
-                <div id="t10" style="font-size:12px;color:var(--muted);margin-top:6px"></div>
-              </div>
-            </div>
+    <section class="card-row" id="pm">
+      <div class="card">
+        <h2>Particulate Matter & AQI</h2>
+        <div class="pm-grid">
+          <div class="pm-box">
+            <h2 id="pm25">--</h2>
+            <p>PM2.5 (μg/m³)</p>
           </div>
-
-          <aside style="min-width:230px">
-            <div style="font-size:13px;color:var(--muted);margin-bottom:8px">Indeks Pencemaran Udara (AQI) - Live (AQICN)</div>
-            <div id="ipu" class="ipu" aria-live="polite">
-              <div>
-                <div id="aqiVal" style="font-size:26px;font-weight:800">--</div>
-                <div id="aqiCat" style="font-size:13px"></div>
-              </div>
-              <div style="text-align:right;font-size:12px">Updated<br><span id="aqiTime">--</span></div>
-            </div>
-          </aside>
-        </div>
-
-        <!-- Trend charts -->
-        <div class="charts">
-          <div class="card">
-            <div style="font-weight:700;display:flex;justify-content:space-between;align-items:center">
-              <div>Trend PM2.5</div><div style="font-size:12px;color:var(--muted)">Recent</div>
-            </div>
-            <canvas id="chart25" aria-label="PM2.5 trend"></canvas>
+          <div class="pm-box">
+            <h2 id="pm10">--</h2>
+            <p>PM10 (μg/m³)</p>
           </div>
-          <div class="card">
-            <div style="font-weight:700;display:flex;justify-content:space-between;align-items:center">
-              <div>Trend PM10</div><div style="font-size:12px;color:var(--muted)">Recent</div>
-            </div>
-            <canvas id="chart10" aria-label="PM10 trend"></canvas>
+          <div class="pm-box">
+            <h2 id="aqi">--</h2>
+            <p>Air Quality Index</p>
           </div>
         </div>
-
-        <div style="margin-top:12px">
-          <div class="card" style="background:linear-gradient(180deg,#fff,#fbfdff)">
-            <strong>Real-time details</strong>
-            <div id="details" style="color:var(--muted);margin-top:8px">Loading real-time data...</div>
-            <div class="note" id="apiNote">Data source: AQICN (waqi.info). Attribution required.</div>
-          </div>
+        <div class="chart-container">
+          <canvas id="pmChart" height="150"></canvas>
         </div>
+        <p>Last Updated: <span id="lastUpdate">--</span></p>
       </div>
-
-      <!-- Sidebar -->
-      <aside>
-        <div class="card">
-          <div style="font-size:13px;color:var(--muted)">Live station</div>
-          <div style="font-weight:700">Kuala Lumpur (AQICN)</div>
-          <div style="margin-top:10px;color:var(--muted);font-size:13px">
-            <strong>Notes:</strong> Data fetched via a proxy to avoid CORS blocking. If values show "No data", API may not have recent readings.
-          </div>
-
-          <hr style="margin:12px 0;border:none;border-top:1px solid rgba(10,20,40,0.04)">
-
-          <div style="font-size:13px">
-            <strong>Quick tips</strong>
-            <ul style="padding-left:18px;margin:8px 0 0 0;color:var(--muted)">
-              <li>Use N95 masks in poor air quality.</li>
-              <li>Limit outdoor exercise during haze.</li>
-              <li>Keep windows closed if outdoor PM high.</li>
-            </ul>
-          </div>
-        </div>
-      </aside>
-    </section>
-
-    <!-- Infographic -->
-    <section id="infografik" class="section">
-      <h2>Infografik: Kesan Particulate Matter ke Sistem Respiratori</h2>
-      <div class="inf" style="margin-top:10px">
-        <div class="info"><strong>PM2.5</strong><p style="color:var(--muted)">Partikel halus yang boleh menembusi alveoli & memasuki peredaran darah — berkaitan asma, bronkitis & penyakit kardiovaskular.</p></div>
-        <div class="info"><strong>PM10</strong><p style="color:var(--muted)">Partikel lebih besar menyebabkan iritasi saluran pernafasan atas dan bronkus.</p></div>
-        <div class="info"><strong>Prevention</strong><p style="color:var(--muted)">Topeng, kawal sumber pencemaran & pantau bacaan AQI.</p></div>
+      <div class="card">
+        <h2>Real-Time AQI</h2>
+        <p id="realTimeAQI">Loading...</p>
       </div>
     </section>
 
-    <!-- Research -->
-    <section id="research" class="section">
-      <h2>Kajian Tempatan</h2>
-      <div class="card" style="margin-top:10px">
-        <p style="color:var(--muted);margin:0 0 8px">Rujukan (Prof. Dr. Juliana binti Jalaludin):</p>
-        <a class="research" href="https://www.tandfonline.com/doi/abs/10.1080/02786826.2025.2502492" target="_blank" rel="noopener noreferrer">Baca artikel Prof. Juliana (2025) ↗</a>
-        <div style="margin-top:10px;color:var(--muted)"><strong>Profil ringkas:</strong> Prof. Dr. Juliana binti Jalaludin — Fakulti Perubatan & Sains Kesihatan, UPM. Penyelidik berkaitan pendedahan pencemaran udara dan implikasi kesihatan. <a href="https://profile.upm.edu.my/juliana/profesional.html" target="_blank">Profil UPM ↗</a></div>
+    <section class="section" id="infographic">
+      <h2>Infographic - Respiratory System & Particulate Matter</h2>
+      <div class="infographic">
+        <img src="https://www.researchgate.net/profile/Fiorella-Barraza/publication/321993233/figure/fig14/AS:574185194704903@1513907826653/Respiratory-tract-and-particulate-matter-PM-size-classification-Modified-from.png" alt="Respiratory Tract & PM">
       </div>
     </section>
 
-    <!-- FAQ & About -->
-    <section id="faq" class="section">
+    <section class="section" id="prof">
+      <h2>Prof Juliana - Research</h2>
+      <p><strong>Bio:</strong> Prof. Juliana is an environmental health expert at UPM focusing on air pollution and respiratory impacts.</p>
+      <p><a href="https://www.tandfonline.com/doi/abs/10.1080/02786826.2025.2502492" target="_blank">Read her research</a></p>
+    </section>
+
+    <section class="section" id="about">
+      <h2>About Us</h2>
+      <div class="about-grid">
+        <div class="member-card">
+          <img src="iqbal.png" alt="Iqbal">
+          <h3>Iqbal</h3>
+          <p>+60179912306</p>
+        </div>
+        <div class="member-card">
+          <img src="syakirullah.png" alt="Syakirullah">
+          <h3>Syakirullah</h3>
+          <p>+60172131363</p>
+        </div>
+        <div class="member-card">
+          <img src="wan_zulkhairi.png" alt="Wan Zulkhairi">
+          <h3>Wan Zulkhairi</h3>
+          <p>+60145147998</p>
+        </div>
+        <div class="member-card">
+          <img src="zhafri.png" alt="Zhafri">
+          <h3>Zhafri</h3>
+          <p>+60138487104</p>
+        </div>
+        <div class="member-card">
+          <img src="zie_ain_balqis.png" alt="Zie Ain Balqis">
+          <h3>Zie Ain Balqis</h3>
+          <p>+60172370158</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="faq">
       <h2>FAQ</h2>
-      <div class="card" style="margin-top:10px;padding:12px">
-        <div style="cursor:pointer" onclick="toggle(this)">Apa itu PM2.5 & PM10?</div>
-        <div style="display:none;color:var(--muted);margin-top:8px">PM2.5 = partikulat <2.5µm; PM10 = partikulat <10µm. PM2.5 boleh menembusi alveoli dan lebih berbahaya.</div>
-        <div style="cursor:pointer;margin-top:8px" onclick="toggle(this)">Apa itu AQI?</div>
-        <div style="display:none;color:var(--muted);margin-top:8px">AQI ialah indeks ringkas untuk kualiti udara — angka lebih tinggi = kualiti udara lebih teruk.</div>
-      </div>
-    </section>
-
-    <section id="about" class="section">
-      <h2>About / Contact</h2>
-      <div class="card team" style="margin-top:10px">
-        <div class="member"><strong>Iqbal</strong><div style="color:var(--muted)">+60179912306</div></div>
-        <div class="member"><strong>Syakirullah</strong><div style="color:var(--muted)">+60172131363</div></div>
-        <div class="member"><strong>Wan Zulkhairi</strong><div style="color:var(--muted)">+60145147998</div></div>
-        <div class="member"><strong>Zhafri</strong><div style="color:var(--muted)">+60138487104</div></div>
-        <div class="member"><strong>Zie Ain Balqis</strong><div style="color:var(--muted)">+60172370158</div></div>
-      </div>
+      <p><strong>Q:</strong> What is PM2.5?<br><strong>A:</strong> Fine particulate matter that can penetrate lungs and affect health.</p>
+      <p><strong>Q:</strong> How often is AQI updated?<br><strong>A:</strong> Every few minutes in real-time using IQAir API.</p>
     </section>
   </main>
 
-  <footer>© KB Pure Breath — Data source: AQICN (waqi.info) • Built for public monitoring</footer>
+  <footer>
+    <p>© 2025 KB Pure Breath</p>
+  </footer>
 
-  <!-- WhatsApp Copilot button -->
-  <a class="chat" href="https://wa.me/18772241042" target="_blank" rel="noopener noreferrer" aria-label="Chat Copilot on WhatsApp">💬 Chat Copilot</a>
+  <button class="whatsapp-btn" onclick="window.open('https://wa.me/18772241042','_blank')">WhatsApp Copilot</button>
 
-<script>
-/* ---------- CONFIG ---------- */
-const AQICN_TOKEN = "ae042b2540f9d68b5f09af2ab8fa7b28b58ad821";
-const AQICN_API = `https://api.waqi.info/feed/kuala+lumpur/?token=${AQICN_TOKEN}`;
-/* Use AllOrigins raw proxy to avoid CORS blocking */
-function proxyUrl(url){ return 'https://api.allorigins.win/raw?url=' + encodeURIComponent(url); }
-const UPDATE_MS = 60_000; // 60s
-const HISTORY_POINTS = 24;
+  <script>
+    const pm25El = document.getElementById('pm25');
+    const pm10El = document.getElementById('pm10');
+    const aqiEl = document.getElementById('aqi');
+    const realTimeEl = document.getElementById('realTimeAQI');
+    const lastUpdateEl = document.getElementById('lastUpdate');
 
-/* ---------- CHARTS ---------- */
-const tLabels = [], series25 = [], series10 = [];
-const ctx25 = document.getElementById('chart25').getContext('2d');
-const ctx10 = document.getElementById('chart10').getContext('2d');
-const chart25 = new Chart(ctx25, { type:'line',
-  data:{ labels:tLabels, datasets:[{ label:'PM2.5 (µg/m³)', data:series25, tension:0.3, borderColor:getComputedStyle(document.documentElement).getPropertyValue('--accent2')||'#4aa0e6', fill:true, backgroundColor:'rgba(74,160,230,0.08)'}]},
-  options:{responsive:true,maintainAspectRatio:false}
-});
-const chart10 = new Chart(ctx10, { type:'line',
-  data:{ labels:tLabels, datasets:[{ label:'PM10 (µg/m³)', data:series10, tension:0.3, borderColor:getComputedStyle(document.documentElement).getPropertyValue('--accent1')||'#2bb6b6', fill:true, backgroundColor:'rgba(43,182,182,0.06)'}]},
-  options:{responsive:true,maintainAspectRatio:false}
-});
+    const pmChartCtx = document.getElementById('pmChart').getContext('2d');
+    let pmChart = new Chart(pmChartCtx, {
+      type: 'line',
+      data: {labels: [], datasets:[
+        {label:'PM2.5',data:[],borderColor:'var(--accent1)',backgroundColor:'rgba(43,182,182,0.2)'},
+        {label:'PM10',data:[],borderColor:'var(--accent2)',backgroundColor:'rgba(74,160,230,0.2)'}
+      ]},
+      options:{responsive:true,animation:false,plugins:{legend:{position:'top'}}}
+    });
 
-/* ---------- HELPERS ---------- */
-function setText(id, txt){ const el=document.getElementById(id); if(el) el.textContent = txt; }
-function describeAQI(a){ if(a===null || isNaN(a)) return {cat:'No data', color:'#9AA4B2'}; if(a<=50) return {cat:'Good',color:'#26a69a'}; if(a<=100) return {cat:'Moderate',color:'#ffca28'}; if(a<=150) return {cat:'Unhealthy (S)',color:'#ff7043'}; if(a<=200) return {cat:'Unhealthy',color:'#e53935'}; if(a<=300) return {cat:'Very Unhealthy',color:'#8e24aa'}; return {cat:'Hazardous',color:'#6b0018'}; }
-function styleIPU(color){ const c=document.getElementById('ipu'); if(c) c.style.background=`linear-gradient(90deg, ${color}, ${color})`; }
+    const API_KEY = 'ae042b2540f9d68b5f09af2ab8fa7b28b58ad821';
+    async function fetchAQI(){
+      try{
+        const res = await fetch(`https://api.waqi.info/feed/kuala+lumpur/?token=${API_KEY}`);
+        const data = await res.json();
+        if(data.status==='ok'){
+          const iaqi = data.data.iaqi;
+          const now = new Date();
+          pm25El.textContent = iaqi.pm25?iaqi.pm25.v:'--';
+          pm10El.textContent = iaqi.pm10?iaqi.pm10.v:'--';
+          aqiEl.textContent = data.data.aqi || '--';
+          realTimeEl.textContent = `AQI: ${data.data.aqi} — ${data.data.dominentpol}`;
+          lastUpdateEl.textContent = now.toLocaleString();
 
-/* ---------- FETCH & UPDATE ---------- */
-async function fetchAQI(){
-  try{
-    // proxy to avoid CORS
-    const res = await fetch(proxyUrl(AQICN_API));
-    if(!res.ok) throw new Error('Network response not ok');
-    const j = await res.json();
-    if(!j || j.status!=='ok' || !j.data) { setText('details','API returned no data.'); return; }
-
-    // parse
-    const aqi = (typeof j.data.aqi === 'number' || !isNaN(Number(j.data.aqi))) ? Number(j.data.aqi) : null;
-    const iaqi = j.data.iaqi || {};
-    const pm25 = iaqi.pm25 ? Number(iaqi.pm25.v) : null;
-    const pm10 = iaqi.pm10 ? Number(iaqi.pm10.v) : null;
-    const timeStr = j.data.time && j.data.time.s ? j.data.time.s : new Date().toISOString();
-
-    // maintain history
-    if(tLabels.length >= HISTORY_POINTS){ tLabels.shift(); series25.shift(); series10.shift(); }
-    const label = new Date(timeStr).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
-    tLabels.push(label);
-    series25.push(pm25 === null ? null : pm25);
-    series10.push(pm10 === null ? null : pm10);
-    chart25.update(); chart10.update();
-
-    // update UI
-    setText('aqiVal', aqi !== null ? aqi : '--');
-    const desc = describeAQI(aqi);
-    setText('aqiCat', desc.cat);
-    styleIPU(desc.color);
-    setText('aqiTime', new Date(timeStr).toLocaleString());
-    setText('pm25', pm25 !== null ? pm25.toFixed(1) : '--');
-    setText('pm10', pm10 !== null ? pm10.toFixed(1) : '--');
-    setText('t25', new Date(timeStr).toLocaleString());
-    setText('t10', new Date(timeStr).toLocaleString());
-    setText('details', `AQI: ${aqi ?? '--'} • PM2.5: ${pm25 !== null ? pm25.toFixed(1) : '--'} µg/m³ • PM10: ${pm10 !== null ? pm10.toFixed(1) : '--'}.`);
-  }catch(err){
-    console.warn('AQI fetch error', err);
-    setText('details','Gagal ambil data (API/proxy). Jika masalah CORS, kita boleh susun serverless proxy).');
-    // keep charts but don't throw
-  }
-}
-
-/* ---------- INIT ---------- */
-window.addEventListener('DOMContentLoaded',()=>{
-  // seed labels
-  for(let i=HISTORY_POINTS-1;i>=0;i--){ const dt=new Date(Date.now()-i*60000); tLabels.push(dt.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})); series25.push(null); series10.push(null); }
-  chart25.update(); chart10.update();
-  fetchAQI();
-  setInterval(fetchAQI, UPDATE_MS);
-});
-
-/* FAQ toggle */
-function toggle(el){ const a = el.nextElementSibling; if(!a) return; a.style.display = (a.style.display==='block') ? 'none' : 'block'; }
-</script>
+          pmChart.data.labels.push(now.getHours()+':'+now.getMinutes());
+          pmChart.data.datasets[0].data.push(iaqi.pm25?iaqi.pm25.v:null);
+          pmChart.data.datasets[1].data.push(iaqi.pm10?iaqi.pm10.v:null);
+          if(pmChart.data.labels.length>20){
+            pmChart.data.labels.shift();
+            pmChart.data.datasets.forEach(ds=>ds.data.shift());
+          }
+          pmChart.update();
+        }
+      }catch(e){console.error(e);}
+    }
+    fetchAQI();
+    setInterval(fetchAQI, 300000); // every 5 min
+  </script>
 </body>
 </html>
