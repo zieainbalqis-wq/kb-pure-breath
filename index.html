@@ -5,167 +5,385 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>KB Pure Breath</title>
   <meta name="description" content="KB Pure Breath - Live Air Quality & Resources" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
   <style>
     :root{
-      --bg:#f6fbff;
       --accent1:#2bb6b6;
       --accent2:#4aa0e6;
       --muted:#6b7280;
-      --card:#ffffff;
-      --glass: rgba(255,255,255,0.75);
-      --maxwidth:1100px;
+      --glass: rgba(255,255,255,0.08);
+      --card: rgba(255,255,255,0.88);
+      --maxw:1200px;
     }
-    *{box-sizing:border-box}
-    html,body{height:100%;margin:0;font-family:Inter,Poppins,sans-serif;line-height:1.45;background:var(--bg);color:#0f172a;padding-bottom:120px;}
-    a{text-decoration:none;color:var(--accent2);}
-    .hero{
-      width:100%;min-height:320px;display:flex;align-items:center;justify-content:center;
+    /* Page background: full KLCC image */
+    html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;color:#071129}
+    body{
       background-image:url('https://us.images.westend61.de/0001599644pw/malaysia-kuala-lumpur-clouds-over-klcc-park-and-petronas-towers-EAF00105.jpg');
-      background-size:cover;background-position:center;position:relative;color:#fff;
+      background-size:cover;
+      background-position:center;
+      background-attachment:fixed;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      padding-bottom:120px;
     }
-    .hero::before{content:"";position:absolute;inset:0;background: linear-gradient(180deg, rgba(6,21,34,0.6), rgba(6,21,34,0.35));pointer-events:none;}
-    .container{width:95%;max-width:var(--maxwidth);margin:0 auto;position:relative;z-index:2;padding:28px 0;}
-    .hero-inner{display:flex;gap:20px;align-items:center;justify-content:space-between;width:100%;}
-    .brand{display:flex;gap:16px;align-items:center;}
-    .logo{
-      width:96px;height:96px;border-radius:12px;object-fit:contain;
-      box-shadow:0 4px 12px rgba(0,0,0,0.2);
+
+    /* overlay to keep text readable */
+    .overlay{
+      position:fixed;inset:0;
+      background:linear-gradient(180deg, rgba(6,21,34,0.55), rgba(6,21,34,0.45));
+      pointer-events:none;z-index:0;
     }
-    .brand h1{margin:0;font-size:28px;font-weight:600}
-    .brand p{margin:0;font-size:14px;color:rgba(255,255,255,0.9)}
-    nav{display:flex;gap:12px;align-items:center;margin-left:auto}
-    nav a{color:rgba(255,255,255,0.95);padding:8px 12px;border-radius:8px;font-weight:500}
+
+    .page{
+      position:relative; z-index:2;
+      max-width:var(--maxw); margin:0 auto; padding:28px;
+    }
+
+    /* Header */
+    header{display:flex;align-items:center;gap:18px;margin-bottom:18px}
+    .logo{width:110px;height:110px;border-radius:14px;overflow:hidden;flex:0 0 110px;box-shadow:0 8px 30px rgba(0,0,0,0.35);background:rgba(255,255,255,0.06)}
+    .logo img{width:100%;height:100%;object-fit:contain;display:block}
+    .site-title{color:#fff}
+    .site-title h1{margin:0;font-size:28px;font-weight:700;line-height:1}
+    .site-title p{margin:4px 0 0 0;color:rgba(255,255,255,0.9)}
+
+    nav{margin-left:auto}
+    nav a{color:rgba(255,255,255,0.95);text-decoration:none;margin-left:12px;padding:8px 10px;border-radius:8px;font-weight:600}
     nav a:hover{background:rgba(255,255,255,0.06)}
 
-    main{margin-top:-36px}
-    .card-row{display:grid;grid-template-columns:1fr 320px;gap:18px;max-width:var(--maxwidth);margin:18px auto;padding:18px;}
-    .card{background:var(--card);border-radius:12px;box-shadow:0 6px 20px rgba(2,6,23,0.06);padding:18px;}
-    .pm-grid{display:flex;gap:12px;flex-wrap:wrap}
-    .pm-box{flex:1 1 220px;padding:14px;border-radius:10px;background:linear-gradient(180deg, rgba(255,255,255,0.95), rgba(255,255,255,0.85));text-align:center;}
-    .pm-box h2{margin:0;font-size:20px;color:var(--accent1)}
-    .pm-box p{margin:4px 0 0;font-size:14px;color:var(--muted)}
-    .chart-container{margin-top:20px;padding:14px;background:var(--card);border-radius:12px;box-shadow:0 6px 20px rgba(2,6,23,0.06);}
-    .infographic{margin:20px auto;text-align:center;}
-    .infographic img{max-width:90%;border-radius:12px;box-shadow:0 6px 20px rgba(2,6,23,0.06);}
-    .section{padding:40px 18px;}
-    .section h2{font-size:24px;margin-bottom:20px;color:var(--accent2);}
-    .about-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:18px;}
-    .member-card{text-align:center;background:var(--card);padding:14px;border-radius:12px;box-shadow:0 6px 20px rgba(2,6,23,0.06);}
-    .member-card img{width:100px;height:100px;border-radius:50%;object-fit:cover;margin-bottom:10px;}
-    footer{background:var(--accent1);color:#fff;padding:28px;text-align:center;border-top-left-radius:12px;border-top-right-radius:12px;}
-    .whatsapp-btn{position:fixed;bottom:28px;right:28px;background:#25D366;color:#fff;border:none;padding:14px 18px;font-size:16px;border-radius:50px;cursor:pointer;box-shadow:0 6px 20px rgba(2,6,23,0.2);}
+    /* layout: realtime region */
+    .realtime{
+      display:grid;
+      grid-template-columns: 1fr 380px;
+      gap:18px;
+      align-items:start;
+      margin-bottom:18px;
+    }
+
+    /* left: big AQI card */
+    .aqi-card{
+      background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+      border-radius:12px;
+      padding:18px;
+      color:#fff;
+      box-shadow:0 10px 30px rgba(2,6,23,0.45);
+      min-height:220px;
+    }
+    .aqi-value{font-size:64px;font-weight:800;line-height:1;margin:6px 0}
+    .aqi-state{font-size:18px;margin-top:6px;color:rgba(255,255,255,0.95)}
+    .aqi-meta{margin-top:10px;color:rgba(255,255,255,0.85);font-size:13px}
+
+    /* right: charts and details */
+    .side-card{background:var(--card);border-radius:12px;padding:14px;box-shadow:0 8px 24px rgba(2,6,23,0.12)}
+    .small-title{font-weight:700;margin-bottom:8px;color:#0f172a}
+    .small-note{font-size:13px;color:var(--muted);margin-bottom:10px}
+
+    canvas{width:100%;height:220px!important}
+
+    /* contact & complain */
+    .contact-row{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:18px}
+    .card{background:var(--card);border-radius:12px;padding:14px;box-shadow:0 8px 24px rgba(2,6,23,0.08);color:#071129}
+    .complain{
+      background:linear-gradient(90deg,var(--accent1),var(--accent2));
+      color:#fff;padding:14px;border-radius:12px;box-shadow:0 8px 30px rgba(10,30,60,0.16);
+    }
+    .complain button{background:#fff;color:var(--accent2);padding:10px 12px;border-radius:8px;border:none;font-weight:700;cursor:pointer}
+
+    /* Poster awareness */
+    .poster-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-top:12px}
+    .poster-card{background:rgba(255,255,255,0.06);border-radius:10px;padding:8px;text-align:center;color:#fff;box-shadow:0 8px 20px rgba(0,0,0,0.3)}
+    .poster-card img{max-width:100%;height:auto;border-radius:8px;display:block;margin:0 auto}
+
+    /* FAQ accordion */
+    .faq{margin-top:18px}
+    .accordion-item{background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));border-radius:10px;margin-bottom:10px;overflow:hidden}
+    .accordion-q{padding:12px 14px;cursor:pointer;color:#fff;font-weight:700;display:flex;justify-content:space-between;align-items:center}
+    .accordion-a{padding:0 14px 14px 14px;color:rgba(255,255,255,0.9);display:none}
+
+    footer{margin-top:28px;padding:16px;text-align:center;color:rgba(255,255,255,0.85)}
+    .whatsapp{position:fixed;right:18px;bottom:18px;background:linear-gradient(90deg,var(--accent1),var(--accent2));color:#fff;padding:12px 14px;border-radius:999px;font-weight:800;box-shadow:0 10px 30px rgba(0,0,0,0.25);text-decoration:none}
+    @media(max-width:980px){
+      .realtime{grid-template-columns:1fr}
+      .contact-row{grid-template-columns:1fr}
+      header{flex-wrap:wrap}
+      .logo{width:86px;height:86px}
+      .aqi-value{font-size:48px}
+      canvas{height:180px!important}
+    }
   </style>
 </head>
 <body>
-  <header class="hero">
-    <div class="container hero-inner">
-      <div class="brand">
-        <img src="logo.png" alt="KB Logo" class="logo" />
-        <div>
-          <h1>KB Pure Breath</h1>
-          <p>Live Air Quality & Resources</p>
-        </div>
+  <div class="overlay" aria-hidden="true"></div>
+
+  <div class="page" role="main">
+    <!-- header -->
+    <header>
+      <div class="logo" aria-hidden="true">
+        <img src="logo.png" alt="KB Pure Breath logo" onerror="this.style.display='none'">
       </div>
-      <nav>
-        <a href="#pm">PM Data</a>
-        <a href="#infographic">Infographic</a>
-        <a href="#prof">Prof Juliana</a>
-        <a href="#about">About Us</a>
-        <a href="#faq">FAQ</a>
+      <div class="site-title">
+        <h1 style="color:#fff">KB Pure Breath</h1>
+        <p style="color:rgba(255,255,255,0.9);margin:4px 0 0 0">Live Air Quality Monitoring — Kuala Lumpur</p>
+      </div>
+      <nav aria-label="Main navigation">
+        <a href="#realtime" title="Realtime">Realtime</a>
+        <a href="#infographic" title="Infographic">Infographic</a>
+        <a href="#about" title="About">About</a>
+        <a href="#faq" title="FAQ">FAQ</a>
       </nav>
-    </div>
-  </header>
-  <main>
-    <section class="card-row" id="pm">
-      <div class="card">
-        <h2>Particulate Matter & AQI</h2>
-        <div class="pm-grid">
-          <div class="pm-box">
-            <h2 id="pm25">--</h2>
-            <p>PM2.5 (μg/m³)</p>
+    </header>
+
+    <!-- REALTIME: left big AQI, right charts -->
+    <section id="realtime" class="realtime" aria-labelledby="realtime-heading">
+      <div class="aqi-card" role="region" aria-labelledby="realtime-heading" id="aqiCard">
+        <div id="realtime-heading" style="display:flex;justify-content:space-between;align-items:center">
+          <div>
+            <div style="font-size:13px;color:rgba(255,255,255,0.9)">Real-Time Air Quality</div>
+            <div style="font-size:12px;color:rgba(255,255,255,0.7)">Source: AQICN (waqi.info) — proxy used</div>
           </div>
-          <div class="pm-box">
-            <h2 id="pm10">--</h2>
-            <p>PM10 (μg/m³)</p>
-          </div>
-          <div class="pm-box">
-            <h2 id="aqi">--</h2>
-            <p>Air Quality Index</p>
-          </div>
+          <div style="font-size:12px;color:rgba(255,255,255,0.85)">Updated: <span id="aqiUpdated">--</span></div>
+        </div>
+
+        <div style="margin-top:12px">
+          <div class="aqi-value" id="aqiValue">--</div>
+          <div class="aqi-state" id="aqiCat">No data</div>
+          <div class="aqi-meta" id="aqiDetails">PM2.5: -- µg/m³ • PM10: -- µg/m³</div>
         </div>
       </div>
-      <div class="card">
-        <h2>Real-Time AQI</h2>
-        <!-- Embed AQICN iframe widget -->
-        <iframe width="100%" height="250" frameborder="0" src="https://aqicn.org/city/kuala-lumpur/widget/"></iframe>
-      </div>
+
+      <aside class="side-card" aria-labelledby="charts-heading">
+        <div id="charts-heading" style="display:flex;justify-content:space-between;align-items:center">
+          <div class="small-title">Particulate Matter Trend</div>
+          <div class="small-note">Last readings (auto)</div>
+        </div>
+
+        <div style="margin-top:12px">
+          <canvas id="pmChart" aria-label="PM2.5 and PM10 trend"></canvas>
+        </div>
+
+        <div style="margin-top:12px" class="small-note">
+          <strong>Note:</strong> If numbers don't appear, proxy or API may have blocked requests — check console for errors.
+        </div>
+      </aside>
     </section>
 
-    <section class="section" id="infographic">
-      <h2>Infographic - Respiratory System & Particulate Matter</h2>
+    <!-- INFOGRAPHIC -->
+    <section id="infographic" class="section" aria-labelledby="infographic-heading">
+      <h2 id="infographic-heading" style="color:#fff">Infographic - Respiratory Tract & PM</h2>
       <div class="infographic">
-        <img src="https://www.researchgate.net/profile/Fiorella-Barraza/publication/321993233/figure/fig14/AS:574185194704903@1513907826653/Respiratory-tract-and-particulate-matter-PM-size-classification-Modified-from.png" alt="Respiratory Tract & PM">
+        <img src="https://www.researchgate.net/profile/Fiorella-Barraza/publication/321993233/figure/fig14/AS:574185194704903@1513907826653/Respiratory-tract-and-particulate-matter-PM-size-classification-Modified-from.png" alt="Respiratory tract and particulate matter">
       </div>
     </section>
 
-    <section class="section" id="prof">
-      <h2>Prof Juliana - Research</h2>
-      <p><strong>Bio:</strong> Prof. Juliana is an environmental health expert at UPM focusing on air pollution and respiratory impacts.</p>
-      <p><a href="https://www.tandfonline.com/doi/abs/10.1080/02786826.2025.2502492" target="_blank">Read her research</a></p>
-    </section>
+    <!-- CONTACT + COMPLAIN BOX (complain above contact as requested) -->
+    <section class="section" aria-labelledby="contact-heading">
+      <div style="display:flex;gap:18px;flex-direction:column">
+        <div class="complain" role="region" aria-label="Complain box">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+            <div>
+              <strong style="font-size:18px">Laporkan isu pencemaran udara</strong>
+              <div style="font-size:13px;margin-top:6px">Jika anda melihat sumber pencemaran, bau pelik atau kejadian berkaitan udara, laporkan segera ke pihak berkuasa.</div>
+            </div>
+            <div>
+              <button onclick="window.open('https://eaduan.doe.gov.my/','_blank')">Lapor Aduan Alam Sekitar</button>
+            </div>
+          </div>
+        </div>
 
-    <section class="section" id="about">
-      <h2>About Us</h2>
-      <div class="about-grid">
-        <div class="member-card">
-          <img src="iqbal.png" alt="Iqbal">
-          <h3>Iqbal</h3>
-          <p>+60179912306</p>
-        </div>
-        <div class="member-card">
-          <img src="syakirullah.png" alt="Syakirullah">
-          <h3>Syakirullah</h3>
-          <p>+60172131363</p>
-        </div>
-        <div class="member-card">
-          <img src="wan_zulkhairi.png" alt="Wan Zulkhairi">
-          <h3>Wan Zulkhairi</h3>
-          <p>+60145147998</p>
-        </div>
-        <div class="member-card">
-          <img src="zhafri.png" alt="Zhafri">
-          <h3>Zhafri</h3>
-          <p>+60138487104</p>
-        </div>
-        <div class="member-card">
-          <img src="zie_ain_balqis.png" alt="Zie Ain Balqis">
-          <h3>Zie Ain Balqis</h3>
-          <p>+60172370158</p>
+        <div class="contact-row">
+          <div class="card">
+            <h3 style="margin:0 0 8px 0">Hubungi Kami</h3>
+            <p style="color:var(--muted);margin:0 0 12px 0">Hubungi ahli kumpulan untuk maklumat lanjut atau kolaborasi.</p>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px">
+              <div style="padding:8px;border-radius:8px;background:rgba(255,255,255,0.9)"><strong>Iqbal</strong><div style="color:var(--muted)">+60179912306</div></div>
+              <div style="padding:8px;border-radius:8px;background:rgba(255,255,255,0.9)"><strong>Syakirullah</strong><div style="color:var(--muted)">+60172131363</div></div>
+              <div style="padding:8px;border-radius:8px;background:rgba(255,255,255,0.9)"><strong>Wan Zulkhairi</strong><div style="color:var(--muted)">+60145147998</div></div>
+              <div style="padding:8px;border-radius:8px;background:rgba(255,255,255,0.9)"><strong>Zhafri</strong><div style="color:var(--muted)">+60138487104</div></div>
+              <div style="padding:8px;border-radius:8px;background:rgba(255,255,255,0.9)"><strong>Zie Ain Balqis</strong><div style="color:var(--muted)">+60172370158</div></div>
+            </div>
+          </div>
+
+          <div class="card" style="display:flex;flex-direction:column;justify-content:space-between">
+            <div>
+              <h3 style="margin:0 0 8px 0">Quick Tips</h3>
+              <ul style="margin:0;padding-left:18px;color:var(--muted)">
+                <li>Gunakan topeng N95 semasa AQI tinggi.</li>
+                <li>Kurangkan aktiviti luar ketika jerebu atau nilai PM tinggi.</li>
+                <li>Guna penapis udara dalam rumah jika perlu.</li>
+              </ul>
+            </div>
+            <div style="margin-top:12px;font-size:13px;color:var(--muted)">Data source: AQICN (waqi.info). Attribution required.</div>
+          </div>
         </div>
       </div>
     </section>
 
-    <section class="section" id="faq">
-      <h2>FAQ</h2>
-      <p><strong>Q1:</strong> What is PM2.5?</p>
-      <p>Fine particulate matter less than 2.5 micrometers that can penetrate lungs.</p>
-      <p><strong>Q2:</strong> What is PM10?</p>
-      <p>Particulate matter less than 10 micrometers.</p>
-      <p><strong>Q3:</strong> What is AQI?</p>
-      <p>Air Quality Index - a number representing air pollution levels.</p>
-      <p><strong>Q4:</strong> How does air pollution affect health?</p>
-      <p>Exposure to PM can lead to respiratory and cardiovascular issues.</p>
-      <p><strong>Q5:</strong> How can I monitor air quality?</p>
-      <p>You can use live dashboards or apps like AQICN.</p>
+    <!-- Poster Awareness (below contact) -->
+    <section id="poster" class="section" aria-labelledby="poster-heading">
+      <h2 id="poster-heading" style="color:#fff">Poster Awareness</h2>
+      <div class="poster-grid">
+        <div class="poster-card">
+          <img src="poster%201.png" alt="Poster 1">
+        </div>
+        <div class="poster-card">
+          <img src="poster%202.png" alt="Poster 2">
+        </div>
+      </div>
     </section>
-  </main>
 
-  <footer>
-    &copy; 2025 KB Pure Breath. All Rights Reserved.
-  </footer>
+    <!-- FAQ accordion (focus on PM effects) -->
+    <section id="faq" class="section" aria-labelledby="faq-heading" style="margin-bottom:40px">
+      <h2 id="faq-heading" style="color:#fff">FAQ — Kesan Particulate Matter kepada Kesihatan</h2>
 
-  <button class="whatsapp-btn" onclick="window.open('https://wa.me/18772241042','_blank')">WhatsApp Copilot</button>
+      <div class="faq">
+        <div class="accordion-item">
+          <div class="accordion-q">1) Apakah itu PM2.5 dan mengapa ia penting? <span>+</span></div>
+          <div class="accordion-a">PM2.5 ialah partikel halus dengan diameter kurang daripada 2.5 mikrometer. Ia boleh menembusi alveoli paru-paru dan memasuki peredaran darah, meningkatkan risiko asma, bronkitis, penyakit kardiovaskular dan kematian pramatang.</div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-q">2) Apakah kesan pendedahan jangka panjang kepada PM2.5? <span>+</span></div>
+          <div class="accordion-a">Pendedahan jangka panjang boleh menyebabkan penyakit kronik seperti penyakit paru obstruktif kronik (COPD), penurunan fungsi pulmonari, tekanan darah tinggi dan penyakit jantung.</div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-q">3) Bagaimanakah PM10 menjejaskan kesihatan berbanding PM2.5? <span>+</span></div>
+          <div class="accordion-a">PM10 lebih besar dan biasanya menyebabkan iritasi saluran pernafasan atas (hidung, tekak) dan boleh mencetuskan simptom pada pesakit asma atau individu sensitif, tetapi PM2.5 lebih berbahaya kerana dapat menembusi lebih dalam ke paru-paru dan masuk ke aliran darah.</div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-q">4) Apa tindakan segera jika bacaan AQI menunjukkan "Unhealthy" atau lebih buruk? <span>+</span></div>
+          <div class="accordion-a">Kurangkan aktiviti luar, pakai topeng berkualiti (N95), tutup tingkap, gunakan penapis udara dalam ruangan, dan dapatkan rawatan perubatan jika mengalami kesukaran bernafas.</div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-q">5) Bagaimana komuniti boleh membantu mengurangkan pendedahan kepada PM? <span>+</span></div>
+          <div class="accordion-a">Sertai usaha mengurangkan pembakaran terbuka, laporkan sumber pencemaran kepada pihak berkuasa, sokong dasar pengurangan pelepasan dan galakkan penggunaan pengangkutan awam serta penanaman pokok.</div>
+        </div>
+
+      </div>
+    </section>
+
+    <footer>
+      © 2025 KB Pure Breath • Data source: AQICN (waqi.info)
+    </footer>
+  </div>
+
+  <!-- WhatsApp Copilot -->
+  <a class="whatsapp" href="https://wa.me/18772241042" target="_blank" rel="noopener noreferrer" aria-label="Chat Copilot">💬 Chat Copilot</a>
+
+  <!-- JS: proxy fetch AQICN + chart + FAQ accordion -->
+  <script>
+    (function(){
+      // config
+      const TOKEN = 'ae042b2540f9d68b5f09af2ab8fa7b28b58ad821';
+      const RAW_API = `https://api.waqi.info/feed/kuala+lumpur/?token=${TOKEN}`;
+      function proxy(url){ return 'https://api.allorigins.win/get?url=' + encodeURIComponent(url); }
+
+      // DOM refs
+      const aqiValueEl = document.getElementById('aqiValue');
+      const aqiCatEl = document.getElementById('aqiCat');
+      const aqiDetailsEl = document.getElementById('aqiDetails');
+      const aqiUpdatedEl = document.getElementById('aqiUpdated');
+
+      // Chart setup
+      const ctx = document.getElementById('pmChart').getContext('2d');
+      const labels = [], d25 = [], d10 = [];
+      const pmChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels,
+          datasets: [
+            { label: 'PM2.5 (µg/m³)', data: d25, borderColor: getComputedStyle(document.documentElement).getPropertyValue('--accent1') || '#2bb6b6', tension: 0.3, fill: true, backgroundColor: 'rgba(43,182,182,0.12)' },
+            { label: 'PM10 (µg/m³)', data: d10, borderColor: getComputedStyle(document.documentElement).getPropertyValue('--accent2') || '#4aa0e6', tension: 0.3, fill: true, backgroundColor: 'rgba(74,160,230,0.12)' }
+          ]
+        },
+        options: {
+          responsive:true,
+          maintainAspectRatio:false,
+          scales:{ y:{ beginAtZero:true } },
+          plugins:{ legend:{ position:'top' } }
+        }
+      });
+
+      // interpret AQI category
+      function aqiCategory(aqi){
+        if(aqi===null || isNaN(aqi)) return {cat:'No data', color:'#9aa4b2'};
+        if(aqi<=50) return {cat:'Good', color:'#26a69a'};
+        if(aqi<=100) return {cat:'Moderate', color:'#ffca28'};
+        if(aqi<=150) return {cat:'Unhealthy (S)', color:'#ff7043'};
+        if(aqi<=200) return {cat:'Unhealthy', color:'#e53935'};
+        if(aqi<=300) return {cat:'Very Unhealthy', color:'#8e24aa'};
+        return {cat:'Hazardous', color:'#6b0018'};
+      }
+
+      async function fetchViaProxy(){
+        try{
+          const resp = await fetch(proxy(RAW_API), {cache:'no-store'});
+          if(!resp.ok) throw new Error('proxy fetch failed: ' + resp.status);
+          const wrapper = await resp.json();
+          const json = JSON.parse(wrapper.contents);
+          if(!json || json.status !== 'ok' || !json.data) {
+            console.warn('No data from AQICN', json);
+            return;
+          }
+
+          const iaqi = json.data.iaqi || {};
+          const aqi = (typeof json.data.aqi === 'number' || !isNaN(Number(json.data.aqi))) ? Number(json.data.aqi) : null;
+          const pm25 = iaqi.pm25 ? Number(iaqi.pm25.v) : null;
+          const pm10 = iaqi.pm10 ? Number(iaqi.pm10.v) : null;
+          const now = new Date();
+          const ts = now.toTimeString().split(' ')[0];
+
+          // update UI
+          aqiValueEl.textContent = aqi !== null ? aqi : '--';
+          const cat = aqiCategory(aqi);
+          aqiCatEl.textContent = cat.cat;
+          aqiDetailsEl.textContent = `PM2.5: ${pm25 !== null ? pm25.toFixed(1) : '--'} µg/m³ • PM10: ${pm10 !== null ? pm10.toFixed(1) : '--'} µg/m³`;
+          aqiUpdatedEl.textContent = now.toLocaleString();
+          // style aqi-card bg by category (subtle)
+          const aqiCard = document.getElementById('aqiCard');
+          if(aqiCard) aqiCard.style.boxShadow = `0 14px 40px ${cat.color}33`;
+
+          // chart push
+          labels.push(ts);
+          d25.push(pm25===null?null:pm25);
+          d10.push(pm10===null?null:pm10);
+          if(labels.length>30){ labels.shift(); d25.shift(); d10.shift(); }
+          pmChart.update();
+        }catch(err){
+          console.error('fetchViaProxy error', err);
+        }
+      }
+
+      // seed chart with empty labels
+      (function seed(){
+        const now = Date.now();
+        for(let i=10;i>0;i--){
+          const t = new Date(now - i*60000);
+          labels.push(t.toTimeString().split(' ')[0]); d25.push(null); d10.push(null);
+        }
+        pmChart.update();
+      })();
+
+      // initial + interval
+      fetchViaProxy();
+      setInterval(fetchViaProxy, 60_000);
+
+      // FAQ accordion
+      document.querySelectorAll('.accordion-q').forEach(q=>{
+        q.addEventListener('click', ()=>{
+          const a = q.nextElementSibling;
+          const open = a.style.display === 'block';
+          document.querySelectorAll('.accordion-a').forEach(x=>x.style.display='none');
+          document.querySelectorAll('.accordion-q span').forEach(s=>s.textContent='+');
+          if(!open){ a.style.display='block'; q.querySelector('span').textContent='−'; }
+        });
+      });
+
+    })();
+  </script>
 </body>
 </html>
