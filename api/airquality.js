@@ -11,48 +11,18 @@ export default async function handler(req) {
       CITY
     )}&parameter[]=pm25&parameter[]=pm10&limit=100&api_key=${API_KEY}`;
 
-    const response = await fetch(apiUrl, {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    });
+    const response = await fetch(apiUrl);
 
-    if (!response.ok) {
-      return new Response(
-        JSON.stringify({ error: `OpenAQ API Error ${response.status}` }),
-        { status: response.status, headers: { "Content-Type": "application/json" } }
-      );
-    }
-
-    const data = await response.json();
-    if (!data.results || data.results.length === 0) {
-      return new Response(JSON.stringify({ error: "No data found" }), {
-        status: 404,
-        headers: { "Content-Type": "application/json" },
-      });
-    }
-
-    const measurements = data.results[0].measurements || [];
-    const pm25 = measurements.find((m) => m.parameter === "pm25")?.value || 0;
-    const pm10 = measurements.find((m) => m.parameter === "pm10")?.value || 0;
-
-    // Simulate trend (10 hours)
-    const now = new Date();
-    const trend = Array.from({ length: 10 }).map((_, i) => ({
-      time: new Date(now - i * 3600000).toLocaleTimeString("en-MY", {
-        hour: "2-digit",
-        minute: "2-digit",
-      }),
-      pm25: pm25 + (Math.random() * 3 - 1.5),
-      pm10: pm10 + (Math.random() * 3 - 1.5),
-    })).reverse();
+    // Return the raw response first (for debugging)
+    const raw = await response.text();
 
     return new Response(
       JSON.stringify({
-        city: CITY,
-        pm25,
-        pm10,
-        trend,
-        updatedAt: new Date().toISOString(),
+        debug: {
+          status: response.status,
+          statusText: response.statusText,
+          body: raw.slice(0, 1000), // limit length
+        },
       }),
       {
         status: 200,
@@ -61,8 +31,14 @@ export default async function handler(req) {
     );
   } catch (err) {
     return new Response(
-      JSON.stringify({ error: "Server Error", details: err.message }),
-      { status: 500, headers: { "Content-Type": "application/json" } }
+      JSON.stringify({
+        error: "Server Error",
+        details: err.message,
+      }),
+      {
+        status: 500,
+        headers: { "Content-Type": "application/json" },
+      }
     );
   }
 }
