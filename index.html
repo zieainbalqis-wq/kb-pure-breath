@@ -50,6 +50,13 @@
     nav a{ color:rgba(255,255,255,0.95); text-decoration:none; padding:8px 10px; border-radius:8px; font-weight:600; }
     nav a:hover{ background: rgba(255,255,255,0.06); }
 
+    <section id="air-quality">
+  <h2>Air Quality - <span id="location">Loading...</span></h2>
+  <p>PM2.5: <span id="pm25">-</span> µg/m³</p>
+  <p>PM10: <span id="pm10">-</span> µg/m³</p>
+  <canvas id="pmChart" width="400" height="200"></canvas>
+</section>
+
     /* glass base */
     .glass{ background:var(--glass-bg); border-radius:12px; padding:14px; color:var(--text-on-glass); backdrop-filter: blur(6px) saturate(110%); -webkit-backdrop-filter: blur(6px) saturate(110%); box-shadow:0 8px 30px rgba(0,0,0,0.25) }
 
@@ -440,5 +447,43 @@
 
   })();
   </script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+async function loadAirQuality() {
+  try {
+    const res = await fetch('/api/airquality');
+    const data = await res.json();
+
+    document.getElementById("location").textContent = data.location;
+    document.getElementById("pm25").textContent = data.pm25;
+    document.getElementById("pm10").textContent = data.pm10;
+
+    updateChart(data.pm25, data.pm10);
+  } catch (err) {
+    console.error("Error loading AQ data:", err);
+  }
+}
+
+let chart;
+function updateChart(pm25, pm10) {
+  const ctx = document.getElementById("pmChart").getContext("2d");
+  if (chart) chart.destroy();
+  chart = new Chart(ctx, {
+    type: "bar",
+    data: {
+      labels: ["PM2.5", "PM10"],
+      datasets: [{
+        label: "Concentration (µg/m³)",
+        data: [pm25, pm10],
+        borderWidth: 1
+      }]
+    },
+    options: { scales: { y: { beginAtZero: true } } }
+  });
+}
+
+loadAirQuality();
+setInterval(loadAirQuality, 60000);
+</script>
 </body>
 </html>
