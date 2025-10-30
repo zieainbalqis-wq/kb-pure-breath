@@ -1,47 +1,68 @@
-export default async function handler(req, res) {
+export const config = {
+  runtime: "edge",
+};
+
+export default async function handler(req) {
   const API_KEY = "a752207ef27e1883a1f2b2d1a6cc08ea6693c2210e359fce94afdea07ab0125a";
   const CITY = "Kuala Lumpur";
 
   try {
-    const response = await fetch(
-      `https://api.openaq.org/v2/latest?city=${encodeURIComponent(CITY)}&limit=100&parameter[]=pm25&parameter[]=pm10&api_key=${API_KEY}`
-    );
+    const apiUrl = `https://api.openaq.org/v2/latest?city=${encodeURIComponent(
+      CITY
+    )}&parameter[]=pm25&parameter[]=pm10&limit=100&api_key=${API_KEY}`;
+
+    const response = await fetch(apiUrl, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    });
 
     if (!response.ok) {
-      throw new Error(`OpenAQ API error: ${response.status}`);
+      return new Response(
+        JSON.stringify({ error: `OpenAQ API Error ${response.status}` }),
+        { status: response.status, headers: { "Content-Type": "application/json" } }
+      );
     }
 
     const data = await response.json();
-
     if (!data.results || data.results.length === 0) {
-      throw new Error("No data found for Kuala Lumpur");
+      return new Response(JSON.stringify({ error: "No data found" }), {
+        status: 404,
+        headers: { "Content-Type": "application/json" },
+      });
     }
 
-    const measurements = data.results[0].measurements;
-    const pm25 = measurements.find(m => m.parameter === "pm25")?.value || 0;
-    const pm10 = measurements.find(m => m.parameter === "pm10")?.value || 0;
+    const measurements = data.results[0].measurements || [];
+    const pm25 = measurements.find((m) => m.parameter === "pm25")?.value || 0;
+    const pm10 = measurements.find((m) => m.parameter === "pm10")?.value || 0;
 
-    // Simulate trend data for chart (use historical endpoint if needed)
+    // Simulate trend (10 hours)
     const now = new Date();
     const trend = Array.from({ length: 10 }).map((_, i) => ({
-      time: new Date(now - i * 3600000).toLocaleTimeString(),
-      pm25: pm25 + (Math.random() * 5 - 2.5),
-      pm10: pm10 + (Math.random() * 5 - 2.5),
+      time: new Date(now - i * 3600000).toLocaleTimeString("en-MY", {
+        hour: "2-digit",
+        minute: "2-digit",
+      }),
+      pm25: pm25 + (Math.random() * 3 - 1.5),
+      pm10: pm10 + (Math.random() * 3 - 1.5),
     })).reverse();
 
-    res.status(200).json({
-      city: CITY,
-      pm25,
-      pm10,
-      trend,
-      updatedAt: new Date().toISOString(),
-    });
-
-  } catch (error) {
-    console.error("API Error:", error);
-    res.status(500).json({
-      error: "Failed to fetch air quality data",
-      details: error.message,
-    });
+    return new Response(
+      JSON.stringify({
+        city: CITY,
+        pm25,
+        pm10,
+        trend,
+        updatedAt: new Date().toISOString(),
+      }),
+      {
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+  } catch (err) {
+    return new Response(
+      JSON.stringify({ error: "Server Error", details: err.message }),
+      { status: 500, headers: { "Content-Type": "application/json" } }
+    );
   }
 }
