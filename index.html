@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>KB Pure Breath — Live AQI KL (Restored)</title>
-  <meta name="description" content="KB Pure Breath - Live Air Quality monitoring Kuala Lumpur (AQICN/OpenAQ) - PM2.5, PM10" />
+  <meta name="description" content="KB Pure Breath - Live Air Quality monitoring Kuala Lumpur (OpenAQ) - PM2.5, PM10" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 
@@ -21,7 +21,8 @@
     *{box-sizing:border-box}
     html,body{height:100%;margin:0;font-family:Inter, Poppins, system-ui; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;}
     body{
-      background-image: url('https://us.images.westend61.de/0001599644pw/malaysia-kuala-lumpur-clouds-over-klcc-park-and-petronas-towers-EAF00105.jpg');
+      /* FULL PAGE BACKGROUND KLCC */
+      background-image: url('klcc-bg.jpg');
       background-size: cover;
       background-position: center;
       background-attachment: fixed;
@@ -29,6 +30,7 @@
       padding-bottom:120px;
     }
 
+    /* overlay to help readability across the page */
     .page-overlay{
       position:fixed; inset:0; background:linear-gradient(180deg, rgba(6,21,34,0.48), rgba(6,21,34,0.32)); z-index:0;
       pointer-events:none;
@@ -36,6 +38,7 @@
 
     .page{ position:relative; z-index:2; max-width:var(--maxw); margin:0 auto; padding:28px; }
 
+    /* Header */
     header{ display:flex; align-items:center; gap:16px; margin-bottom:18px; flex-wrap:wrap;}
     .logo{ width:110px; height:110px; border-radius:14px; overflow:hidden; box-shadow:0 12px 40px rgba(0,0,0,0.35); background:var(--glass-bg); flex:0 0 110px; }
     .logo img{ width:100%; height:100%; object-fit:contain; display:block; }
@@ -47,8 +50,10 @@
     nav a{ color:rgba(255,255,255,0.95); text-decoration:none; padding:8px 10px; border-radius:8px; font-weight:600; }
     nav a:hover{ background: rgba(255,255,255,0.06); }
 
+    /* glass base */
     .glass{ background:var(--glass-bg); border-radius:12px; padding:14px; color:var(--text-on-glass); backdrop-filter: blur(6px) saturate(110%); -webkit-backdrop-filter: blur(6px) saturate(110%); box-shadow:0 8px 30px rgba(0,0,0,0.25) }
 
+    /* Realtime layout */
     .realtime{ display:grid; grid-template-columns: 1fr 380px; gap:18px; align-items:start; margin-bottom:18px; }
     .aqi-big{ padding:18px; border-radius:12px; color:var(--text-on-glass); background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); box-shadow:0 12px 36px rgba(0,0,0,0.45) }
     .aqi-value{ font-size:72px; font-weight:800; margin:10px 0; letter-spacing:-1px }
@@ -56,20 +61,24 @@
     .aqi-meta{ margin-top:8px; color:rgba(255,255,255,0.85); font-size:13px }
 
     .side{ background:var(--card-bg); color:#071129; border-radius:12px; padding:12px; box-shadow:0 8px 24px rgba(2,6,23,0.12); min-height:220px; }
-    .chart-wrap{ height:220px; }
+    .chart-wrap{ height:220px; position:relative; }
 
+    /* pm small boxes */
     .pm-row{ display:flex; gap:12px; margin-top:12px; flex-wrap:wrap }
     .pm-box{ flex:1 1 120px; padding:10px; border-radius:10px; background:rgba(255,255,255,0.06); color:var(--text-on-glass); text-align:center }
 
+    /* contact & complain grid */
     .contact-grid{ display:grid; grid-template-columns:1fr 320px; gap:18px; margin-top:18px; }
     .card{ background:var(--card-bg); border-radius:12px; padding:12px; box-shadow:0 8px 24px rgba(2,6,23,0.12); color:#071129 }
     .complain{ background: linear-gradient(90deg,var(--accent1),var(--accent2)); padding:14px; border-radius:12px; color:#fff; box-shadow:0 10px 30px rgba(10,30,60,0.16); display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap }
     .complain button{ background:#fff; color:var(--accent2); border:none; padding:10px 12px; border-radius:8px; font-weight:700; cursor:pointer }
 
+    /* poster awareness */
     .poster-grid{ display:grid; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); gap:14px; margin-top:12px; }
     .poster-card{ background: rgba(255,255,255,0.06); border-radius:10px; padding:10px; text-align:center; color:#fff; box-shadow:0 8px 20px rgba(0,0,0,0.28) }
     .poster-card img{ width:100%; height:auto; border-radius:8px; display:block; }
 
+    /* FAQ accordion */
     .faq{ margin-top:18px }
     .accordion-item{ background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); border-radius:10px; margin-bottom:12px; overflow:hidden; color:#fff; box-shadow:0 8px 24px rgba(0,0,0,0.2) }
     .accordion-q{ padding:12px 14px; cursor:pointer; display:flex; justify-content:space-between; align-items:center; font-weight:700 }
@@ -277,8 +286,7 @@
   <script>
   (function(){
     // ---- CONFIG ----
-    // Serverless proxy endpoint within same project (ensure /api/airquality is deployed)
-    const API_ENDPOINT = '/api/airquality'; // returns { pm25, pm10, trend:[{time,pm25,pm10}], updatedAt, city }
+    const API_ENDPOINT = '/api/airquality'; // serverless proxy must exist
     const REFRESH_MS = 5 * 60 * 1000; // 5 minutes
 
     // DOM refs
@@ -289,8 +297,9 @@
     const pm25Box = document.getElementById('pm25Box');
     const pm10Box = document.getElementById('pm10Box');
     const aqiBox = document.getElementById('aqiBox');
+    const aqiCard = document.getElementById('aqiCard');
 
-    // Chart setup (PM2.5 and PM10)
+    // Chart setup
     const ctx = document.getElementById('pmChart').getContext('2d');
     const labels = [], series25 = [], series10 = [];
     const pmChart = new Chart(ctx, {
@@ -328,13 +337,11 @@
         }
         const json = await res.json();
 
-        // expect: { pm25, pm10, aqi (optional), trend: [{time,pm25,pm10}], updatedAt, city }
         const pm25 = (typeof json.pm25 === 'number') ? json.pm25 : (json.pm25 ? Number(json.pm25) : null);
         const pm10 = (typeof json.pm10 === 'number') ? json.pm10 : (json.pm10 ? Number(json.pm10) : null);
         const aqi = (typeof json.aqi === 'number') ? json.aqi : null;
         const updated = json.updatedAt || json.timestamp || new Date().toISOString();
 
-        // Update UI boxes
         if(pm25Box) pm25Box.textContent = pm25 !== null ? pm25.toFixed(1) : '--';
         if(pm10Box) pm10Box.textContent = pm10 !== null ? pm10.toFixed(1) : '--';
         if(aqiBox) aqiBox.textContent = aqi !== null ? Math.round(aqi) : '--';
@@ -349,13 +356,12 @@
         }
         if(aqiUpdatedEl) aqiUpdatedEl.textContent = new Date(updated).toLocaleString();
 
-        // trend: if API returned trend array, seed chart from it; else push latest point
         if(Array.isArray(json.trend) && json.trend.length){
           labels.length=0; series25.length=0; series10.length=0;
           json.trend.forEach(pt=>{
             labels.push(pt.time || new Date().toLocaleTimeString());
-            series25.push(typeof pt.pm25 === 'number' ? Number(pt.pm25.toFixed ? pt.pm25 : pt.pm25) : (pt.pm25 ? Number(pt.pm25) : null));
-            series10.push(typeof pt.pm10 === 'number' ? Number(pt.pm10.toFixed ? pt.pm10 : pt.pm10) : (pt.pm10 ? Number(pt.pm10) : null));
+            series25.push(typeof pt.pm25 === 'number' ? Number(Number(pt.pm25).toFixed(1)) : (pt.pm25 ? Number(pt.pm25) : null));
+            series10.push(typeof pt.pm10 === 'number' ? Number(Number(pt.pm10).toFixed(1)) : (pt.pm10 ? Number(pt.pm10) : null));
           });
         } else {
           const ts = new Date().toLocaleTimeString();
@@ -372,7 +378,6 @@
       }
     }
 
-    // seed chart with empty points
     (function seed(){
       const now = Date.now();
       for(let i=10;i>0;i--){
@@ -383,18 +388,15 @@
       pmChart.update();
     })();
 
-    // init + interval + manual refresh
     updateFromApi();
     setInterval(updateFromApi, REFRESH_MS);
 
-    // Small helper: add click-to-refresh on AQ card (if user wants)
     const refreshTrigger = document.getElementById('aqiCard');
     if(refreshTrigger){
       refreshTrigger.style.cursor = 'pointer';
       refreshTrigger.addEventListener('click', updateFromApi);
     }
 
-    // FAQ accordion: single-open behavior
     document.querySelectorAll('.accordion-q').forEach(q=>{
       q.addEventListener('click', ()=>{
         const a = q.nextElementSibling;
@@ -406,13 +408,11 @@
       });
     });
 
-    // accessibility fallback: allow pressing Enter on question to toggle
     document.querySelectorAll('.accordion-q').forEach(q=>{
       q.setAttribute('tabindex','0');
       q.addEventListener('keydown', e => { if(e.key === 'Enter' || e.key === ' ') q.click(); });
     });
 
-    // wire up the manual refresh button if present on page (some pages have separate button)
     const manualBtn = document.querySelector('button[onclick*="eaduan"]') ? null : document.querySelector('#refreshBtn');
     if(manualBtn) manualBtn.addEventListener('click', updateFromApi);
 
