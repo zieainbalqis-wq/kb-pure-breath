@@ -7,9 +7,8 @@
   <meta name="description" content="KB Pure Breath - Live Air Quality monitoring Kuala Lumpur (OpenAQ) - PM2.5, PM10" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-
   <style>
-    :root{
+    :root {
       --accent1:#2bb6b6;
       --accent2:#4aa0e6;
       --muted:rgba(15,23,42,0.7);
@@ -21,7 +20,6 @@
     *{box-sizing:border-box}
     html,body{height:100%;margin:0;font-family:Inter, Poppins, system-ui; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;}
     body{
-      /* FULL PAGE BACKGROUND KLCC */
       background-image: url('klcc-bg.jpg');
       background-size: cover;
       background-position: center;
@@ -29,65 +27,30 @@
       color:#071129;
       padding-bottom:120px;
     }
-
-    /* overlay to help readability across the page */
     .page-overlay{
       position:fixed; inset:0; background:linear-gradient(180deg, rgba(6,21,34,0.48), rgba(6,21,34,0.32)); z-index:0;
       pointer-events:none;
     }
-
     .page{ position:relative; z-index:2; max-width:var(--maxw); margin:0 auto; padding:28px; }
-
-    /* Header */
     header{ display:flex; align-items:center; gap:16px; margin-bottom:18px; flex-wrap:wrap;}
     .logo{ width:110px; height:110px; border-radius:14px; overflow:hidden; box-shadow:0 12px 40px rgba(0,0,0,0.35); background:var(--glass-bg); flex:0 0 110px; }
     .logo img{ width:100%; height:100%; object-fit:contain; display:block; }
     .site-title{ color:var(--text-on-glass) }
     .site-title h1{ margin:0; font-size:26px; font-weight:700; text-shadow:0 2px 6px rgba(0,0,0,0.35) }
     .site-title p{ margin:4px 0 0 0; color:rgba(255,255,255,0.9); font-size:13px; }
-
     nav{ margin-left:auto; display:flex; gap:10px; align-items:center; }
     nav a{ color:rgba(255,255,255,0.95); text-decoration:none; padding:8px 10px; border-radius:8px; font-weight:600; }
     nav a:hover{ background: rgba(255,255,255,0.06); }
-
-    /* glass base */
     .glass{ background:var(--glass-bg); border-radius:12px; padding:14px; color:var(--text-on-glass); backdrop-filter: blur(6px) saturate(110%); -webkit-backdrop-filter: blur(6px) saturate(110%); box-shadow:0 8px 30px rgba(0,0,0,0.25) }
-
-    /* Realtime layout */
     .realtime{ display:grid; grid-template-columns: 1fr 380px; gap:18px; align-items:start; margin-bottom:18px; }
     .aqi-big{ padding:18px; border-radius:12px; color:var(--text-on-glass); background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); box-shadow:0 12px 36px rgba(0,0,0,0.45) }
     .aqi-value{ font-size:72px; font-weight:800; margin:10px 0; letter-spacing:-1px }
     .aqi-cat{ font-size:18px; margin-top:6px; color:rgba(255,255,255,0.95) }
     .aqi-meta{ margin-top:8px; color:rgba(255,255,255,0.85); font-size:13px }
-
     .side{ background:var(--card-bg); color:#071129; border-radius:12px; padding:12px; box-shadow:0 8px 24px rgba(2,6,23,0.12); min-height:220px; }
     .chart-wrap{ height:220px; position:relative; }
-
-    /* pm small boxes */
     .pm-row{ display:flex; gap:12px; margin-top:12px; flex-wrap:wrap }
     .pm-box{ flex:1 1 120px; padding:10px; border-radius:10px; background:rgba(255,255,255,0.06); color:var(--text-on-glass); text-align:center }
-
-    /* contact & complain grid */
-    .contact-grid{ display:grid; grid-template-columns:1fr 320px; gap:18px; margin-top:18px; }
-    .card{ background:var(--card-bg); border-radius:12px; padding:12px; box-shadow:0 8px 24px rgba(2,6,23,0.12); color:#071129 }
-    .complain{ background: linear-gradient(90deg,var(--accent1),var(--accent2)); padding:14px; border-radius:12px; color:#fff; box-shadow:0 10px 30px rgba(10,30,60,0.16); display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap }
-    .complain button{ background:#fff; color:var(--accent2); border:none; padding:10px 12px; border-radius:8px; font-weight:700; cursor:pointer }
-
-    /* poster awareness */
-    .poster-grid{ display:grid; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); gap:14px; margin-top:12px; }
-    .poster-card{ background: rgba(255,255,255,0.06); border-radius:10px; padding:10px; text-align:center; color:#fff; box-shadow:0 8px 20px rgba(0,0,0,0.28) }
-    .poster-card img{ width:100%; height:auto; border-radius:8px; display:block; }
-
-    /* FAQ accordion */
-    .faq{ margin-top:18px }
-    .accordion-item{ background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); border-radius:10px; margin-bottom:12px; overflow:hidden; color:#fff; box-shadow:0 8px 24px rgba(0,0,0,0.2) }
-    .accordion-q{ padding:12px 14px; cursor:pointer; display:flex; justify-content:space-between; align-items:center; font-weight:700 }
-    .accordion-a{ padding:0 14px 14px 14px; display:none; color:rgba(255,255,255,0.9); font-weight:400 }
-
-    footer{ margin-top:28px; padding:18px; text-align:center; color:rgba(255,255,255,0.9) }
-
-    .wa-btn{ display:inline-flex; align-items:center; justify-content:center; gap:8px; background:linear-gradient(90deg,var(--accent1),var(--accent2)); color:#fff; border-radius:999px; padding:8px 10px; text-decoration:none; font-weight:700; box-shadow:0 8px 24px rgba(0,0,0,0.2) }
-
     @media(max-width:980px){
       .realtime{ grid-template-columns:1fr }
       .contact-grid{ grid-template-columns:1fr }
@@ -99,9 +62,7 @@
 </head>
 <body>
   <div class="page-overlay" aria-hidden="true"></div>
-
   <main class="page" role="main">
-    <!-- Header -->
     <header>
       <div class="logo" aria-hidden="true">
         <img src="logo.png" alt="KB Pure Breath logo" onerror="this.style.display='none'">
@@ -110,7 +71,6 @@
         <h1>KB Pure Breath</h1>
         <p>Live Air Quality Monitoring — Kuala Lumpur</p>
       </div>
-
       <nav aria-label="Main navigation">
         <a href="#realtime">Realtime</a>
         <a href="#infographic">Infographic</a>
@@ -119,47 +79,36 @@
         <a href="#faq">FAQ</a>
       </nav>
     </header>
-
     <!-- Realtime -->
     <section id="realtime" class="realtime" aria-labelledby="realtime-heading">
       <div class="aqi-big glass" id="aqiCard" role="region" aria-labelledby="realtime-heading">
-        <div style="display:flex;justify-content:space-between;align-items:center">
-          <div>
-            <div id="realtime-heading" style="font-weight:700">Real-Time Air Quality</div>
-            <div style="font-size:12px;color:rgba(255,255,255,0.85)">Source: OpenAQ (proxied via /api/airquality) — default: Kuala Lumpur</div>
-          </div>
-          <div style="font-size:13px;color:rgba(255,255,255,0.85)">Updated: <span id="aqiUpdated">--</span></div>
-        </div>
-
-        <div style="margin-top:12px">
-          <div class="aqi-value" id="aqiValue">--</div>
-          <div class="aqi-cat" id="aqiCat">—</div>
-          <div class="aqi-meta" id="aqiMeta">PM2.5: -- µg/m³ • PM10: -- µg/m³</div>
-
-          <div class="pm-row" aria-hidden="false">
-            <div class="pm-box"><div style="font-size:12px;color:rgba(255,255,255,0.85)">PM2.5</div><div id="pm25Box" style="font-size:20px;margin-top:6px">--</div></div>
-            <div class="pm-box"><div style="font-size:12px;color:rgba(255,255,255,0.85)">PM10</div><div id="pm10Box" style="font-size:20px;margin-top:6px">--</div></div>
-            <div class="pm-box"><div style="font-size:12px;color:rgba(255,255,255,0.85)">AQI</div><div id="aqiBox" style="font-size:20px;margin-top:6px">--</div></div>
-          </div>
+        <h2 id="realtime-heading" style="margin:0 0 10px 0">Realtime Air Quality Index (AQI)</h2>
+        <div class="aqi-value" id="aqiValue">--</div>
+        <div class="aqi-cat" id="aqiCategory">Loading...</div>
+        <div class="aqi-meta" id="aqiMeta">Last updated: --</div>
+        <div class="pm-row">
+          <div class="pm-box" id="pm25Box">PM2.5: -- µg/m³</div>
+          <div class="pm-box" id="pm10Box">PM10: -- µg/m³</div>
         </div>
       </div>
-
       <aside class="side" aria-labelledby="charts-heading">
         <div id="charts-heading" style="display:flex;justify-content:space-between;align-items:center">
           <div style="font-weight:700;color:#0f172a">Particulate Matter Trend</div>
           <div style="font-size:12px;color:var(--muted)">Recent readings</div>
         </div>
-
         <div class="chart-wrap" style="margin-top:12px">
           <canvas id="pmChart" aria-label="PM2.5 and PM10 trend" role="img"></canvas>
         </div>
 
+        <!-- AQICN Forecast Embed -->
+        <div style="margin-top:18px">
+          <iframe src="https://aqicn.org/forecast/kuala-lumpur/" width="100%" height="600" style="border:none;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,0.2)" title="AQICN Forecast"></iframe>
+        </div>
         <div style="margin-top:12px;font-size:13px;color:var(--muted)">
           Note: If numbers don't appear, proxy or API may be rate-limited — open DevTools Console.
         </div>
       </aside>
     </section>
-
     <!-- Infographic -->
     <section id="infographic" class="glass" style="margin-top:18px;padding:16px" aria-labelledby="infog">
       <h2 id="infog" style="margin:0 0 10px 0;color:var(--text-on-glass)">Infographic — Respiratory Tract & Particulate Matter</h2>
@@ -170,68 +119,23 @@
 
     <!-- Contact + Complain -->
     <section id="about" style="margin-top:18px">
-      <div class="complain" role="region" aria-label="Complain box">
-        <div style="display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap">
-          <div>
-            <strong style="font-size:18px">Laporkan isu pencemaran udara</strong>
-            <div style="font-size:13px;margin-top:6px">Lapor sumber pencemaran, bau pelik atau kejadian berkaitan udara terus ke pihak berkuasa.</div>
-          </div>
-          <div><button onclick="window.open('https://eaduan.doe.gov.my/','_blank')">Lapor Aduan Alam Sekitar</button></div>
-        </div>
-      </div>
-
-      <div class="contact-grid" style="margin-top:12px">
-        <div class="card">
-          <h3 style="margin:0 0 8px 0">Hubungi Kami</h3>
-          <p style="color:var(--muted);margin:0 0 12px 0">Hubungi ahli kumpulan untuk maklumat lanjut atau kolaborasi.</p>
-
-          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px">
-            <!-- Iqbal -->
-            <div style="text-align:center">
-              <img src="iqbal.png" alt="Iqbal" style="width:92px;height:92px;border-radius:50%;object-fit:cover;display:block;margin:0 auto 8px">
-              <strong>Iqbal</strong>
-              <div style="margin-top:8px"><a class="wa-btn" href="https://wa.me/60179912306" target="_blank" rel="noopener noreferrer" title="WhatsApp Iqbal">WhatsApp</a></div>
-            </div>
-
-            <!-- Syakirullah -->
-            <div style="text-align:center">
-              <img src="syakirullah.png" alt="Syakirullah" style="width:92px;height:92px;border-radius:50%;object-fit:cover;display:block;margin:0 auto 8px">
-              <strong>Syakirullah</strong>
-              <div style="margin-top:8px"><a class="wa-btn" href="https://wa.me/60172131363" target="_blank" rel="noopener noreferrer" title="WhatsApp Syakirullah">WhatsApp</a></div>
-            </div>
-
-            <!-- Wan Zulkhairi -->
-            <div style="text-align:center">
-              <img src="wan_zulkhairi.png" alt="Wan Zulkhairi" style="width:92px;height:92px;border-radius:50%;object-fit:cover;display:block;margin:0 auto 8px">
-              <strong>Wan Zulkhairi</strong>
-              <div style="margin-top:8px"><a class="wa-btn" href="https://wa.me/60145147998" target="_blank" rel="noopener noreferrer" title="WhatsApp Wan Zulkhairi">WhatsApp</a></div>
-            </div>
-
-            <!-- Zhafri -->
-            <div style="text-align:center">
-              <img src="zhafri.png" alt="Zhafri" style="width:92px;height:92px;border-radius:50%;object-fit:cover;display:block;margin:0 auto 8px">
-              <strong>Zhafri</strong>
-              <div style="margin-top:8px"><a class="wa-btn" href="https://wa.me/60138487104" target="_blank" rel="noopener noreferrer" title="WhatsApp Zhafri">WhatsApp</a></div>
-            </div>
-
-            <!-- Zie Ain Balqis -->
-            <div style="text-align:center">
-              <img src="zie_ain_balqis.png" alt="Zie Ain Balqis" style="width:92px;height:92px;border-radius:50%;object-fit:cover;display:block;margin:0 auto 8px">
-              <strong>Zie Ain Balqis</strong>
-              <div style="margin-top:8px"><a class="wa-btn" href="https://wa.me/60172370158" target="_blank" rel="noopener noreferrer" title="WhatsApp Zie Ain Balqis">WhatsApp</a></div>
-            </div>
-          </div>
-
-        </div>
-
-        <div class="card">
-          <h3 style="margin:0 0 8px 0">Quick Tips</h3>
-          <ul style="margin:0;padding-left:18px;color:var(--muted)">
-            <li>Gunakan mask N95 jika AQI tidak sihat.</li>
-            <li>Kurangkan aktiviti luar ketika jerebu atau bacaan PM tinggi.</li>
-            <li>Tutup tingkap & guna penapis udara di dalam rumah.</li>
+      <div class="contact-grid">
+        <div class="glass">
+          <h3 style="margin-top:0">Hubungi Kami</h3>
+          <p>Untuk pertanyaan lanjut atau cadangan, sila hubungi kami melalui:</p>
+          <ul>
+            <li>Email: <a href="mailto:info@kbpurebreath.org">info@kbpurebreath.org</a></li>
+            <li>WhatsApp: <a href="https://wa.me/60123456789" target="_blank">+60 12-345 6789</a></li>
           </ul>
-          <div style="margin-top:12px;font-size:13px;color:var(--muted)">Data source: OpenAQ (proxied) • Attribution required.</div>
+        </div>
+        <div class="glass">
+          <h3 style="margin-top:0">Aduan & Cadangan</h3>
+          <p>Kami mengalu-alukan maklum balas anda untuk penambahbaikan dashboard ini.</p>
+          <form>
+            <label for="feedback">Maklum balas:</label><br>
+            <textarea id="feedback" name="feedback" rows="4" style="width:100%;border-radius:8px;padding:8px"></textarea><br><br>
+            <button type="submit" style="padding:8px 16px;border:none;border-radius:8px;background:var(--accent1);color:white;font-weight:600">Hantar</button>
+          </form>
         </div>
       </div>
     </section>
@@ -249,30 +153,18 @@
     <section id="faq" style="margin-top:18px">
       <h2 style="color:var(--text-on-glass);margin:0 0 10px 0">FAQ — Kesan Particulate Matter terhadap Kesihatan</h2>
       <div class="faq">
-        <div class="accordion-item">
-          <div class="accordion-q">Apakah PM2.5 dan mengapa ia berbahaya? <span>+</span></div>
-          <div class="accordion-a">PM2.5 ialah partikel halus (≤2.5 µm) yang boleh menembusi alveoli paru-paru dan masuk ke dalam peredaran darah. Ia dikaitkan dengan asma, penyakit jantung, dan peningkatan kadar kematian pramatang.</div>
-        </div>
-
-        <div class="accordion-item">
-          <div class="accordion-q">Apakah kesan pendedahan jangka panjang kepada PM2.5? <span>+</span></div>
-          <div class="accordion-a">Pendedahan jangka panjang boleh menyebabkan penyakit kronik seperti COPD, penurunan fungsi pulmonari, hipertensi, strok dan penyakit kardiovaskular.</div>
-        </div>
-
-        <div class="accordion-item">
-          <div class="accordion-q">Bagaimana PM10 berbeza dari PM2.5 dalam kesan kesihatan? <span>+</span></div>
-          <div class="accordion-a">PM10 lebih besar dan biasanya menyebabkan iritasi saluran pernafasan atas. PM2.5 menembusi lebih dalam dan lebih berbahaya pada jangka panjang.</div>
-        </div>
-
-        <div class="accordion-item">
-          <div class="accordion-q">Apa tindakan segera jika bacaan AQI tidak sihat? <span>+</span></div>
-          <div class="accordion-a">Kurangkan aktiviti luar, pakai topeng N95, tutup tingkap, gunakan penapis udara, dan dapatkan rawatan jika mengalami masalah pernafasan.</div>
-        </div>
-
-        <div class="accordion-item">
-          <div class="accordion-q">Bagaimana komuniti boleh membantu mengurangkan pendedahan kepada PM? <span>+</span></div>
-          <div class="accordion-a">Laporkan sumber pencemaran, kurangkan pembakaran terbuka, sokong pengangkutan awam dan program penanaman pokok.</div>
-        </div>
+        <details>
+          <summary>Apa itu PM2.5 dan PM10?</summary>
+          <p>PM2.5 dan PM10 ialah zarah halus dalam udara yang boleh menjejaskan kesihatan pernafasan.</p>
+        </details>
+        <details>
+          <summary>Bagaimana PM memberi kesan kepada paru-paru?</summary>
+          <p>Zarah halus boleh masuk jauh ke dalam paru-paru dan menyebabkan keradangan serta penyakit kronik.</p>
+        </details>
+        <details>
+          <summary>Siapa yang paling terjejas?</summary>
+          <p>Kanak-kanak, warga emas, dan individu dengan penyakit pernafasan lebih berisiko.</p>
+        </details>
       </div>
     </section>
 
@@ -284,139 +176,126 @@
 
   <!-- SCRIPT: realtime fetch + chart + accordion -->
   <script>
-  (function(){
-    // ---- CONFIG ----
-    const API_ENDPOINT = '/api/airquality'; // serverless proxy must exist
-    const REFRESH_MS = 5 * 60 * 1000; // 5 minutes
+    (function(){
+      async function fetchAQI(){
+        try {
+          const res = await fetch('/api/airquality');
+          const data = await res.json();
+          document.getElementById('aqiValue').textContent = data.aqi;
+          document.getElementById('aqiCategory').textContent = data.category;
+          document.getElementById('aqiMeta').textContent = 'Last updated: ' + data.updated;
+          document.getElementById('pm25Box').textContent = 'PM2.5: ' + data.pm25 + ' µg/m³';
+          document.getElementById('pm10Box').textContent = 'PM10: ' + data.pm10 + ' µg/m³';
 
-    // DOM refs
-    const aqiValueEl = document.getElementById('aqiValue');
-    const aqiCatEl = document.getElementById('aqiCat');
-    const aqiMetaEl = document.getElementById('aqiMeta');
-    const aqiUpdatedEl = document.getElementById('aqiUpdated');
-    const pm25Box = document.getElementById('pm25Box');
-    const pm10Box = document.getElementById('pm10Box');
-    const aqiBox = document.getElementById('aqiBox');
-    const aqiCard = document.getElementById('aqiCard');
-
-    // Chart setup
-    const ctx = document.getElementById('pmChart').getContext('2d');
-    const labels = [], series25 = [], series10 = [];
-    const pmChart = new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels,
-        datasets: [
-          { label: 'PM2.5 (µg/m³)', data: series25, borderColor: getComputedStyle(document.documentElement).getPropertyValue('--accent1') || '#2bb6b6', tension:0.3, fill:true, backgroundColor:'rgba(43,182,182,0.12)', pointRadius:1 },
-          { label: 'PM10 (µg/m³)', data: series10, borderColor: getComputedStyle(document.documentElement).getPropertyValue('--accent2') || '#4aa0e6', tension:0.3, fill:true, backgroundColor:'rgba(74,160,230,0.12)', pointRadius:1 }
-        ]
-      },
-      options: {
-        responsive:true,
-        maintainAspectRatio:false,
-        scales:{ y:{ beginAtZero:true } },
-        plugins:{ legend:{ labels:{ color: 'rgba(0,0,0,0.7)' }, position:'top' } }
-      }
-    });
-
-    function aqiCategoryFromValue(a){
-      if(a===null || isNaN(a)) return {cat:'No data', color:'#9AA4B2'};
-      if(a<=50) return {cat:'Good', color:'#26a69a'};
-      if(a<=100) return {cat:'Moderate', color:'#ffca28'};
-      if(a<=150) return {cat:'Unhealthy (S)', color:'#ff7043'};
-      if(a<=200) return {cat:'Unhealthy', color:'#e53935'};
-      if(a<=300) return {cat:'Very Unhealthy', color:'#8e24aa'};
-      return {cat:'Hazardous', color:'#6b0018'};
-    }
-
-    async function updateFromApi(){
-      try{
-        const res = await fetch(API_ENDPOINT, { cache: 'no-store' });
-        if(!res.ok){
-          throw new Error('API returned ' + res.status);
-        }
-        const json = await res.json();
-
-        const pm25 = (typeof json.pm25 === 'number') ? json.pm25 : (json.pm25 ? Number(json.pm25) : null);
-        const pm10 = (typeof json.pm10 === 'number') ? json.pm10 : (json.pm10 ? Number(json.pm10) : null);
-        const aqi = (typeof json.aqi === 'number') ? json.aqi : null;
-        const updated = json.updatedAt || json.timestamp || new Date().toISOString();
-
-        if(pm25Box) pm25Box.textContent = pm25 !== null ? pm25.toFixed(1) : '--';
-        if(pm10Box) pm10Box.textContent = pm10 !== null ? pm10.toFixed(1) : '--';
-        if(aqiBox) aqiBox.textContent = aqi !== null ? Math.round(aqi) : '--';
-        if(aqiValueEl) aqiValueEl.textContent = aqi !== null ? Math.round(aqi) : '--';
-
-        const cat = aqiCategoryFromValue(aqi);
-        if(aqiCatEl) aqiCatEl.textContent = cat.cat;
-        if(aqiCard) aqiCard.style.boxShadow = `0 14px 40px ${cat.color}33`;
-
-        if(aqiMetaEl){
-          aqiMetaEl.textContent = `PM2.5: ${pm25 !== null ? pm25.toFixed(1) : '--'} µg/m³ • PM10: ${pm10 !== null ? pm10.toFixed(1) : '--'} µg/m³`;
-        }
-        if(aqiUpdatedEl) aqiUpdatedEl.textContent = new Date(updated).toLocaleString();
-
-        if(Array.isArray(json.trend) && json.trend.length){
-          labels.length=0; series25.length=0; series10.length=0;
-          json.trend.forEach(pt=>{
-            labels.push(pt.time || new Date().toLocaleTimeString());
-            series25.push(typeof pt.pm25 === 'number' ? Number(Number(pt.pm25).toFixed(1)) : (pt.pm25 ? Number(pt.pm25) : null));
-            series10.push(typeof pt.pm10 === 'number' ? Number(Number(pt.pm10).toFixed(1)) : (pt.pm10 ? Number(pt.pm10) : null));
+          const ctx = document.getElementById('pmChart').getContext('2d');
+          new Chart(ctx, {
+            type: 'line',
+            data: {
+              labels: data.trend.labels,
+              datasets: [
+                {
+                  label: 'PM2.5',
+                  data: data.trend.pm25,
+                  borderColor: '#2bb6b6',
+                  fill: false
+                },
+                {
+                  label: 'PM10',
+                  data: data.trend.pm10,
+                  borderColor: '#4aa0e6',
+                  fill: false
+                }
+              ]
+            },
+            options: {
+              responsive: true,
+              plugins: {
+                legend: { display: true }
+              },
+              scales: {
+                y: { beginAtZero: true }
+              }
+            }
           });
-        } else {
-          const ts = new Date().toLocaleTimeString();
-          labels.push(ts);
-          series25.push(pm25 === null ? null : pm25);
-          series10.push(pm10 === null ? null : pm10);
-          if(labels.length > 30){ labels.shift(); series25.shift(); series10.shift(); }
+        } catch (err) {
+          console.error('Error fetching AQI data:', err);
         }
-        pmChart.update();
-
-      }catch(err){
-        console.error('updateFromApi error', err);
-        if(aqiMetaEl) aqiMetaEl.textContent = 'Real-time data unavailable (proxy/API).';
       }
-    }
 
-    (function seed(){
-      const now = Date.now();
-      for(let i=10;i>0;i--){
-        const t = new Date(now - i*60000);
-        labels.push(t.toTimeString().split(' ')[0]);
-        series25.push(null); series10.push(null);
-      }
-      pmChart.update();
-    })();
+      fetchAQI();
 
-    updateFromApi();
-    setInterval(updateFromApi, REFRESH_MS);
-
-    const refreshTrigger = document.getElementById('aqiCard');
-    if(refreshTrigger){
-      refreshTrigger.style.cursor = 'pointer';
-      refreshTrigger.addEventListener('click', updateFromApi);
-    }
-
-    document.querySelectorAll('.accordion-q').forEach(q=>{
-      q.addEventListener('click', ()=>{
-        const a = q.nextElementSibling;
-        const allA = document.querySelectorAll('.accordion-a');
-        const allQ = document.querySelectorAll('.accordion-q');
-        allA.forEach(x => x.style.display = 'none');
-        allQ.forEach(x => { const s = x.querySelector('span'); if(s) s.textContent = '+'; });
-        if(a.style.display !== 'block'){ a.style.display = 'block'; const s = q.querySelector('span'); if(s) s.textContent = '−'; }
+      document.querySelectorAll('details').forEach((el) => {
+        el.addEventListener('toggle', () => {
+          if (el.open) {
+            el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        });
       });
-    });
+    })();
+  </script>
+</body>
+</html>
+  <!-- floating WhatsApp copilot -->
+  <a class="wa-btn" href="https://wa.me/18772241042" target="_blank" rel="noopener noreferrer" style="position:fixed;right:18px;bottom:18px;z-index:999">Chat Copilot</a>
 
-    document.querySelectorAll('.accordion-q').forEach(q=>{
-      q.setAttribute('tabindex','0');
-      q.addEventListener('keydown', e => { if(e.key === 'Enter' || e.key === ' ') q.click(); });
-    });
+  <!-- SCRIPT: realtime fetch + chart + accordion -->
+  <script>
+    (function(){
+      async function fetchAQI(){
+        try {
+          const res = await fetch('/api/airquality');
+          const data = await res.json();
+          document.getElementById('aqiValue').textContent = data.aqi;
+          document.getElementById('aqiCategory').textContent = data.category;
+          document.getElementById('aqiMeta').textContent = 'Last updated: ' + data.updated;
+          document.getElementById('pm25Box').textContent = 'PM2.5: ' + data.pm25 + ' µg/m³';
+          document.getElementById('pm10Box').textContent = 'PM10: ' + data.pm10 + ' µg/m³';
 
-    const manualBtn = document.querySelector('button[onclick*="eaduan"]') ? null : document.querySelector('#refreshBtn');
-    if(manualBtn) manualBtn.addEventListener('click', updateFromApi);
+          const ctx = document.getElementById('pmChart').getContext('2d');
+          new Chart(ctx, {
+            type: 'line',
+            data: {
+              labels: data.trend.labels,
+              datasets: [
+                {
+                  label: 'PM2.5',
+                  data: data.trend.pm25,
+                  borderColor: '#2bb6b6',
+                  fill: false
+                },
+                {
+                  label: 'PM10',
+                  data: data.trend.pm10,
+                  borderColor: '#4aa0e6',
+                  fill: false
+                }
+              ]
+            },
+            options: {
+              responsive: true,
+              plugins: {
+                legend: { display: true }
+              },
+              scales: {
+                y: { beginAtZero: true }
+              }
+            }
+          });
+        } catch (err) {
+          console.error('Error fetching AQI data:', err);
+        }
+      }
 
-  })();
+      fetchAQI();
+
+      document.querySelectorAll('details').forEach((el) => {
+        el.addEventListener('toggle', () => {
+          if (el.open) {
+            el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        });
+      });
+    })();
   </script>
 </body>
 </html>
