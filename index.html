@@ -95,6 +95,15 @@
       .aqi-value{ font-size:48px }
       .chart-wrap{ height:180px }
     }
+
+    /* drawer styles (manuskrip) */
+    .drawer{border-radius:10px;border:1px solid #eef3fb;padding:8px;background:#fff}
+    .drawer-toggle{display:flex;gap:8px;align-items:center}
+    .drawer-content{max-height:0;overflow:hidden;transition:max-height .28s ease;padding:0 8px}
+    .drawer-open .drawer-content{max-height:900px;padding:8px 8px 16px 8px}
+    .file-missing{padding:12px;background:#fff3f3;border-radius:8px;border:1px solid #ffd6d6;color:#922; margin-top:8px}
+    .file-actions{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+    .file-actions a{display:inline-block;padding:8px 10px;border-radius:8px;background:#f3f4f6;color:#072;text-decoration:none;font-weight:700}
   </style>
 </head>
 <body>
@@ -277,8 +286,23 @@
             <div class="small">Klik butang untuk buka/tutup pratonton PDF. Jika fail besar, muatkan boleh ambil masa.</div>
           </div>
           <div class="drawer-content" id="drawerContent">
-            <iframe id="pdfFrame" src="/manuscript-kbp.pdf" style="width:100%;height:600px;border:0;border-radius:6px"></iframe>
-            <div style="margin-top:8px"><a class="link" href="/manuscript-kbp.pdf" target="_blank">Buka PDF dalam tab baru / muat turun</a></div>
+            <!-- iframe will be set dynamically if file exists; otherwise show friendly upload instructions -->
+            <div id="pdfPlaceholder" style="min-height:120px;display:flex;align-items:center;justify-content:center">
+              <div class="small">Mencari manuskrip…</div>
+            </div>
+            <div id="pdfFrameWrap" style="display:none">
+              <iframe id="pdfFrame" src="" style="width:100%;height:600px;border:0;border-radius:6px"></iframe>
+              <div style="margin-top:8px"><a class="link" id="pdfDirectLink" href="#" target="_blank">Buka PDF dalam tab baru / muat turun</a></div>
+            </div>
+
+            <div id="pdfMissing" style="display:none" class="file-missing">
+              <div>Kami tidak menemui fail <code>/manuscript-kbp.pdf</code> di repo. Untuk memaparkan manuskrip di sini, upload fail PDF ke repo root dan pastikan nama fail <code>manuscript-kbp.pdf</code>.</div>
+              <div class="file-actions">
+                <a id="rawPdf" href="https://raw.githubusercontent.com/zieainbalqis-wq/kb-pure-breath/main/manuscript-kbp.pdf" target="_blank" rel="noopener noreferrer">Buka Raw (jika ada)</a>
+                <a id="uploadBtn" href="https://github.com/zieainbalqis-wq/kb-pure-breath/upload/main?path=" target="_blank" rel="noopener noreferrer">Upload Manuskrip ke repo</a>
+              </div>
+            </div>
+
           </div>
         </div>
       </div>
@@ -321,12 +345,14 @@
   <!-- floating WhatsApp copilot -->
   <a class="wa-btn" href="https://wa.me/18772241042" target="_blank" rel="noopener noreferrer" style="position:fixed;right:18px;bottom:18px;z-index:999">Chat Copilot</a>
 
-  <!-- SCRIPT: realtime fetch + chart + accordion -->
+  <!-- SCRIPT: realtime fetch + chart + accordion + manuscript check -->
   <script>
   (function(){
     // ---- CONFIG ----
-    const API_ENDPOINT = '/api/airquality'; // NOTE: GitHub Pages cannot run server code — /api must be hosted elsewhere (Vercel/Netlify) to work.
+    const API_ENDPOINT = '/api/airquality'; // NOTE: GitHub Pages cannot run server code — /api must be hosted elsewhere to work.
     const REFRESH_MS = 5 * 60 * 1000; // 5 minutes
+    const RAW_PDF_URL = 'https://raw.githubusercontent.com/zieainbalqis-wq/kb-pure-breath/main/manuscript-kbp.pdf';
+    const PDF_PATH = '/manuscript-kbp.pdf';
 
     // DOM refs
     const aqiValueEl = document.getElementById('aqiValue');
@@ -452,15 +478,68 @@
       q.addEventListener('keydown', e => { if(e.key === 'Enter' || e.key === ' ') q.click(); });
     });
 
-    // Manuskrip drawer toggle
+    // Manuskrip existence check + drawer toggle
     const openBtn = document.getElementById('openDrawerBtn');
     const manDrawer = document.getElementById('manDrawer');
+    const pdfPlaceholder = document.getElementById('pdfPlaceholder');
+    const pdfFrameWrap = document.getElementById('pdfFrameWrap');
+    const pdfFrame = document.getElementById('pdfFrame');
+    const pdfDirectLink = document.getElementById('pdfDirectLink');
+    const pdfMissing = document.getElementById('pdfMissing');
     let open = false;
+
+    async function checkPdf(){
+      try{
+        // Try HEAD first (some hosts may not support HEAD; fall back to GET if needed)
+        let ok = false;
+        try {
+          const res = await fetch(PDF_PATH, { method: 'HEAD', cache:'no-store' });
+          ok = res.ok;
+        } catch(e){
+          // HEAD failed — try GET with range to avoid downloading whole file
+          try {
+            const r2 = await fetch(PDF_PATH, { method: 'GET', headers: { Range: 'bytes=0-1023' }, cache:'no-store' });
+            ok = r2.ok && r2.status !== 416;
+          } catch(e2){
+            ok = false;
+          }
+        }
+
+        if(ok){
+          // show iframe preview
+          pdfPlaceholder.style.display = 'none';
+          pdfMissing.style.display = 'none';
+          pdfFrameWrap.style.display = 'block';
+          pdfFrame.src = PDF_PATH;
+          pdfDirectLink.href = PDF_PATH;
+        } else {
+          pdfPlaceholder.style.display = 'none';
+          pdfFrameWrap.style.display = 'none';
+          pdfMissing.style.display = 'block';
+          // raw link (may 404) still useful for debugging
+          document.getElementById('rawPdf').href = RAW_PDF_URL;
+        }
+      }catch(err){
+        console.error('PDF check error', err);
+        pdfPlaceholder.style.display = 'none';
+        pdfFrameWrap.style.display = 'none';
+        pdfMissing.style.display = 'block';
+        document.getElementById('rawPdf').href = RAW_PDF_URL;
+      }
+    }
+
     if(openBtn){
-      openBtn.addEventListener('click', ()=>{
+      openBtn.addEventListener('click', async ()=>{
         open = !open;
-        if(open){ manDrawer.classList.add('drawer-open'); openBtn.textContent = 'Tutup Manuskrip'; }
-        else { manDrawer.classList.remove('drawer-open'); openBtn.textContent = 'Buka Manuskrip'; }
+        if(open){
+          manDrawer.classList.add('drawer-open');
+          openBtn.textContent = 'Tutup Manuskrip';
+          // check pdf & show correct UI
+          await checkPdf();
+        } else {
+          manDrawer.classList.remove('drawer-open');
+          openBtn.textContent = 'Buka Manuskrip';
+        }
       });
     }
 
