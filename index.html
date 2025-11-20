@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>KB Pure Breath — Live AQI KL (Restored)</title>
+  <title>KB Pure Breath — Live AQI KL</title>
   <meta name="description" content="KB Pure Breath - Live Air Quality monitoring Kuala Lumpur (OpenAQ) - PM2.5, PM10" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
@@ -21,7 +21,6 @@
     *{box-sizing:border-box}
     html,body{height:100%;margin:0;font-family:Inter, Poppins, system-ui; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;}
     body{
-      /* FULL PAGE BACKGROUND KLCC */
       background-image: url('klcc-bg.jpg');
       background-size: cover;
       background-position: center;
@@ -30,15 +29,9 @@
       padding-bottom:120px;
     }
 
-    /* overlay to help readability across the page */
-    .page-overlay{
-      position:fixed; inset:0; background:linear-gradient(180deg, rgba(6,21,34,0.48), rgba(6,21,34,0.32)); z-index:0;
-      pointer-events:none;
-    }
-
+    .page-overlay{ position:fixed; inset:0; background:linear-gradient(180deg, rgba(6,21,34,0.48), rgba(6,21,34,0.32)); z-index:0; pointer-events:none; }
     .page{ position:relative; z-index:2; max-width:var(--maxw); margin:0 auto; padding:28px; }
 
-    /* Header */
     header{ display:flex; align-items:center; gap:16px; margin-bottom:18px; flex-wrap:wrap;}
     .logo{ width:110px; height:110px; border-radius:14px; overflow:hidden; box-shadow:0 12px 40px rgba(0,0,0,0.35); background:var(--glass-bg); flex:0 0 110px; }
     .logo img{ width:100%; height:100%; object-fit:contain; display:block; }
@@ -50,10 +43,8 @@
     nav a{ color:rgba(255,255,255,0.95); text-decoration:none; padding:8px 10px; border-radius:8px; font-weight:600; }
     nav a:hover{ background: rgba(255,255,255,0.06); }
 
-    /* glass base */
     .glass{ background:var(--glass-bg); border-radius:12px; padding:14px; color:var(--text-on-glass); backdrop-filter: blur(6px) saturate(110%); -webkit-backdrop-filter: blur(6px) saturate(110%); box-shadow:0 8px 30px rgba(0,0,0,0.25) }
 
-    /* Realtime layout */
     .realtime{ display:grid; grid-template-columns: 1fr 380px; gap:18px; align-items:start; margin-bottom:18px; }
     .aqi-big{ padding:18px; border-radius:12px; color:var(--text-on-glass); background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); box-shadow:0 12px 36px rgba(0,0,0,0.45) }
     .aqi-value{ font-size:72px; font-weight:800; margin:10px 0; letter-spacing:-1px }
@@ -63,26 +54,20 @@
     .side{ background:var(--card-bg); color:#071129; border-radius:12px; padding:12px; box-shadow:0 8px 24px rgba(2,6,23,0.12); min-height:220px; }
     .chart-wrap{ height:220px; position:relative; }
 
-    /* pm small boxes */
     .pm-row{ display:flex; gap:12px; margin-top:12px; flex-wrap:wrap }
     .pm-box{ flex:1 1 120px; padding:10px; border-radius:10px; background:rgba(255,255,255,0.06); color:var(--text-on-glass); text-align:center }
 
-    /* contact & complain grid */
-    .contact-grid{ display:grid; grid-template-columns:1fr 320px; gap:18px; margin-top:18px; }
-    .card{ background:var(--card-bg); border-radius:12px; padding:12px; box-shadow:0 8px 24px rgba(2,6,23,0.12); color:#071129 }
-    .complain{ background: linear-gradient(90deg,var(--accent1),var(--accent2)); padding:14px; border-radius:12px; color:#fff; box-shadow:0 10px 30px rgba(10,30,60,0.16); display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap }
-    .complain button{ background:#fff; color:var(--accent2); border:none; padding:10px 12px; border-radius:8px; font-weight:700; cursor:pointer }
-
-    /* poster awareness */
     .poster-grid{ display:grid; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); gap:14px; margin-top:12px; }
     .poster-card{ background: rgba(255,255,255,0.06); border-radius:10px; padding:10px; text-align:center; color:#fff; box-shadow:0 8px 20px rgba(0,0,0,0.28) }
     .poster-card img{ width:100%; height:auto; border-radius:8px; display:block; }
 
-    /* FAQ accordion */
     .faq{ margin-top:18px }
     .accordion-item{ background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); border-radius:10px; margin-bottom:12px; overflow:hidden; color:#fff; box-shadow:0 8px 24px rgba(0,0,0,0.2) }
     .accordion-q{ padding:12px 14px; cursor:pointer; display:flex; justify-content:space-between; align-items:center; font-weight:700 }
     .accordion-a{ padding:0 14px 14px 14px; display:none; color:rgba(255,255,255,0.9); font-weight:400 }
+
+    .contact-grid{ display:grid; grid-template-columns:1fr 320px; gap:18px; margin-top:18px; }
+    .card{ background:var(--card-bg); border-radius:12px; padding:12px; box-shadow:0 8px 24px rgba(2,6,23,0.12); color:#071129 }
 
     footer{ margin-top:28px; padding:18px; text-align:center; color:rgba(255,255,255,0.9) }
 
@@ -121,7 +106,6 @@
       </div>
 
       <nav aria-label="Main navigation">
-        <!-- Nav matches requested order -->
         <a href="#aduan">Aduan</a>
         <a href="#realtime">Realtime</a>
         <a href="#poster">Poster</a>
@@ -141,7 +125,6 @@
             <div style="font-size:13px;margin-top:6px">Lapor sumber pencemaran, bau pelik atau kejadian berkaitan udara terus melalui borang aduan.</div>
           </div>
           <div>
-            <!-- user-provided Google Form -->
             <button onclick="window.open('https://docs.google.com/forms/d/e/1FAIpQLSeNpSIZy-BT5JPAQddddWRe5TvFEo1-7szVrZbcamtgcULU9A/viewform?usp=header','_blank')">Buka Borang Aduan</button>
           </div>
         </div>
@@ -193,7 +176,6 @@
       <h2 style="color:var(--text-on-glass);margin:0 0 10px 0">Poster Awareness</h2>
       <div class="poster-grid">
         <div class="poster-card">
-          <!-- single poster as requested -->
           <img src="poster%201.png" alt="Poster 1">
           <div style="margin-top:8px">
             <a href="https://www.canva.com/design/DAG3kf01Gig/Zf2Stx1G6IcfuNncKkOK7g/edit" target="_blank" rel="noopener noreferrer" class="wa-btn" style="display:inline-block;padding:6px 10px;margin-right:8px">Edit Canva A</a>
@@ -230,19 +212,18 @@
             <div class="small">Klik butang untuk buka/tutup pratonton PDF. Jika fail besar, muatkan boleh ambil masa.</div>
           </div>
           <div class="drawer-content" id="drawerContent">
-            <!-- iframe will be set dynamically if file exists; otherwise show friendly upload instructions -->
             <div id="pdfPlaceholder" style="min-height:120px;display:flex;align-items:center;justify-content:center">
               <div class="small">Mencari manuskrip…</div>
             </div>
             <div id="pdfFrameWrap" style="display:none">
-              <iframe id="pdfFrame" src="" style="width:100%;height:600px;border:0;border-radius:6px"></iframe>
-              <div style="margin-top:8px"><a class="link" id="pdfDirectLink" href="#" target="_blank">Buka PDF dalam tab baru / muat turun</a></div>
+              <iframe id="pdfFrame" src="/manuscript-kbp.pdf" style="width:100%;height:600px;border:0;border-radius:6px"></iframe>
+              <div style="margin-top:8px"><a class="link" id="pdfDirectLink" href="/manuscript-kbp.pdf" target="_blank">Buka PDF dalam tab baru / muat turun</a></div>
             </div>
 
             <div id="pdfMissing" style="display:none" class="file-missing">
-              <div>Kami tidak menemui fail <code>/manuscript-kbp.pdf</code> di repo. Untuk memaparkan manuskrip di sini, upload fail PDF ke repo root dan pastikan nama fail <code>manuscript-kbp.pdf</code>.</div>
+              <div>Kami tidak menemui fail <code>/manuscript-kbp.pdf</code> di repo (atau file tidak dapat dimuat). Pastikan fail wujud di root branch <code>main</code>.</div>
               <div class="file-actions">
-                <a id="rawPdf" href="https://raw.githubusercontent.com/zieainbalqis-wq/kb-pure-breath/main/manuscript-kbp.pdf" target="_blank" rel="noopener noreferrer">Buka Raw (jika ada)</a>
+                <a id="rawPdf" href="https://raw.githubusercontent.com/zieainbalqis-wq/kb-pure-breath/main/manuscript-kbp.pdf" target="_blank" rel="noopener noreferrer">Buka Raw</a>
                 <a id="uploadBtn" href="https://github.com/zieainbalqis-wq/kb-pure-breath/upload/main?path=" target="_blank" rel="noopener noreferrer">Upload Manuskrip ke repo</a>
               </div>
             </div>
@@ -252,7 +233,7 @@
       </div>
     </section>
 
-    <!-- 6) FAQ (pulled from file content provided) -->
+    <!-- 6) FAQ -->
     <section id="faq" style="margin-top:18px">
       <h2 style="color:var(--text-on-glass);margin:0 0 10px 0">FAQ — Kesan Particulate Matter terhadap Kesihatan</h2>
       <div class="faq">
@@ -283,7 +264,7 @@
       </div>
     </section>
 
-    <!-- 7) CONTACT US (moved to its own section) -->
+    <!-- 7) CONTACT US -->
     <section id="contact" style="margin-top:18px">
       <div class="contact-grid">
         <div class="card">
@@ -291,39 +272,34 @@
           <p style="color:var(--muted);margin:0 0 12px 0">Hubungi ahli kumpulan untuk maklumat lanjut atau kolaborasi.</p>
 
           <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px">
-            <!-- Iqbal -->
             <div style="text-align:center">
               <img src="iqbal.png" alt="Iqbal" style="width:92px;height:92px;border-radius:50%;object-fit:cover;display:block;margin:0 auto 8px">
               <strong>Iqbal</strong>
-              <div style="margin-top:8px"><a class="wa-btn" href="https://wa.me/60179912306" target="_blank" rel="noopener noreferrer" title="WhatsApp Iqbal">WhatsApp</a></div>
+              <div style="margin-top:8px"><a class="wa-btn" href="https://wa.me/60179912306" target="_blank" rel="noopener noreferrer">WhatsApp</a></div>
             </div>
 
-            <!-- Syakirullah -->
             <div style="text-align:center">
               <img src="syakirullah.png" alt="Syakirullah" style="width:92px;height:92px;border-radius:50%;object-fit:cover;display:block;margin:0 auto 8px">
               <strong>Syakirullah</strong>
-              <div style="margin-top:8px"><a class="wa-btn" href="https://wa.me/60172131363" target="_blank" rel="noopener noreferrer" title="WhatsApp Syakirullah">WhatsApp</a></div>
+              <div style="margin-top:8px"><a class="wa-btn" href="https://wa.me/60172131363" target="_blank" rel="noopener noreferrer">WhatsApp</a></div>
             </div>
 
-            <!-- Wan Zulkhairi -->
             <div style="text-align:center">
               <img src="wan_zulkhairi.png" alt="Wan Zulkhairi" style="width:92px;height:92px;border-radius:50%;object-fit:cover;display:block;margin:0 auto 8px">
               <strong>Wan Zulkhairi</strong>
-              <div style="margin-top:8px"><a class="wa-btn" href="https://wa.me/60145147998" target="_blank" rel="noopener noreferrer" title="WhatsApp Wan Zulkhairi">WhatsApp</a></div>
+              <div style="margin-top:8px"><a class="wa-btn" href="https://wa.me/60145147998" target="_blank" rel="noopener noreferrer">WhatsApp</a></div>
             </div>
 
-            <!-- Zhafri -->
             <div style="text-align:center">
               <img src="zhafri.png" alt="Zhafri" style="width:92px;height:92px;border-radius:50%;object-fit:cover;display:block;margin:0 auto 8px">
               <strong>Zhafri</strong>
-              <div style="margin-top:8px"><a class="wa-btn" href="https://wa.me/60138487104" target="_blank" rel="noopener noreferrer" title="WhatsApp Zhafri">WhatsApp</a></div>
+              <div style="margin-top:8px"><a class="wa-btn" href="https://wa.me/60138487104" target="_blank" rel="noopener noreferrer">WhatsApp</a></div>
             </div>
 
-            <!-- Zie Ain Balqis -->
             <div style="text-align:center">
               <img src="zie_ain_balqis.png" alt="Zie Ain Balqis" style="width:92px;height:92px;border-radius:50%;object-fit:cover;display:block;margin:0 auto 8px">
               <strong>Zie Ain Balqis</strong>
-              <div style="margin-top:8px"><a class="wa-btn" href="https://wa.me/60172370158" target="_blank" rel="noopener noreferrer" title="WhatsApp Zie Ain Balqis">WhatsApp</a></div>
+              <div style="margin-top:8px"><a class="wa-btn" href="https://wa.me/60172370158" target="_blank" rel="noopener noreferrer">WhatsApp</a></div>
             </div>
           </div>
         </div>
@@ -343,19 +319,17 @@
     <footer style="margin-top:28px">© 2025 KB Pure Breath • Built for public monitoring</footer>
   </main>
 
-  <!-- floating WhatsApp copilot -->
   <a class="wa-btn" href="https://wa.me/18772241042" target="_blank" rel="noopener noreferrer" style="position:fixed;right:18px;bottom:18px;z-index:999">Chat Copilot</a>
 
-  <!-- SCRIPT: realtime fetch + chart + accordion + manuscript check -->
   <script>
   (function(){
     // ---- CONFIG ----
-    const API_ENDPOINT = '/api/airquality'; // NOTE: GitHub Pages cannot run server code — /api must be hosted elsewhere to work.
-    const REFRESH_MS = 5 * 60 * 1000; // 5 minutes
+    const API_ENDPOINT = '/api/airquality';
+    const REFRESH_MS = 5 * 60 * 1000;
     const RAW_PDF_URL = 'https://raw.githubusercontent.com/zieainbalqis-wq/kb-pure-breath/main/manuscript-kbp.pdf';
     const PDF_PATH = '/manuscript-kbp.pdf';
 
-    // DOM refs
+    // DOM refs for AQI / chart
     const aqiValueEl = document.getElementById('aqiValue');
     const aqiCatEl = document.getElementById('aqiCat');
     const aqiMetaEl = document.getElementById('aqiMeta');
@@ -398,9 +372,7 @@
     async function updateFromApi(){
       try{
         const res = await fetch(API_ENDPOINT, { cache: 'no-store' });
-        if(!res.ok){
-          throw new Error('API returned ' + res.status);
-        }
+        if(!res.ok) throw new Error('API returned ' + res.status);
         const json = await res.json();
 
         const pm25 = (typeof json.pm25 === 'number') ? json.pm25 : (json.pm25 ? Number(json.pm25) : null);
@@ -444,6 +416,7 @@
       }
     }
 
+    // seed empty chart
     (function seed(){
       const now = Date.now();
       for(let i=10;i>0;i--){
@@ -458,28 +431,21 @@
     setInterval(updateFromApi, REFRESH_MS);
 
     const refreshTrigger = document.getElementById('aqiCard');
-    if(refreshTrigger){
-      refreshTrigger.style.cursor = 'pointer';
-      refreshTrigger.addEventListener('click', updateFromApi);
-    }
+    if(refreshTrigger){ refreshTrigger.style.cursor = 'pointer'; refreshTrigger.addEventListener('click', updateFromApi); }
 
+    // accordion accessibility
     document.querySelectorAll('.accordion-q').forEach(q=>{
       q.addEventListener('click', ()=>{
         const a = q.nextElementSibling;
-        const allA = document.querySelectorAll('.accordion-a');
-        const allQ = document.querySelectorAll('.accordion-q');
-        allA.forEach(x => x.style.display = 'none');
-        allQ.forEach(x => { const s = x.querySelector('span'); if(s) s.textContent = '+'; });
+        document.querySelectorAll('.accordion-a').forEach(x => x.style.display = 'none');
+        document.querySelectorAll('.accordion-q').forEach(x => { const s = x.querySelector('span'); if(s) s.textContent = '+'; });
         if(a.style.display !== 'block'){ a.style.display = 'block'; const s = q.querySelector('span'); if(s) s.textContent = '−'; }
       });
-    });
-
-    document.querySelectorAll('.accordion-q').forEach(q=>{
       q.setAttribute('tabindex','0');
       q.addEventListener('keydown', e => { if(e.key === 'Enter' || e.key === ' ') q.click(); });
     });
 
-    // Manuskrip existence check + drawer toggle
+    // Manuskrip drawer toggle + quick existence check (since file exists, iframe uses /manuscript-kbp.pdf)
     const openBtn = document.getElementById('openDrawerBtn');
     const manDrawer = document.getElementById('manDrawer');
     const pdfPlaceholder = document.getElementById('pdfPlaceholder');
@@ -491,13 +457,13 @@
 
     async function checkPdf(){
       try{
-        // Try HEAD first (some hosts may not support HEAD; fall back to GET if needed)
+        // Try HEAD
         let ok = false;
         try {
           const res = await fetch(PDF_PATH, { method: 'HEAD', cache:'no-store' });
           ok = res.ok;
         } catch(e){
-          // HEAD failed — try GET with range to avoid downloading whole file
+          // fallback to GET (small range)
           try {
             const r2 = await fetch(PDF_PATH, { method: 'GET', headers: { Range: 'bytes=0-1023' }, cache:'no-store' });
             ok = r2.ok && r2.status !== 416;
@@ -507,19 +473,33 @@
         }
 
         if(ok){
-          // show iframe preview
           pdfPlaceholder.style.display = 'none';
           pdfMissing.style.display = 'none';
           pdfFrameWrap.style.display = 'block';
           pdfFrame.src = PDF_PATH;
           pdfDirectLink.href = PDF_PATH;
-        } else {
-          pdfPlaceholder.style.display = 'none';
-          pdfFrameWrap.style.display = 'none';
-          pdfMissing.style.display = 'block';
-          // raw link (may 404) still useful for debugging
-          document.getElementById('rawPdf').href = RAW_PDF_URL;
+          return;
         }
+
+        // fallback to raw.githubusercontent
+        try {
+          const rawRes = await fetch(RAW_PDF_URL, { method: 'HEAD', cache:'no-store' });
+          if(rawRes.ok){
+            pdfPlaceholder.style.display = 'none';
+            pdfMissing.style.display = 'none';
+            pdfFrameWrap.style.display = 'block';
+            pdfFrame.src = RAW_PDF_URL;
+            pdfDirectLink.href = RAW_PDF_URL;
+            return;
+          }
+        } catch(e){ /* ignore */ }
+
+        // not found
+        pdfPlaceholder.style.display = 'none';
+        pdfFrameWrap.style.display = 'none';
+        pdfMissing.style.display = 'block';
+        document.getElementById('rawPdf').href = RAW_PDF_URL;
+
       }catch(err){
         console.error('PDF check error', err);
         pdfPlaceholder.style.display = 'none';
@@ -535,7 +515,6 @@
         if(open){
           manDrawer.classList.add('drawer-open');
           openBtn.textContent = 'Tutup Manuskrip';
-          // check pdf & show correct UI
           await checkPdf();
         } else {
           manDrawer.classList.remove('drawer-open');
