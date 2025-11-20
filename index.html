@@ -121,7 +121,7 @@
       </div>
 
       <nav aria-label="Main navigation">
-        <!-- Nav updated to match requested order -->
+        <!-- Nav matches requested order -->
         <a href="#aduan">Aduan</a>
         <a href="#realtime">Realtime</a>
         <a href="#poster">Poster</a>
@@ -132,8 +132,24 @@
       </nav>
     </header>
 
-    <!-- Realtime -->
-    <section id="realtime" class="realtime" aria-labelledby="realtime-heading">
+    <!-- 1) ADUAN -->
+    <section id="aduan" style="margin-top:6px">
+      <div class="complain" role="region" aria-label="Complain box">
+        <div style="display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap">
+          <div>
+            <strong style="font-size:18px">Laporkan isu pencemaran udara</strong>
+            <div style="font-size:13px;margin-top:6px">Lapor sumber pencemaran, bau pelik atau kejadian berkaitan udara terus melalui borang aduan.</div>
+          </div>
+          <div>
+            <!-- user-provided Google Form -->
+            <button onclick="window.open('https://docs.google.com/forms/d/e/1FAIpQLSeNpSIZy-BT5JPAQddddWRe5TvFEo1-7szVrZbcamtgcULU9A/viewform?usp=header','_blank')">Buka Borang Aduan</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2) GRAF REALTIME (placeholder) -->
+    <section id="realtime" class="realtime" aria-labelledby="realtime-heading" style="margin-top:18px">
       <div class="aqi-big glass" id="aqiCard" role="region" aria-labelledby="realtime-heading">
         <div style="display:flex;justify-content:space-between;align-items:center">
           <div>
@@ -167,100 +183,28 @@
         </div>
 
         <div style="margin-top:12px;font-size:13px;color:var(--muted)">
-          Note: If numbers don't appear, proxy or API may be rate-limited — open DevTools Console. (GitHub Pages can't run server code; keep that in mind when connecting /api.)
+          Placeholder data shown. When API endpoint is ready, client-side fetch will be hooked to <code>/api/airquality</code> (or an absolute URL). GitHub Pages can't run server-side endpoints — use external host or serverless when ready.
         </div>
       </aside>
     </section>
 
-    <!-- Aduan + Contact (split anchors inside) -->
-    <section id="aduan" style="margin-top:18px">
-      <div class="complain" role="region" aria-label="Complain box">
-        <div style="display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap">
-          <div>
-            <strong style="font-size:18px">Laporkan isu pencemaran udara</strong>
-            <div style="font-size:13px;margin-top:6px">Lapor sumber pencemaran, bau pelik atau kejadian berkaitan udara terus melalui borang aduan.</div>
-          </div>
-          <div>
-            <!-- Changed to user-provided Google Form link -->
-            <button onclick="window.open('https://docs.google.com/forms/d/e/1FAIpQLSeNpSIZy-BT5JPAQddddWRe5TvFEo1-7szVrZbcamtgcULU9A/viewform?usp=header','_blank')">Buka Borang Aduan</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="contact-grid" style="margin-top:12px">
-        <div class="card" id="contact">
-          <h3 style="margin:0 0 8px 0">Hubungi Kami</h3>
-          <p style="color:var(--muted);margin:0 0 12px 0">Hubungi ahli kumpulan untuk maklumat lanjut atau kolaborasi.</p>
-
-          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px">
-            <!-- Iqbal -->
-            <div style="text-align:center">
-              <img src="iqbal.png" alt="Iqbal" style="width:92px;height:92px;border-radius:50%;object-fit:cover;display:block;margin:0 auto 8px">
-              <strong>Iqbal</strong>
-              <div style="margin-top:8px"><a class="wa-btn" href="https://wa.me/60179912306" target="_blank" rel="noopener noreferrer" title="WhatsApp Iqbal">WhatsApp</a></div>
-            </div>
-
-            <!-- Syakirullah -->
-            <div style="text-align:center">
-              <img src="syakirullah.png" alt="Syakirullah" style="width:92px;height:92px;border-radius:50%;object-fit:cover;display:block;margin:0 auto 8px">
-              <strong>Syakirullah</strong>
-              <div style="margin-top:8px"><a class="wa-btn" href="https://wa.me/60172131363" target="_blank" rel="noopener noreferrer" title="WhatsApp Syakirullah">WhatsApp</a></div>
-            </div>
-
-            <!-- Wan Zulkhairi -->
-            <div style="text-align:center">
-              <img src="wan_zulkhairi.png" alt="Wan Zulkhairi" style="width:92px;height:92px;border-radius:50%;object-fit:cover;display:block;margin:0 auto 8px">
-              <strong>Wan Zulkhairi</strong>
-              <div style="margin-top:8px"><a class="wa-btn" href="https://wa.me/60145147998" target="_blank" rel="noopener noreferrer" title="WhatsApp Wan Zulkhairi">WhatsApp</a></div>
-            </div>
-
-            <!-- Zhafri -->
-            <div style="text-align:center">
-              <img src="zhafri.png" alt="Zhafri" style="width:92px;height:92px;border-radius:50%;object-fit:cover;display:block;margin:0 auto 8px">
-              <strong>Zhafri</strong>
-              <div style="margin-top:8px"><a class="wa-btn" href="https://wa.me/60138487104" target="_blank" rel="noopener noreferrer" title="WhatsApp Zhafri">WhatsApp</a></div>
-            </div>
-
-            <!-- Zie Ain Balqis -->
-            <div style="text-align:center">
-              <img src="zie_ain_balqis.png" alt="Zie Ain Balqis" style="width:92px;height:92px;border-radius:50%;object-fit:cover;display:block;margin:0 auto 8px">
-              <strong>Zie Ain Balqis</strong>
-              <div style="margin-top:8px"><a class="wa-btn" href="https://wa.me/60172370158" target="_blank" rel="noopener noreferrer" title="WhatsApp Zie Ain Balqis">WhatsApp</a></div>
-            </div>
-          </div>
-
-        </div>
-
-        <div class="card">
-          <h3 style="margin:0 0 8px 0">Quick Tips</h3>
-          <ul style="margin:0;padding-left:18px;color:var(--muted)">
-            <li>Gunakan mask N95 jika AQI tidak sihat.</li>
-            <li>Kurangkan aktiviti luar ketika jerebu atau bacaan PM tinggi.</li>
-            <li>Tutup tingkap & guna penapis udara di dalam rumah.</li>
-          </ul>
-          <div style="margin-top:12px;font-size:13px;color:var(--muted)">Data source: OpenAQ (proxied) • Attribution required.</div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Poster Awareness -->
+    <!-- 3) POSTER AWARENESS -->
     <section id="poster" style="margin-top:18px">
       <h2 style="color:var(--text-on-glass);margin:0 0 10px 0">Poster Awareness</h2>
       <div class="poster-grid">
         <div class="poster-card">
-          <!-- KEEP only one poster as requested -->
+          <!-- single poster as requested -->
           <img src="poster%201.png" alt="Poster 1">
           <div style="margin-top:8px">
             <a href="https://www.canva.com/design/DAG3kf01Gig/Zf2Stx1G6IcfuNncKkOK7g/edit" target="_blank" rel="noopener noreferrer" class="wa-btn" style="display:inline-block;padding:6px 10px;margin-right:8px">Edit Canva A</a>
             <a href="https://www.canva.com/design/DAG5JXH0LV4/GsfkXATXVpdSoq1lG5pLeg/edit" target="_blank" rel="noopener noreferrer" class="wa-btn" style="display:inline-block;padding:6px 10px">Edit Canva B</a>
           </div>
-          <div class="small" style="margin-top:8px;color:#fff;opacity:0.85">Tip: rename file to <code>poster-2025.jpg</code> (no spaces) to avoid URL-encoding issues.</div>
+          <div class="small" style="margin-top:8px;color:#fff;opacity:0.85">Tip: rename file to <code>poster-2025.jpg</code> (no spaces) to avoid URL-encoding issues — not required.</div>
         </div>
-        <!-- poster 2 removed as requested -->
       </div>
     </section>
 
-    <!-- Infographic -->
+    <!-- 4) INFOGRAFIK -->
     <section id="infographic" class="glass" style="margin-top:18px;padding:16px" aria-labelledby="infog">
       <h2 id="infog" style="margin:0 0 10px 0;color:var(--text-on-glass)">Infographic — Respiratory Tract & Particulate Matter</h2>
       <div style="text-align:center">
@@ -268,7 +212,7 @@
       </div>
     </section>
 
-    <!-- Manuskrip (drawer style) -->
+    <!-- 5) MANUSKRIP (drawer, readable) -->
     <section id="manuskrip" style="margin-top:18px">
       <div class="card">
         <div style="display:flex;justify-content:space-between;align-items:center">
@@ -308,7 +252,7 @@
       </div>
     </section>
 
-    <!-- FAQ -->
+    <!-- 6) FAQ (pulled from file content provided) -->
     <section id="faq" style="margin-top:18px">
       <h2 style="color:var(--text-on-glass);margin:0 0 10px 0">FAQ — Kesan Particulate Matter terhadap Kesihatan</h2>
       <div class="faq">
@@ -339,7 +283,64 @@
       </div>
     </section>
 
-    <footer>© 2025 KB Pure Breath • Built for public monitoring</footer>
+    <!-- 7) CONTACT US (moved to its own section) -->
+    <section id="contact" style="margin-top:18px">
+      <div class="contact-grid">
+        <div class="card">
+          <h3 style="margin:0 0 8px 0">Hubungi Kami</h3>
+          <p style="color:var(--muted);margin:0 0 12px 0">Hubungi ahli kumpulan untuk maklumat lanjut atau kolaborasi.</p>
+
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px">
+            <!-- Iqbal -->
+            <div style="text-align:center">
+              <img src="iqbal.png" alt="Iqbal" style="width:92px;height:92px;border-radius:50%;object-fit:cover;display:block;margin:0 auto 8px">
+              <strong>Iqbal</strong>
+              <div style="margin-top:8px"><a class="wa-btn" href="https://wa.me/60179912306" target="_blank" rel="noopener noreferrer" title="WhatsApp Iqbal">WhatsApp</a></div>
+            </div>
+
+            <!-- Syakirullah -->
+            <div style="text-align:center">
+              <img src="syakirullah.png" alt="Syakirullah" style="width:92px;height:92px;border-radius:50%;object-fit:cover;display:block;margin:0 auto 8px">
+              <strong>Syakirullah</strong>
+              <div style="margin-top:8px"><a class="wa-btn" href="https://wa.me/60172131363" target="_blank" rel="noopener noreferrer" title="WhatsApp Syakirullah">WhatsApp</a></div>
+            </div>
+
+            <!-- Wan Zulkhairi -->
+            <div style="text-align:center">
+              <img src="wan_zulkhairi.png" alt="Wan Zulkhairi" style="width:92px;height:92px;border-radius:50%;object-fit:cover;display:block;margin:0 auto 8px">
+              <strong>Wan Zulkhairi</strong>
+              <div style="margin-top:8px"><a class="wa-btn" href="https://wa.me/60145147998" target="_blank" rel="noopener noreferrer" title="WhatsApp Wan Zulkhairi">WhatsApp</a></div>
+            </div>
+
+            <!-- Zhafri -->
+            <div style="text-align:center">
+              <img src="zhafri.png" alt="Zhafri" style="width:92px;height:92px;border-radius:50%;object-fit:cover;display:block;margin:0 auto 8px">
+              <strong>Zhafri</strong>
+              <div style="margin-top:8px"><a class="wa-btn" href="https://wa.me/60138487104" target="_blank" rel="noopener noreferrer" title="WhatsApp Zhafri">WhatsApp</a></div>
+            </div>
+
+            <!-- Zie Ain Balqis -->
+            <div style="text-align:center">
+              <img src="zie_ain_balqis.png" alt="Zie Ain Balqis" style="width:92px;height:92px;border-radius:50%;object-fit:cover;display:block;margin:0 auto 8px">
+              <strong>Zie Ain Balqis</strong>
+              <div style="margin-top:8px"><a class="wa-btn" href="https://wa.me/60172370158" target="_blank" rel="noopener noreferrer" title="WhatsApp Zie Ain Balqis">WhatsApp</a></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3 style="margin:0 0 8px 0">Quick Tips</h3>
+          <ul style="margin:0;padding-left:18px;color:var(--muted)">
+            <li>Gunakan mask N95 jika AQI tidak sihat.</li>
+            <li>Kurangkan aktiviti luar ketika jerebu atau bacaan PM tinggi.</li>
+            <li>Tutup tingkap & guna penapis udara di dalam rumah.</li>
+          </ul>
+          <div style="margin-top:12px;font-size:13px;color:var(--muted)">Data source: OpenAQ (proxied) • Attribution required.</div>
+        </div>
+      </div>
+    </section>
+
+    <footer style="margin-top:28px">© 2025 KB Pure Breath • Built for public monitoring</footer>
   </main>
 
   <!-- floating WhatsApp copilot -->
