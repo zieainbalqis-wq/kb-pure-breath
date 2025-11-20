@@ -130,13 +130,13 @@
       </div>
     </section>
 
-    <!-- 2) GRAF REALTIME (placeholder) -->
+    <!-- 2) GRAF REALTIME -->
     <section id="realtime" class="realtime" aria-labelledby="realtime-heading" style="margin-top:18px">
       <div class="aqi-big glass" id="aqiCard" role="region" aria-labelledby="realtime-heading">
         <div style="display:flex;justify-content:space-between;align-items:center">
           <div>
             <div id="realtime-heading" style="font-weight:700">Real-Time Air Quality</div>
-            <div style="font-size:12px;color:rgba(255,255,255,0.85)">Source: OpenAQ v3 — default: Kuala Lumpur</div>
+            <div style="font-size:12px;color:rgba(255,255,255,0.85)">Source: OpenAQ v3 — default: Kuala Lumpur (Coordinates)</div>
           </div>
           <div style="font-size:13px;color:rgba(255,255,255,0.85)">Updated: <span id="aqiUpdated">--</span></div>
         </div>
@@ -321,272 +321,292 @@
   <!-- floating WhatsApp copilot -->
   <a class="wa-btn" href="https://wa.me/18772241042" target="_blank" rel="noopener noreferrer" style="position:fixed;right:18px;bottom:18px;z-index:999">Chat Copilot</a>
 
-  <!-- SCRIPT: realtime fetch (OpenAQ v3) + chart + accordion + manuscript check -->
   <script>
-  (function(){
-    // ---- CONFIG ----
-    // OpenAQ v3 measurements endpoint for Kuala Lumpur. Adjust query if needed.
-    const API_ENDPOINT = 'https://api.allorigins.win/raw?url=https%3A%2F%2Fapi.openaq.org%2Fv3%2Fmeasurements%3Fcity%3DKuala%2520Lumpur%26parameter%3Dpm25%2Cpm10%26limit%3D200';
-    const REFRESH_MS = 5 * 60 * 1000; // 5 minutes
-    const RAW_PDF_URL = 'https://raw.githubusercontent.com/zieainbalqis-wq/kb-pure-breath/main/manuscript-kbp.pdf';
-    const PDF_PATH = '/manuscript-kbp.pdf';
+(function(){
 
-    // DOM refs
-    const aqiValueEl = document.getElementById('aqiValue');
-    const aqiCatEl = document.getElementById('aqiCat');
-    const aqiMetaEl = document.getElementById('aqiMeta');
-    const aqiUpdatedEl = document.getElementById('aqiUpdated');
-    const pm25Box = document.getElementById('pm25Box');
-    const pm10Box = document.getElementById('pm10Box');
-    const aqiBox = document.getElementById('aqiBox');
-    const aqiCard = document.getElementById('aqiCard');
+  /* ============================================================
+     CONFIG — OPENAQ (Coordinates KL, NO API KEY NEEDED)
+  ============================================================ */
+  const API_ENDPOINT =
+    "https://api.openaq.org/v3/measurements?coordinates=3.1390%2C101.6869&radius=20000&limit=100&parameter=pm25%2Cpm10";
 
-    // Chart setup
-    const ctx = document.getElementById('pmChart').getContext('2d');
-    const labels = [], series25 = [], series10 = [];
-    const pmChart = new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels,
-        datasets: [
-          { label: 'PM2.5 (µg/m³)', data: series25, borderColor: getComputedStyle(document.documentElement).getPropertyValue('--accent1') || '#2bb6b6', tension:0.3, fill:true, backgroundColor:'rgba(43,182,182,0.12)', pointRadius:1 },
-          { label: 'PM10 (µg/m³)', data: series10, borderColor: getComputedStyle(document.documentElement).getPropertyValue('--accent2') || '#4aa0e6', tension:0.3, fill:true, backgroundColor:'rgba(74,160,230,0.12)', pointRadius:1 }
-        ]
-      },
-      options: {
-        responsive:true,
-        maintainAspectRatio:false,
-        scales:{ y:{ beginAtZero:true } },
-        plugins:{ legend:{ labels:{ color: 'rgba(0,0,0,0.7)' }, position:'top' } }
-      }
-    });
+  const REFRESH_MS = 5 * 60 * 1000; // 5 minutes
+  const RAW_PDF_URL = 'https://raw.githubusercontent.com/zieainbalqis-wq/kb-pure-breath/main/manuscript-kbp.pdf';
+  const PDF_PATH = '/manuscript-kbp.pdf';
 
-    function aqiCategoryFromValue(a){
-      if(a===null || isNaN(a)) return {cat:'No data', color:'#9AA4B2'};
-      if(a<=50) return {cat:'Good', color:'#26a69a'};
-      if(a<=100) return {cat:'Moderate', color:'#ffca28'};
-      if(a<=150) return {cat:'Unhealthy (S)', color:'#ff7043'};
-      if(a<=200) return {cat:'Unhealthy', color:'#e53935'};
-      if(a<=300) return {cat:'Very Unhealthy', color:'#8e24aa'};
-      return {cat:'Hazardous', color:'#6b0018'};
+  // DOM references
+  const aqiValueEl = document.getElementById('aqiValue');
+  const aqiCatEl = document.getElementById('aqiCat');
+  const aqiMetaEl = document.getElementById('aqiMeta');
+  const aqiUpdatedEl = document.getElementById('aqiUpdated');
+  const pm25Box = document.getElementById('pm25Box');
+  const pm10Box = document.getElementById('pm10Box');
+  const aqiBox = document.getElementById('aqiBox');
+  const aqiCard = document.getElementById('aqiCard');
+
+  /* ============================================================
+     CHART INIT
+  ============================================================ */
+  const ctx = document.getElementById('pmChart').getContext('2d');
+  const labels = [], series25 = [], series10 = [];
+
+  const accent1 = getComputedStyle(document.documentElement).getPropertyValue('--accent1') || '#2bb6b6';
+  const accent2 = getComputedStyle(document.documentElement).getPropertyValue('--accent2') || '#4aa0e6';
+
+  const pmChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [
+        {
+          label: 'PM2.5 (µg/m³)',
+          data: series25,
+          borderColor: accent1,
+          backgroundColor: 'rgba(43,182,182,0.12)',
+          tension: 0.35,
+          pointRadius: 1
+        },
+        {
+          label: 'PM10 (µg/m³)',
+          data: series10,
+          borderColor: accent2,
+          backgroundColor: 'rgba(74,160,230,0.12)',
+          tension: 0.35,
+          pointRadius: 1
+        }
+      ]
+    },
+    options: {
+      responsive:true,
+      maintainAspectRatio:false,
+      scales:{ y:{ beginAtZero:true } },
+      plugins:{ legend:{ labels:{ color: '#000' }, position:'top' } }
     }
+  });
 
-    // US EPA PM2.5 -> AQI conversion
-    function pm25ToAqi(pm) {
-      if (pm === null || pm === undefined || !isFinite(pm)) return null;
-      const table = [
-        { clow: 0.0,  chigh: 12.0,  ilow: 0,   ihigh: 50 },
-        { clow: 12.1, chigh: 35.4,  ilow: 51,  ihigh: 100 },
-        { clow: 35.5, chigh: 55.4,  ilow: 101, ihigh: 150 },
-        { clow: 55.5, chigh: 150.4, ilow: 151, ihigh: 200 },
-        { clow: 150.5,chigh: 250.4, ilow: 201, ihigh: 300 },
-        { clow: 250.5,chigh: 350.4, ilow: 301, ihigh: 400 },
-        { clow: 350.5,chigh: 500.4, ilow: 401, ihigh: 500 }
-      ];
-      for (const b of table) {
-        if (pm >= b.clow && pm <= b.chigh) {
-          const a = ((b.ihigh - b.ilow) / (b.chigh - b.clow)) * (pm - b.clow) + b.ilow;
-          return Math.round(a);
-        }
+
+  /* ============================================================
+     AQI CATEGORY COLORING
+  ============================================================ */
+  function aqiCategoryFromValue(a){
+    if(a===null || isNaN(a)) return {cat:'Tiada Data', color:'#9AA4B2'};
+    if(a<=50) return {cat:'Baik / Good', color:'#26a69a'};
+    if(a<=100) return {cat:'Sederhana', color:'#ffca28'};
+    if(a<=150) return {cat:'Tidak Sihat (Sensitif)', color:'#ff7043'};
+    if(a<=200) return {cat:'Tidak Sihat', color:'#e53935'};
+    if(a<=300) return {cat:'Sangat Tidak Sihat', color:'#8e24aa'};
+    return {cat:'Berbahaya', color:'#6b0018'};
+  }
+
+
+  /* ============================================================
+     PM2.5 → AQI (EPA Standard)
+  ============================================================ */
+  function pm25ToAqi(pm) {
+    if (pm == null || !isFinite(pm)) return null;
+
+    const ranges = [
+      [0.0,12.0,  0,50],
+      [12.1,35.4, 51,100],
+      [35.5,55.4, 101,150],
+      [55.5,150.4,151,200],
+      [150.5,250.4,201,300],
+      [250.5,350.4,301,400],
+      [350.5,500.4,401,500]
+    ];
+
+    for(const r of ranges){
+      const [cl,ch,il,ih] = r;
+      if(pm>=cl && pm<=ch){
+        return Math.round(((ih-il)/(ch-cl))*(pm-cl) + il);
       }
-      return null;
     }
+    return null;
+  }
 
-    // ---------- UPDATE FROM OpenAQ v3 ----------
-    async function updateFromApi(){
-      try{
-        const res = await fetch(API_ENDPOINT, { cache: 'no-store' });
-        if(!res.ok) throw new Error('API returned ' + res.status);
-        const json = await res.json();
 
-        // OpenAQ v3: json.results -> array of measurements
-        // We'll pick latest PM2.5 and PM10 found, and build a simple trend from recent entries.
-        let pm25 = null, pm10 = null;
-        const trend = [];
+  /* ============================================================
+     FETCH REALTIME FROM OPENAQ v3
+     (Coordinates KL — No API key required)
+  ============================================================ */
+  async function updateFromApi(){
+    try{
+      const res = await fetch(API_ENDPOINT, { cache:'no-store' });
+      if(!res.ok) throw new Error("API returned " + res.status);
 
-        if(Array.isArray(json.results)){
-          // json.results likely ordered newest-first; we'll iterate and collect
-          for (const r of json.results) {
-            const param = (r.parameter || '').toLowerCase();
-            const value = (r.value !== undefined && r.value !== null) ? Number(r.value) : null;
-            const time = r.date && r.date.utc ? new Date(r.date.utc).toLocaleTimeString() : '';
+      const json = await res.json();
+      const results = json.results || [];
 
-            if(param === 'pm25' && pm25 === null && isFinite(value)) pm25 = value;
-            if(param === 'pm10' && pm10 === null && isFinite(value)) pm10 = value;
+      let pm25 = null, pm10 = null;
+      const trend = [];
 
-            trend.push({
-              time,
-              pm25: param === 'pm25' ? (isFinite(value) ? value : null) : null,
-              pm10: param === 'pm10' ? (isFinite(value) ? value : null) : null
-            });
-          }
-        }
+      for(const r of results){
+        const param = (r.parameter || "").toLowerCase();
+        const value = r.value != null ? Number(r.value) : null;
 
-        // Combine trend points by time: compress entries so each time has pm25 & pm10 where possible
-        const byTime = {};
-        trend.forEach(pt=>{
-          if(!pt.time) return;
-          if(!byTime[pt.time]) byTime[pt.time] = { time: pt.time, pm25: null, pm10: null };
-          if(pt.pm25 !== null) byTime[pt.time].pm25 = pt.pm25;
-          if(pt.pm10 !== null) byTime[pt.time].pm10 = pt.pm10;
-        });
-        const trimmedTrend = Object.values(byTime).slice(0, 30);
+        const time = r.date ? (r.date.local || r.date.utc) : null;
+        const formatted = time ? new Date(time).toLocaleTimeString('en-GB',{hour12:false}) : "--:--:--";
 
-        const aqi = pm25 !== null ? pm25ToAqi(pm25) : null;
-
-        // Update DOM
-        if(pm25Box) pm25Box.textContent = pm25 !== null ? pm25.toFixed(1) : '--';
-        if(pm10Box) pm10Box.textContent = pm10 !== null ? pm10.toFixed(1) : '--';
-        if(aqiBox) aqiBox.textContent = aqi !== null ? Math.round(aqi) : '--';
-        if(aqiValueEl) aqiValueEl.textContent = aqi !== null ? Math.round(aqi) : '--';
-
-        const cat = aqiCategoryFromValue(aqi);
-        if(aqiCatEl) aqiCatEl.textContent = cat.cat;
-        if(aqiCard) aqiCard.style.boxShadow = `0 14px 40px ${cat.color}33`;
-
-        if(aqiMetaEl){
-          aqiMetaEl.textContent = `PM2.5: ${pm25 !== null ? pm25.toFixed(1) : '--'} µg/m³ • PM10: ${pm10 !== null ? pm10.toFixed(1) : '--'} µg/m³`;
-        }
-        if(aqiUpdatedEl) aqiUpdatedEl.textContent = new Date().toLocaleString();
-
-        // Update chart data
-        labels.length = 0; series25.length = 0; series10.length = 0;
-        trimmedTrend.forEach(pt=>{
-          labels.push(pt.time);
-          series25.push(pt.pm25);
-          series10.push(pt.pm10);
+        trend.push({
+          time: formatted,
+          pm25: param=="pm25" ? value : null,
+          pm10: param=="pm10" ? value : null
         });
 
-        // If no trend points, seed with current reading
-        if(labels.length === 0){
-          const ts = new Date().toLocaleTimeString();
-          labels.push(ts);
-          series25.push(pm25);
-          series10.push(pm10);
-        }
-
-        pmChart.update();
-
-      }catch(err){
-        console.error('updateFromApi error', err);
-        if(aqiMetaEl) aqiMetaEl.textContent = 'Real-time data unavailable (OpenAQ v3).';
+        if(param=="pm25" && pm25===null && value!=null) pm25 = value;
+        if(param=="pm10" && pm10===null && value!=null) pm10 = value;
       }
-    }
 
-    // seed small empty chart
-    (function seed(){
-      const now = Date.now();
-      for(let i=10;i>0;i--){
-        const t = new Date(now - i*60000);
-        labels.push(t.toTimeString().split(' ')[0]);
-        series25.push(null); series10.push(null);
-      }
+      // Combine by time for chart
+      const byTime = {};
+      trend.forEach(pt=>{
+        if(!byTime[pt.time]) byTime[pt.time] = {time:pt.time, pm25:null, pm10:null};
+        if(pt.pm25!=null) byTime[pt.time].pm25 = pt.pm25;
+        if(pt.pm10!=null) byTime[pt.time].pm10 = pt.pm10;
+      });
+
+      const finalTrend = Object.values(byTime).slice(0,20);
+
+      const aqi = pm25 != null ? pm25ToAqi(pm25) : null;
+
+      // Update UI
+      pm25Box.textContent = pm25!=null ? pm25.toFixed(1) : "--";
+      pm10Box.textContent = pm10!=null ? pm10.toFixed(1) : "--";
+      aqiBox.textContent  = aqi!=null ? aqi : "--";
+      aqiValueEl.textContent = aqi!=null ? aqi : "--";
+
+      const cat = aqiCategoryFromValue(aqi);
+      aqiCatEl.textContent = cat.cat;
+      aqiCard.style.boxShadow = `0 14px 40px ${cat.color}55`;
+
+      aqiMetaEl.textContent = `PM2.5: ${pm25!=null?pm25.toFixed(1):"--"} µg/m³ • PM10: ${pm10!=null?pm10.toFixed(1):"--"} µg/m³`;
+      aqiUpdatedEl.textContent = new Date().toLocaleString();
+
+      // Update Chart
+      labels.length = 0; series25.length = 0; series10.length = 0;
+
+      finalTrend.forEach(pt=>{
+        labels.push(pt.time);
+        series25.push(pt.pm25);
+        series10.push(pt.pm10);
+      });
+
       pmChart.update();
-    })();
 
-    // initial call + interval
-    updateFromApi();
-    setInterval(updateFromApi, REFRESH_MS);
-
-    // clicking the card forces refresh
-    const refreshTrigger = document.getElementById('aqiCard');
-    if(refreshTrigger){
-      refreshTrigger.style.cursor = 'pointer';
-      refreshTrigger.addEventListener('click', updateFromApi);
+    }catch(err){
+      console.error("Realtime error:", err);
+      aqiMetaEl.textContent = "⚠️ Data tidak dapat dimuatkan (OpenAQ v3).";
     }
+  }
 
-    // accordion accessibility
-    document.querySelectorAll('.accordion-q').forEach(q=>{
-      q.addEventListener('click', ()=>{
-        const a = q.nextElementSibling;
-        const allA = document.querySelectorAll('.accordion-a');
-        const allQ = document.querySelectorAll('.accordion-q');
-        allA.forEach(x => x.style.display = 'none');
-        allQ.forEach(x => { const s = x.querySelector('span'); if(s) s.textContent = '+'; });
-        if(a.style.display !== 'block'){ a.style.display = 'block'; const s = q.querySelector('span'); if(s) s.textContent = '−'; }
-      });
-    });
-    document.querySelectorAll('.accordion-q').forEach(q=>{
-      q.setAttribute('tabindex','0');
-      q.addEventListener('keydown', e => { if(e.key === 'Enter' || e.key === ' ') q.click(); });
-    });
 
-    // Manuskrip drawer toggle & check
-    const openBtn = document.getElementById('openDrawerBtn');
-    const manDrawer = document.getElementById('manDrawer');
-    const pdfPlaceholder = document.getElementById('pdfPlaceholder');
-    const pdfFrameWrap = document.getElementById('pdfFrameWrap');
-    const pdfFrame = document.getElementById('pdfFrame');
-    const pdfDirectLink = document.getElementById('pdfDirectLink');
-    const pdfMissing = document.getElementById('pdfMissing');
-
-    async function pathExists(url){
-      try{
-        // try HEAD
-        try {
-          const r = await fetch(url, { method:'HEAD', cache:'no-store' });
-          if(r && r.ok) return true;
-        } catch(e){}
-        // try small GET
-        try {
-          const r2 = await fetch(url, { method:'GET', headers:{Range:'bytes=0-1023'}, cache:'no-store' });
-          if(r2 && (r2.ok || r2.status === 206)) return true;
-        } catch(e){}
-        // final GET attempt
-        const r3 = await fetch(url, { method:'GET', cache:'no-store' });
-        return !!(r3 && r3.ok);
-      }catch(e){ return false; }
+  /* ============================================================
+     INITIAL CHART SEED
+  ============================================================ */
+  (function seed(){
+    for(let i=10;i>0;i--){
+      labels.push("--:--:--");
+      series25.push(null);
+      series10.push(null);
     }
-
-    async function checkPdf(){
-      try{
-        let ok = await pathExists(PDF_PATH);
-        if(ok){
-          pdfPlaceholder.style.display = 'none';
-          pdfMissing.style.display = 'none';
-          pdfFrameWrap.style.display = 'block';
-          pdfFrame.src = PDF_PATH;
-          pdfDirectLink.href = PDF_PATH;
-          return;
-        }
-        ok = await pathExists(RAW_PDF_URL);
-        if(ok){
-          pdfPlaceholder.style.display = 'none';
-          pdfMissing.style.display = 'none';
-          pdfFrameWrap.style.display = 'block';
-          pdfFrame.src = RAW_PDF_URL;
-          pdfDirectLink.href = RAW_PDF_URL;
-          return;
-        }
-        pdfPlaceholder.style.display = 'none';
-        pdfFrameWrap.style.display = 'none';
-        pdfMissing.style.display = 'block';
-        document.getElementById('rawPdf').href = RAW_PDF_URL;
-      }catch(err){
-        console.error('checkPdf error', err);
-        pdfPlaceholder.style.display = 'none';
-        pdfFrameWrap.style.display = 'none';
-        pdfMissing.style.display = 'block';
-        document.getElementById('rawPdf').href = RAW_PDF_URL;
-      }
-    }
-
-    if(openBtn){
-      let open = false;
-      openBtn.addEventListener('click', async ()=>{
-        open = !open;
-        if(open){
-          manDrawer.classList.add('drawer-open');
-          openBtn.textContent = 'Tutup Manuskrip';
-          await checkPdf();
-        } else {
-          manDrawer.classList.remove('drawer-open');
-          openBtn.textContent = 'Buka Manuskrip';
-        }
-      });
-    }
-
+    pmChart.update();
   })();
-  </script>
+
+
+  /* ============================================================
+     REFRESH INTERVAL
+  ============================================================ */
+  updateFromApi();
+  setInterval(updateFromApi, REFRESH_MS);
+
+
+  /* ============================================================
+     MANUAL REFRESH ON CLICK
+  ============================================================ */
+  aqiCard.style.cursor = "pointer";
+  aqiCard.addEventListener('click', updateFromApi);
+
+
+  /* ============================================================
+     FAQ ACCORDION
+  ============================================================ */
+  document.querySelectorAll('.accordion-q').forEach(q=>{
+    q.addEventListener('click', ()=>{
+      const a = q.nextElementSibling;
+
+      document.querySelectorAll('.accordion-a').forEach(x=>x.style.display='none');
+      document.querySelectorAll('.accordion-q span').forEach(s=>s.textContent='+');
+
+      if(a.style.display!=='block'){
+        a.style.display='block';
+        q.querySelector('span').textContent='−';
+      }
+    });
+
+    q.setAttribute('tabindex','0');
+    q.addEventListener('keydown', e=>{ if(e.key==="Enter"||e.key===" ") q.click(); });
+  });
+
+
+  /* ============================================================
+     MANUSKRIP DRAWER
+  ============================================================ */
+  const openBtn = document.getElementById('openDrawerBtn');
+  const manDrawer = document.getElementById('manDrawer');
+  const pdfPlaceholder = document.getElementById('pdfPlaceholder');
+  const pdfFrameWrap = document.getElementById('pdfFrameWrap');
+  const pdfFrame = document.getElementById('pdfFrame');
+  const pdfDirectLink = document.getElementById('pdfDirectLink');
+  const pdfMissing = document.getElementById('pdfMissing');
+
+  async function checkPdfFile(url) {
+    try {
+      const head = await fetch(url, {method:'HEAD', cache:'no-store'});
+      return head.ok;
+    } catch { return false; }
+  }
+
+  async function loadPdf(){
+    pdfPlaceholder.style.display = 'none';
+
+    if(await checkPdfFile(PDF_PATH)){
+      pdfFrame.src = PDF_PATH;
+      pdfDirectLink.href = PDF_PATH;
+      pdfFrameWrap.style.display = 'block';
+      pdfMissing.style.display = 'none';
+      return;
+    }
+
+    if(await checkPdfFile(RAW_PDF_URL)){
+      pdfFrame.src = RAW_PDF_URL;
+      pdfDirectLink.href = RAW_PDF_URL;
+      pdfFrameWrap.style.display = 'block';
+      pdfMissing.style.display = 'none';
+      return;
+    }
+
+    pdfFrameWrap.style.display='none';
+    pdfMissing.style.display='block';
+  }
+
+  if(openBtn){
+    let opened = false;
+    openBtn.addEventListener('click', async ()=>{
+      opened=!opened;
+      if(opened){
+        manDrawer.classList.add('drawer-open');
+        openBtn.textContent = "Tutup Manuskrip";
+        await loadPdf();
+      } else {
+        manDrawer.classList.remove('drawer-open');
+        openBtn.textContent = "Buka Manuskrip";
+      }
+    });
+  }
+
+})();
+</script>
+
 </body>
 </html>
+
