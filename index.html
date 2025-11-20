@@ -44,7 +44,7 @@
     .logo img{ width:100%; height:100%; object-fit:contain; display:block; }
     .site-title{ color:var(--text-on-glass) }
     .site-title h1{ margin:0; font-size:26px; font-weight:700; text-shadow:0 2px 6px rgba(0,0,0,0.35) }
-    .site-title p{ margin:4px 0 0 0; color:rgba(255,255,255,0.9); font-size:13px; }
+    .site-title p{ margin:4px 0 0 0; color:rgba(255,255,255,0.9); font-size:13px }
 
     nav{ margin-left:auto; display:flex; gap:10px; align-items:center; }
     nav a{ color:rgba(255,255,255,0.95); text-decoration:none; padding:8px 10px; border-radius:8px; font-weight:600; }
@@ -112,11 +112,14 @@
       </div>
 
       <nav aria-label="Main navigation">
+        <!-- Nav updated to match requested order -->
+        <a href="#aduan">Aduan</a>
         <a href="#realtime">Realtime</a>
+        <a href="#poster">Poster</a>
         <a href="#infographic">Infographic</a>
-        <a href="#about">Hubungi Kami</a>
-        <a href="#poster">Poster Awareness</a>
+        <a href="#manuskrip">Manuskrip</a>
         <a href="#faq">FAQ</a>
+        <a href="#contact">Contact Us</a>
       </nav>
     </header>
 
@@ -155,33 +158,28 @@
         </div>
 
         <div style="margin-top:12px;font-size:13px;color:var(--muted)">
-          Note: If numbers don't appear, proxy or API may be rate-limited — open DevTools Console.
+          Note: If numbers don't appear, proxy or API may be rate-limited — open DevTools Console. (GitHub Pages can't run server code; keep that in mind when connecting /api.)
         </div>
       </aside>
     </section>
 
-    <!-- Infographic -->
-    <section id="infographic" class="glass" style="margin-top:18px;padding:16px" aria-labelledby="infog">
-      <h2 id="infog" style="margin:0 0 10px 0;color:var(--text-on-glass)">Infographic — Respiratory Tract & Particulate Matter</h2>
-      <div style="text-align:center">
-        <img src="https://www.researchgate.net/profile/Fiorella-Barraza/publication/321993233/figure/fig14/AS:574185194704903@1513907826653/Respiratory-tract-and-particulate-matter-PM-size-classification-Modified-from.png" alt="Respiratory tract and PM" style="max-width:100%;border-radius:10px;box-shadow:0 8px 20px rgba(0,0,0,0.25)">
-      </div>
-    </section>
-
-    <!-- Contact + Complain -->
-    <section id="about" style="margin-top:18px">
+    <!-- Aduan + Contact (split anchors inside) -->
+    <section id="aduan" style="margin-top:18px">
       <div class="complain" role="region" aria-label="Complain box">
         <div style="display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap">
           <div>
             <strong style="font-size:18px">Laporkan isu pencemaran udara</strong>
-            <div style="font-size:13px;margin-top:6px">Lapor sumber pencemaran, bau pelik atau kejadian berkaitan udara terus ke pihak berkuasa.</div>
+            <div style="font-size:13px;margin-top:6px">Lapor sumber pencemaran, bau pelik atau kejadian berkaitan udara terus melalui borang aduan.</div>
           </div>
-          <div><button onclick="window.open('https://eaduan.doe.gov.my/','_blank')">Lapor Aduan Alam Sekitar</button></div>
+          <div>
+            <!-- Changed to user-provided Google Form link -->
+            <button onclick="window.open('https://docs.google.com/forms/d/e/1FAIpQLSeNpSIZy-BT5JPAQddddWRe5TvFEo1-7szVrZbcamtgcULU9A/viewform?usp=header','_blank')">Buka Borang Aduan</button>
+          </div>
         </div>
       </div>
 
       <div class="contact-grid" style="margin-top:12px">
-        <div class="card">
+        <div class="card" id="contact">
           <h3 style="margin:0 0 8px 0">Hubungi Kami</h3>
           <p style="color:var(--muted);margin:0 0 12px 0">Hubungi ahli kumpulan untuk maklumat lanjut atau kolaborasi.</p>
 
@@ -240,8 +238,49 @@
     <section id="poster" style="margin-top:18px">
       <h2 style="color:var(--text-on-glass);margin:0 0 10px 0">Poster Awareness</h2>
       <div class="poster-grid">
-        <div class="poster-card"><img src="poster%201.png" alt="Poster 1"></div>
-        <div class="poster-card"><img src="poster%202.png" alt="Poster 2"></div>
+        <div class="poster-card">
+          <!-- KEEP only one poster as requested -->
+          <img src="poster%201.png" alt="Poster 1">
+          <div style="margin-top:8px">
+            <a href="https://www.canva.com/design/DAG3kf01Gig/Zf2Stx1G6IcfuNncKkOK7g/edit" target="_blank" rel="noopener noreferrer" class="wa-btn" style="display:inline-block;padding:6px 10px;margin-right:8px">Edit Canva A</a>
+            <a href="https://www.canva.com/design/DAG5JXH0LV4/GsfkXATXVpdSoq1lG5pLeg/edit" target="_blank" rel="noopener noreferrer" class="wa-btn" style="display:inline-block;padding:6px 10px">Edit Canva B</a>
+          </div>
+          <div class="small" style="margin-top:8px;color:#fff;opacity:0.85">Tip: rename file to <code>poster-2025.jpg</code> (no spaces) to avoid URL-encoding issues.</div>
+        </div>
+        <!-- poster 2 removed as requested -->
+      </div>
+    </section>
+
+    <!-- Infographic -->
+    <section id="infographic" class="glass" style="margin-top:18px;padding:16px" aria-labelledby="infog">
+      <h2 id="infog" style="margin:0 0 10px 0;color:var(--text-on-glass)">Infographic — Respiratory Tract & Particulate Matter</h2>
+      <div style="text-align:center">
+        <img src="https://www.researchgate.net/profile/Fiorella-Barraza/publication/321993233/figure/fig14/AS:574185194704903@1513907826653/Respiratory-tract-and-particulate-matter-PM-size-classification-Modified-from.png" alt="Respiratory tract and PM" style="max-width:100%;border-radius:10px;box-shadow:0 8px 20px rgba(0,0,0,0.25)">
+      </div>
+    </section>
+
+    <!-- Manuskrip (drawer style) -->
+    <section id="manuskrip" style="margin-top:18px">
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div>
+            <h3 style="margin:0">Manuskrip (PDF)</h3>
+            <div class="small" style="margin-top:6px">Manuskrip dimuatkan dari fail <code>/manuscript-kbp.pdf</code> di root — pratonton dalam drawer (untuk elakkan halaman penuh dipenuhi PDF).</div>
+          </div>
+          <div>
+            <button class="btn" id="openDrawerBtn">Buka Manuskrip</button>
+          </div>
+        </div>
+
+        <div style="margin-top:12px" class="drawer" id="manDrawer">
+          <div class="drawer-toggle">
+            <div class="small">Klik butang untuk buka/tutup pratonton PDF. Jika fail besar, muatkan boleh ambil masa.</div>
+          </div>
+          <div class="drawer-content" id="drawerContent">
+            <iframe id="pdfFrame" src="/manuscript-kbp.pdf" style="width:100%;height:600px;border:0;border-radius:6px"></iframe>
+            <div style="margin-top:8px"><a class="link" href="/manuscript-kbp.pdf" target="_blank">Buka PDF dalam tab baru / muat turun</a></div>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -286,7 +325,7 @@
   <script>
   (function(){
     // ---- CONFIG ----
-    const API_ENDPOINT = '/api/airquality'; // serverless proxy must exist
+    const API_ENDPOINT = '/api/airquality'; // NOTE: GitHub Pages cannot run server code — /api must be hosted elsewhere (Vercel/Netlify) to work.
     const REFRESH_MS = 5 * 60 * 1000; // 5 minutes
 
     // DOM refs
@@ -413,8 +452,17 @@
       q.addEventListener('keydown', e => { if(e.key === 'Enter' || e.key === ' ') q.click(); });
     });
 
-    const manualBtn = document.querySelector('button[onclick*="eaduan"]') ? null : document.querySelector('#refreshBtn');
-    if(manualBtn) manualBtn.addEventListener('click', updateFromApi);
+    // Manuskrip drawer toggle
+    const openBtn = document.getElementById('openDrawerBtn');
+    const manDrawer = document.getElementById('manDrawer');
+    let open = false;
+    if(openBtn){
+      openBtn.addEventListener('click', ()=>{
+        open = !open;
+        if(open){ manDrawer.classList.add('drawer-open'); openBtn.textContent = 'Tutup Manuskrip'; }
+        else { manDrawer.classList.remove('drawer-open'); openBtn.textContent = 'Buka Manuskrip'; }
+      });
+    }
 
   })();
   </script>
