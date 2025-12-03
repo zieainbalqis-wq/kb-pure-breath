@@ -20,8 +20,8 @@
 
       /* dynamic by AQI */
       --aqi-color:#26a69a;
-      --aqi-bg1:rgba(38,166,154,0.15);
-      --aqi-bg2:rgba(15,23,42,0.9);
+      --aqi-bg1:rgba(38,166,154,0.25);
+      --aqi-bg2:rgba(15,23,42,0.95);
     }
 
     *{box-sizing:border-box}
@@ -45,7 +45,7 @@
     .page-overlay{
       position:fixed;
       inset:0;
-      background:linear-gradient(180deg, rgba(6,21,34,0.55), var(--aqi-bg1));
+      background:linear-gradient(180deg, rgba(6,21,34,0.65), var(--aqi-bg1));
       z-index:0;
       pointer-events:none;
       transition:background .35s ease;
@@ -237,7 +237,7 @@
       cursor:pointer;
     }
 
-    /* Poster */
+    /* Poster Awareness */
     .poster-grid{
       display:grid;
       grid-template-columns: repeat(auto-fit, minmax(260px,1fr));
@@ -245,24 +245,76 @@
       margin-top:12px;
     }
     .poster-card{
-      background: rgba(255,255,255,0.06);
+      background: rgba(255,255,255,0.08);
       border-radius:10px;
       padding:10px;
-      text-align:center;
       color:#fff;
       box-shadow:0 8px 20px rgba(0,0,0,0.28);
     }
-    .poster-card img{
-      width:100%;
-      height:auto;
+    .poster-thumb{
+      background:#000;
       border-radius:8px;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,0.2);
+      margin-bottom:8px;
+    }
+    .poster-thumb embed{
+      width:100%;
+      height:260px;
+      display:block;
+      background:#0f172a;
+    }
+    .poster-actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-top:4px;
+    }
+    .btn-link{
+      display:inline-block;
+      padding:6px 10px;
+      border-radius:999px;
+      border:none;
+      text-decoration:none;
+      font-size:13px;
+      font-weight:600;
+      cursor:pointer;
+      background:linear-gradient(90deg,var(--accent1),var(--accent2));
+      color:#fff;
+      box-shadow:0 4px 12px rgba(0,0,0,0.35);
+    }
+
+    /* Video */
+    .video-section{
+      margin-top:18px;
+    }
+    .video-card{
+      border-radius:12px;
+      padding:14px;
+      background:rgba(15,23,42,0.85);
+      color:#e5e7eb;
+      box-shadow:0 10px 30px rgba(0,0,0,0.45);
+    }
+    .video-frame-wrap{
+      position:relative;
+      width:100%;
+      aspect-ratio:16/9;
+      margin-top:10px;
+      border-radius:12px;
+      overflow:hidden;
+      box-shadow:0 10px 30px rgba(0,0,0,0.6);
+    }
+    .video-frame-wrap iframe{
+      width:100%;
+      height:100%;
+      border:0;
       display:block;
     }
 
     /* FAQ */
     .faq{ margin-top:18px }
     .accordion-item{
-      background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(15,23,42,0.8));
+      background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(15,23,42,0.9));
       border-radius:10px;
       margin-bottom:12px;
       overflow:hidden;
@@ -369,8 +421,8 @@
       header{ gap:12px }
       .aqi-value{ font-size:48px }
       .chart-wrap{ height:180px }
+      .poster-thumb embed{ height:220px; }
     }
-
   </style>
 </head>
 <body>
@@ -391,10 +443,11 @@
         <a href="#aduan">Aduan</a>
         <a href="#realtime">Realtime</a>
         <a href="#poster">Poster</a>
+        <a href="#video">Video</a>
         <a href="#infographic">Infografik</a>
         <a href="#manuskrip">Manuskrip</a>
         <a href="#faq">FAQ</a>
-        <a href="#contact">Contact Us</a>
+        <a href="#contact">Contact</a>
       </nav>
     </header>
 
@@ -474,31 +527,59 @@
       </aside>
     </section>
 
-    <!-- 3) POSTER AWARENESS -->
+    <!-- 3) POSTER AWARENESS (PDF) -->
     <section id="poster" style="margin-top:18px">
-      <h2 style="color:var(--text-on-glass);margin:0 0 10px 0">Poster Awareness</h2>
+      <h2 style="color:var(--text-on-glass);margin:0 0 10px 0">Poster Awareness (PDF)</h2>
       <div class="poster-grid">
+        <!-- Poster PDF -->
         <div class="poster-card">
-          <img src="poster 1.png" alt="Poster 1">
-          <div style="margin-top:8px">
-            <a href="https://www.canva.com/design/DAG3kf01Gig/Zf2Stx1G6IcfuNncKkOK7g/edit"
-               target="_blank" rel="noopener noreferrer"
-               class="wa-btn"
-               style="display:inline-block;padding:6px 10px;margin-right:8px;font-size:13px">
-              Edit Canva A
+          <h3 style="margin:0 0 6px 0;font-size:16px;">Poster Awareness</h3>
+          <div style="font-size:13px;opacity:0.9;margin-bottom:6px;">Pratonton pantas versi PDF.</div>
+          <div class="poster-thumb">
+            <embed src="poster-kbp.pdf#toolbar=0&view=FitH" type="application/pdf">
+          </div>
+          <div class="poster-actions">
+            <a class="btn-link" href="poster-kbp.pdf" target="_blank" rel="noopener noreferrer">
+              Buka Poster Penuh (PDF)
             </a>
-            <a href="https://www.canva.com/design/DAG5JXH0LV4/GsfkXATXVpdSoq1lG5pLeg/edit"
-               target="_blank" rel="noopener noreferrer"
-               class="wa-btn"
-               style="display:inline-block;padding:6px 10px;font-size:13px">
-              Edit Canva B
+          </div>
+        </div>
+
+        <!-- Brochure PDF -->
+        <div class="poster-card">
+          <h3 style="margin:0 0 6px 0;font-size:16px;">Brochure Awareness</h3>
+          <div style="font-size:13px;opacity:0.9;margin-bottom:6px;">Pratonton pantas brochure dalam PDF.</div>
+          <div class="poster-thumb">
+            <embed src="brochure-kbp.pdf#toolbar=0&view=FitH" type="application/pdf">
+          </div>
+          <div class="poster-actions">
+            <a class="btn-link" href="brochure-kbp.pdf" target="_blank" rel="noopener noreferrer">
+              Buka Brochure Penuh (PDF)
             </a>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- 4) INFOGRAFIK -->
+    <!-- 4) VIDEO AWARENESS -->
+    <section id="video" class="video-section">
+      <div class="video-card">
+        <h2 style="margin:0 0 8px 0;">Video Awareness — Air Pollution</h2>
+        <p style="margin:0 0 10px 0;font-size:13px;opacity:0.9;">
+          Video ini menerangkan kesan pencemaran udara terhadap kesihatan dan langkah perlindungan asas.
+        </p>
+        <div class="video-frame-wrap">
+          <iframe
+            src="https://www.youtube.com/embed/4JyhDHc6YC0"
+            title="Air Pollution Awareness"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowfullscreen
+          ></iframe>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5) INFOGRAFIK -->
     <section id="infographic" class="glass" style="margin-top:18px;padding:16px" aria-labelledby="infog">
       <h2 id="infog" style="margin:0 0 10px 0;color:var(--text-on-glass)">Infographic — Respiratory Tract & Particulate Matter</h2>
       <div style="text-align:center">
@@ -508,14 +589,14 @@
       </div>
     </section>
 
-    <!-- 5) MANUSKRIP -->
+    <!-- 6) MANUSKRIP -->
     <section id="manuskrip" style="margin-top:18px">
       <div class="card">
         <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
           <div>
             <h3 style="margin:0">Manuskrip (PDF)</h3>
             <div style="margin-top:6px;font-size:13px;color:var(--muted)">
-              Manuskrip dimuat dari <code>manuscript-kbp.pdf</code> di root repo dan dipaparkan dalam drawer.
+              Manuskrip dimuat dari <code>Manuscript-kbp.pdf</code> di root repo dan dipaparkan dalam drawer.
             </div>
           </div>
           <div>
@@ -539,9 +620,9 @@
               </div>
             </div>
             <div id="pdfMissing" style="display:none" class="file-missing">
-              <div>Kami tidak menemui <code>manuscript-kbp.pdf</code> di root. Semak semula atau muat naik fail tersebut ke repo.</div>
+              <div>Kami tidak menemui <code>Manuscript-kbp.pdf</code> di root. Semak semula atau muat naik fail tersebut ke repo.</div>
               <div class="file-actions">
-                <a id="rawPdf" href="https://raw.githubusercontent.com/zieainbalqis-wq/kb-pure-breath/main/manuscript-kbp.pdf" target="_blank" rel="noopener noreferrer">
+                <a id="rawPdf" href="https://raw.githubusercontent.com/zieainbalqis-wq/kb-pure-breath/main/Manuscript-kbp.pdf" target="_blank" rel="noopener noreferrer">
                   Buka versi raw (jika ada)
                 </a>
                 <a id="uploadBtn" href="https://github.com/zieainbalqis-wq/kb-pure-breath/upload/main?path=" target="_blank" rel="noopener noreferrer">
@@ -554,7 +635,7 @@
       </div>
     </section>
 
-    <!-- 6) FAQ -->
+    <!-- 7) FAQ -->
     <section id="faq" style="margin-top:18px">
       <h2 style="color:var(--text-on-glass);margin:0 0 10px 0">FAQ — Kesan Particulate Matter terhadap Kesihatan</h2>
       <div class="faq">
@@ -585,7 +666,7 @@
       </div>
     </section>
 
-    <!-- 7) CONTACT -->
+    <!-- 8) CONTACT -->
     <section id="contact" style="margin-top:18px">
       <div class="contact-grid">
         <div class="card">
@@ -646,11 +727,11 @@
   <script>
   (function(){
     // ===== CONFIG =====
-    const API_ENDPOINT = ""; // let empty for now (real API mode akan fallback)
+    const API_ENDPOINT = ""; // kosongkan untuk paksa mod simulasi
     const REFRESH_MS = 5 * 60 * 1000;
 
-    const RAW_PDF_URL = 'https://raw.githubusercontent.com/zieainbalqis-wq/kb-pure-breath/main/manuscript-kbp.pdf';
-    const PDF_PATH = '/manuscript-kbp.pdf';
+    const RAW_PDF_URL = 'https://raw.githubusercontent.com/zieainbalqis-wq/kb-pure-breath/main/Manuscript-kbp.pdf';
+    const PDF_PATH = '/Manuscript-kbp.pdf';
 
     // DOM refs
     const aqiValueEl = document.getElementById('aqiValue');
@@ -699,20 +780,20 @@
         bg1:'rgba(148,163,184,0.2)',
         bg2:'rgba(15,23,42,0.9)'
       };
-      if(a<=50)  return { cat:'Baik (Good)', color:'#26a69a', bg1:'rgba(38,166,154,0.25)', bg2:'rgba(15,23,42,0.9)' };
-      if(a<=100) return { cat:'Sederhana (Moderate)', color:'#ffca28', bg1:'rgba(255,202,40,0.25)', bg2:'rgba(15,23,42,0.95)' };
+      if(a<=50)  return { cat:'Baik (Good)',            color:'#26a69a', bg1:'rgba(38,166,154,0.25)', bg2:'rgba(15,23,42,0.9)' };
+      if(a<=100) return { cat:'Sederhana (Moderate)',   color:'#ffca28', bg1:'rgba(255,202,40,0.25)', bg2:'rgba(15,23,42,0.95)' };
       if(a<=150) return { cat:'Tidak Sihat (Sensitif)', color:'#ff7043', bg1:'rgba(255,112,67,0.25)', bg2:'rgba(15,23,42,0.98)' };
-      if(a<=200) return { cat:'Tidak Sihat', color:'#e53935', bg1:'rgba(229,57,53,0.3)', bg2:'rgba(15,23,42,0.98)' };
-      if(a<=300) return { cat:'Sangat Tidak Sihat', color:'#8e24aa', bg1:'rgba(142,36,170,0.3)', bg2:'rgba(15,23,42,0.98)' };
-      return       { cat:'Berbahaya', color:'#6b0018', bg1:'rgba(107,0,24,0.4)', bg2:'rgba(15,23,42,1)' };
+      if(a<=200) return { cat:'Tidak Sihat',            color:'#e53935', bg1:'rgba(229,57,53,0.3)',  bg2:'rgba(15,23,42,0.98)' };
+      if(a<=300) return { cat:'Sangat Tidak Sihat',     color:'#8e24aa', bg1:'rgba(142,36,170,0.3)', bg2:'rgba(15,23,42,0.98)' };
+      return       { cat:'Berbahaya',                   color:'#6b0018', bg1:'rgba(107,0,24,0.4)',   bg2:'rgba(15,23,42,1)' };
     }
 
     function hazeFromAqi(a){
       if(a==null || isNaN(a)) return 'Status jerebu: Tidak diketahui';
       if(a<=50)  return 'Status jerebu: Tiada jerebu (udara sihat)';
-      if(a<=100) return 'Status jerebu: Risiko rendah — berwaspada untuk kumpulan sensitif';
+      if(a<=100) return 'Status jerebu: Risiko rendah — sensitif perlu berwaspada';
       if(a<=200) return 'Status jerebu: Jerebu sederhana — hadkan aktiviti luar yang berat';
-      return       'Status jerebu: Jerebu teruk — elak aktiviti luar, gunakan N95';
+      return       'Status jerebu: Jerebu teruk — elak aktiviti luar, gunakan respirator N95.';
     }
 
     function pm25ToAqi(pm){
@@ -753,7 +834,7 @@
     function useMockData(reason){
       const now = new Date();
       const pm25 = 30 + Math.random()*45;  // 30-75
-      const pm10 = pm25 + (10 + Math.random()*40); // always > pm25
+      const pm10 = pm25 + (10 + Math.random()*40);
       const aqi  = pm25ToAqi(pm25);
 
       if(pm25Box) pm25Box.textContent = pm25.toFixed(1);
